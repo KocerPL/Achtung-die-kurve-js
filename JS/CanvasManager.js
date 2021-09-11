@@ -8,7 +8,6 @@ export class CanvasManager
         this.clearEachFrame = clearEachFrame;
         this.centerPoint= new Vector(0,0);
      this.canvas = document.createElement('canvas');
-     
      this.percentWidth = percentWidth;
      this.proportion = proportion;
      this.virtualWidth=virtualWidth;

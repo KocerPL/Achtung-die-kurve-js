@@ -2,8 +2,8 @@ export class CollisionDetector
 {
     constructor()
     {
-this.detectArray=new Array(0);
-this.hitboxArray=new Array(0);
+    this.detectArray=new Array(0);
+    this.hitboxArray=new Array(0);
     }
     removeHitboxes()
     {
@@ -11,13 +11,21 @@ this.hitboxArray=new Array(0);
     }
     removeLineHitboxes()
     {
+      var arrayPositions=new Array(0);
       for(var a=0;a<this.hitboxArray.length;a++)
       {
-        if(this.hitboxArray[a].type=="Line")
+       
+        while(this.hitboxArray[a]!=undefined && this.hitboxArray[a].type=="Line")
         {
-          this.hitboxArray.splice(a, 1);
-        }
+       // arrayPositions.push(a);
+        this.hitboxArray.splice(a, 1);
+      //delete this.hitboxArray[a];
+         //console.log( a);
+        } 
       }
+
+      
+      console.log(this.hitboxArray);
     }
     addLineHitbox(startVector,endVector,width,distance)
     {
@@ -92,7 +100,6 @@ this.hitboxArray=new Array(0);
                     var tmpYstart = this.hitboxArray[a].startVector.getY();
                     if(this.lineCircle(tmpXstart,tmpYstart,tmpX,tmpY,this.hitboxArray[a].width,tmpObjectX,tmpObjectY, this.detectArray[i].radius))
                     {
-                      
                       console.log(this.hitboxArray[a]);
                       //console.log(this.detectArray[i]);
                       var checkId=this.detectArray[i].id;
