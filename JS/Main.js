@@ -1,3 +1,6 @@
+import { GameObject } from "./GameObject.js";
+import { List } from "./List.js";
+import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
 
 export class Main
@@ -14,6 +17,7 @@ export class Main
     static frames=0;
     static lastFpsMeasure=0;
     static renderFPS = true;
+    static gameObjects= new List(GameObject);
     //Canvas variables
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
@@ -25,6 +29,7 @@ export class Main
     {
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
+        this.gameObjects.add(new Player(new Vector(100,10),0,1));
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -38,14 +43,17 @@ export class Main
             while(this.updateDelta>this.updateTime)
             {
                 this.updateDelta-=this.updateTime;
-                //Updates
+                //Update
+                this.update();
             }
-            this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-            //Draw methods
             
+            this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+            //Draw
+           this.draw();
             //Fps measurement
             if(this.renderFPS)  
             {
+                this.ctx.fillStyle="#ffffff";
                 this.ctx.font = "20px Calibri";
                 this.ctx.fillText("Fps: "+this.fps,0,20);
             }
@@ -58,8 +66,16 @@ export class Main
             }
         this.lastTime=time;
         }
-        
-    
+    }
+    static draw()
+    {
+        this.ctx.save();
+       this.gameObjects.forEach((element)=>{element.draw(this.ctx); this.ctx.restore()
+    });
+    }
+    static update()
+    {
+        this.gameObjects.forEach((element)=>{element.update()});
     }
     static resize()
     {
@@ -76,6 +92,7 @@ Main.start();
 All game objects must have:
 - draw method 
 - update method
+- collision method
 Collision detection: 
 - static method in object
 - pass in another object
