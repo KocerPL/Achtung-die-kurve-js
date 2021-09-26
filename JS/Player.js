@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObject.js";
+import { kcCirc, kcRect } from "./Geometry.js";
 import { Vector } from "./Vector.js";
 
 export class Player extends GameObject
@@ -6,26 +7,28 @@ export class Player extends GameObject
 constructor(position,rotation,scale)
 {
     super(position,rotation,scale);
-    this.velVec=new Vector(0,0);
-    
+    this.radius =8;
+    this.parts = new Array(new kcRect(new Vector(-10,-10),new Vector(20,20)));
 }
 draw(ctx)
 {
 super.draw(ctx);
+this.coll ? ctx.fillStyle="Red":ctx.fillStyle="White";
 ctx.beginPath();
-ctx.arc(0,0,8,0,Math.PI*2);
-ctx.fillStyle = "#ffffff";
-ctx.closePath();
+ctx.fillRect(-10,-10,20,20);
 ctx.fill();
 ctx.strokeStyle="red";
 ctx.beginPath();
 ctx.moveTo(0,0);
-ctx.lineTo(10,0);
+ctx.lineTo(8,0);
 ctx.stroke();
-
 }
 update()
 {
-this.rotation=0;
+super.update();
+let pos = this.position;
+//this.rotation++;
+
 }
+
 }

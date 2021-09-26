@@ -20,9 +20,9 @@ export class List
     // Iterates for each element in list
     forEach(functio)
     {
-        for(var i =0; i<this.array.length;i++)
+        for (this.i=0; this.i<this.array.length;this.i++)
         {
-            functio(this.array[i]);
+       functio(this.array[this.i]);      
         }
     }
     //Removes the first occurrence of the specified element from this list, if it is present (optional operation).
@@ -32,7 +32,7 @@ export class List
         {
             if(this.array[i]==element)
             {
-            this.array.splice(i,1);
+                this.array.splice(i,1);
             return;
             }
         }
@@ -63,6 +63,12 @@ export class List
     get(index)
     {
         return this.array[index];
+    }
+    clone()
+    {
+        var temp = new List(this.classType)
+        temp.array = this.array;
+        return temp;
     }
 
 }
