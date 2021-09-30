@@ -1,9 +1,9 @@
+import { AABBComponent } from "./Components/AABBComponent.js";
 import { Vector } from "./Vector.js";
-import { Geometry, kcRect } from "./Geometry.js";
 //!!!!Abstract class!!!!\\
 export class GameObject
 {
-  
+    
     constructor(position,rotation,scaleVec)
     {
         if (!Vector.isVector(position)) throw new Error("Position must be a Vector");
@@ -13,31 +13,59 @@ export class GameObject
         this.coll=false;
         this.velVec=new Vector(Math.random()*1+0.01,Math.random()*1+0.01);
         this.rotation=rotation;
-        this.parts=new Array();
+        this.components=new Array();
         this.scaleVec= scaleVec.copy();
+      
     }
-    static checkCollision(go1,go2)
+    collision(gameobject,component)
     {
-       
-        for(var i=0;i<go1.parts.length;i++)
-        {
-            for(var b=0;b<go2.parts.length;b++)
-        {
-           var  foif = Geometry.collide(kcRect.multByMat(go1.getTransfMat(),go1.parts[i]),kcRect.multByMat(go2.getTransfMat(),go2.parts[b]));
-            if(foif)
-            {
-               return true;
-             
-            }
-           
-        }
-        }
-        return false;
+
     }
-    draw(ctx)
+    updateComponents(parent)
     {
+        for( var c of this.components)
+        {
+            c.update(parent);
+        }
+    }
+    drawComponents(ctx)
+    {
+        for(var c of this.components)
+        {
+            c.draw(ctx);
+        }
+    }
+   addComponent(component)
+   {
+       this.components.push(component)
+   }
+   removeComponent(tag)
+   {
+       for(var i=0;i<this.components.length;i++)
+       {
+        if(this.components[i].getTag()==tag)
+        {
+            this.components[i].splice(i,1);
+        }
+       }
+   }
+   findComponent(tag)
+   {
+    for(var i=0;i<this.components.length;i++)
+    {
+     if(this.components[i].getTag()==tag)
+     {
+         return this.components[i];
+     }
+    }
+    return null;
+   }
+    useTransfMat(ctx)
+    {
+        this.drawComponents(ctx);
        let trMatrix = this.getTransfMat();
         ctx.transform(trMatrix.a,trMatrix.b,trMatrix.c,trMatrix.d,trMatrix.e,trMatrix.f);
+      
     }
     getTransfMat()
     {
@@ -55,6 +83,7 @@ export class GameObject
     }
     update()
     {
+        this.updateComponents();
         this.position = Vector.add(this.position,this.velVec);
     }
     getBounds()

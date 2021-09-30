@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObject.js";
+import { Physics } from "./Physics.js";
 import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
 
@@ -30,10 +31,9 @@ export class Main
     {
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
-     for(var a=0;a<10;a++)
-        {   
-        this.gameObjects.push(new Player(new Vector(Math.random()*100+8,10),0,new Vector(1,1)));
-    }
+    
+        this.gameObjects.push(new Player(new Vector(Math.random()*100+8,10),0,new Vector(1,1),65,68));
+
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -48,6 +48,7 @@ export class Main
             {
                 this.updateDelta-=this.updateTime;
                 //Update
+                Physics.update();
                 this.update();
             }
             
@@ -79,29 +80,9 @@ export class Main
     {
         
         this.gameObjects.forEach((element)=>{element.update()});
-        this.collisionUpdate();   
        
     }
-    static collisionUpdate()
-    {
-        let gaObjArr = this.gameObjects;
-        for(let i=0;i<gaObjArr.length;i++)
-        {
-            gaObjArr[i].coll=false;
-            for(let i2=0;i2<gaObjArr.length;i2++)
-            {
-            if(gaObjArr[i]!=gaObjArr[i2])
-                {
    
-                if( GameObject.checkCollision(gaObjArr[i],gaObjArr[i2]))
-                {
-                    gaObjArr[i].coll=true;
-                    gaObjArr[i2].coll=true;
-                }
-            }
-            }
-        }
-    }
     static resize()
     {
     this.min = window.innerWidth/this.ratio<window.innerHeight;
