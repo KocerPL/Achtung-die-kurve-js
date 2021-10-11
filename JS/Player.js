@@ -2,31 +2,35 @@ import { GameObject } from "./GameObject.js";
 import { Vector } from "./Vector.js";
 import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
+import { CircleComponent } from "./Components/lineCircleComponent.js";
 
 export class Player extends GameObject
 {
-constructor(position,rotation,scale,leftKeyCode,rightKeyCode)
+constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 {
     super(position,rotation,scale);
     this.radius =4;
     this.vel =1;
     this.distance=0;
     this.rotVel=0;
+    this.color=color;
     this.lastDistance=0;
     this.leftKeyCode=leftKeyCode;
     this.rightKeyCode=rightKeyCode;
     this.tail= new Tail(position,this);
     this.lastPosition=position;
+    this.HALT=false
     this.break=
     {
         length:40,
-        interval:360,
+        interval:300,
         last:0,
         is:false
     }
 
     window.addEventListener("keydown",this.keyPress.bind(this),false);
     window.addEventListener("keyup",this.keyPress.bind(this),false);
+    this.addComponent(new CircleComponent(this));
     //this.addComponent(new SATPolygon(this,new Vector(-10,-10),new Vector(-10,10),new Vector(10,10),new Vector(10,-10)));
 }
 keyPress(ev)
@@ -48,11 +52,14 @@ keyPress(ev)
 }
 collision(gameobject,component)
 {
-    if(component.getTag()=="boundingBox")
+    if(component.getTag()=="line")
     {
-        
+
+        this.coll=true;
+        if(!this.break.is)
+        this.HALT=true;
     }
-    this.coll=true;
+   
 }
 draw(ctx)
 {
@@ -74,6 +81,7 @@ this.coll=false;
 }
 update()
 {
+if(this.HALT) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();

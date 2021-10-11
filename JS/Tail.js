@@ -1,4 +1,5 @@
 import { AABBComponent } from "./Components/AABBComponent.js";
+import { StaticCircleComponent } from "./Components/lineCircleComponent.js";
 import { GameObject } from "./GameObject.js";
 import { Vector } from "./Vector.js";
 
@@ -17,7 +18,7 @@ constructor(position,parent)
 draw(ctx)
 {
     ctx.lineCap = "round";
-    ctx.strokeStyle="blue";
+    ctx.strokeStyle=this.parent.color;
 for(var i=0;i<this.positions.length;i++)
 {
    
@@ -27,15 +28,28 @@ for(var i=0;i<this.positions.length;i++)
     for(var j=1;j<this.positions[i].length;j++)
     {
      ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)
+    //Arc filling
+    // ctx.fillStyle="orange";
+    //ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.parent.radius,0,Math.PI*2,false);
+  //  ctx.fill();
     }
-    ctx.stroke();
+   ctx.stroke();
+    
 }
 ctx.lineWidth=1;
 }
 addPoint(position)
 {
     if(!this.break && position instanceof Vector)
+    {
     this.positions[this.currentIndex].push(position.copy());
+    if(this.positions[this.currentIndex].length>3)
+    {
+        var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-3]);
+        temp.setTag("line");
+    this.addComponent(temp);
+    }
+    }
 }
 collision(gameobject,component)
     {

@@ -1,3 +1,4 @@
+import { Physics } from "../Physics.js";
 import { Component } from "./Component.js";
 
 export class LineComponent extends Component
@@ -20,8 +21,18 @@ this.pos = parent.position.copy();
 }
 update()
 {
-    this.radius= parent.radius;
-    this.pos = parent.position.copy();
-
+    this.radius= this.parent.radius;
+    this.pos = this.parent.position.copy();
+    Physics.addCircleComponent(this);
+}
+}
+export class StaticCircleComponent extends Component
+{
+constructor(parent,radius,pos)
+{
+super(parent);
+this.radius= radius;
+this.pos = pos.copy();
+Physics.addStaticComponent(this);
 }
 }

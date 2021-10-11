@@ -32,8 +32,8 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
     
-        this.gameObjects.push(new Player(new Vector(Math.random()*100+8,10),0,new Vector(1,1),65,68));
-
+        this.gameObjects.push(new Player(new Vector(Math.random()*1000+8,Math.random()*800+8),0,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*1000+8,Math.random()*800+8),0,new Vector(1,1),37,39,"red"));
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
