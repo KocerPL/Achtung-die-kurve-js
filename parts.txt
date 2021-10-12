@@ -1,8 +1,0 @@
-Kocer -> Kc
-1. triangle -> KcTria
-2. circle  -> KcCirc
-3. line with circular edge -> KcLine
-4. rectangle -> KcRect
-5. point -> KcPoin
-all of these will extend class Geometry
-each object will have rectangle hitbox for hitbox test speed optimization

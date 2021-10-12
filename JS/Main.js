@@ -2,7 +2,7 @@ import { GameObject } from "./GameObject.js";
 import { Physics } from "./Physics.js";
 import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
-
+import { FrameHitbox } from "./Components/FrameHitbox.js";
 export class Main
 {
     // object array
@@ -24,16 +24,17 @@ export class Main
     static ratio = 1.7;
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
+    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(795.5,595.5));
     // if true then width *ratio < height
-  
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
     {
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
-    
-        this.gameObjects.push(new Player(new Vector(Math.random()*1000+8,Math.random()*800+8),0,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*1000+8,Math.random()*800+8),0,new Vector(1,1),37,39,"red"));
+        this.frameHitbox.setTag("Frame");
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),37,39,"red"));
+
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -75,6 +76,9 @@ export class Main
     static draw()
     {
        this.gameObjects.forEach((element)=>{this.ctx.save();element.draw(this.ctx); this.ctx.restore()});
+       this.ctx.lineWidth = 5;
+       this.ctx.strokeStyle="yellow";
+       this.ctx.strokeRect(2.5,2.5,797.5,597.5);
     }
     static update()
     {
@@ -94,6 +98,10 @@ export class Main
   this.caMatr = new DOMMatrix();
 this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
     this.ctx.setTransform(this.caMatr);
+    }
+    static collision()
+    {
+        console.log("FRAME");
     }
 }
 Main.start();

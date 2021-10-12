@@ -59,7 +59,12 @@ collision(gameobject,component)
         if(!this.break.is)
         this.HALT=true;
     }
-   
+    if(component.getTag()=="Frame")
+    {
+
+        this.coll=true;
+        this.HALT=true;
+    }
 }
 draw(ctx)
 {

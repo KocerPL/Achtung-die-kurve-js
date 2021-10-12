@@ -58,7 +58,12 @@ console.log("coll");
 breakLine()
 {
     this.break=true;
-   
+    var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-2]);
+    temp.setTag("line");
+this.addComponent(temp);
+var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-1]);
+temp.setTag("line");
+this.addComponent(temp);
 }
 continueLine(position)
 {

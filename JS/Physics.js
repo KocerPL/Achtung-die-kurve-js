@@ -5,9 +5,14 @@ export class Physics
     static aabbarray=new Array();
     static circleStatics= new Array();
     static circleComponents= new Array();
+    static frameHitboxes= new Array();
     static addAABBcomponent(aabb)
     {
         this.aabbarray.push(aabb);
+    }
+    static addFrameHitbox(item)
+    {
+        this.frameHitboxes.push(item);
     }
     static addStaticComponent(item)
     {
@@ -21,6 +26,7 @@ export class Physics
     {
         //AABB MUST BE FIRST FOR BOUNDING BOXES!!!!!!!!!!!!!!!
         this.updateAABB();
+        this.updateFCcollision();
         this.updateCCcollision();
     }
     static updateAABB()
@@ -54,6 +60,28 @@ export class Physics
             }
         }
         this.circleComponents = new Array();
+    }
+    static updateFCcollision() // Frame circle component collision
+    {
+        for(var i=0;i<this.frameHitboxes.length;i++)
+        {
+            for(var j=0;j<this.circleComponents.length;j++)
+            {
+                if(this.circleFrameCollision(this.circleComponents[j],this.frameHitboxes[i]))
+               {
+                  this.circleComponents[j].parent.collision(this.frameHitboxes[i].parent,this.frameHitboxes[i]);
+                   this.frameHitboxes[i].parent.collision( this.circleComponents[j].parent,this.circleComponents[j]);
+               }
+            }
+        }
+    }
+    static circleFrameCollision(cir,fra)
+    {
+        if(cir.pos.x+cir.radius>fra.dpos.x) return true;
+        if(cir.pos.y+cir.radius>fra.dpos.y) return true;
+        if(cir.pos.y-cir.radius<fra.pos.y) return true;
+        if(cir.pos.y-cir.radius<fra.pos.y) return true;
+        return false;
     }
     static CircleCircleCollision(cir1,cir2)
     {
