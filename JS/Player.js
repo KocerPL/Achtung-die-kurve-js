@@ -19,7 +19,9 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this.rightKeyCode=rightKeyCode;
     this.tail= new Tail(position,this);
     this.lastPosition=position;
-    this.HALT=false
+    this._alive = true;
+    this.HALT=false;
+    this.score =0;
     this.break=
     {
         length:40,
@@ -30,7 +32,9 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 
     window.addEventListener("keydown",this.keyPress.bind(this),false);
     window.addEventListener("keyup",this.keyPress.bind(this),false);
-    this.addComponent(new CircleComponent(this));
+    let temp = new CircleComponent(this);
+    temp.setTag("Head");
+    this.addComponent(temp);
     //this.addComponent(new SATPolygon(this,new Vector(-10,-10),new Vector(-10,10),new Vector(10,10),new Vector(10,-10)));
 }
 keyPress(ev)
@@ -50,20 +54,28 @@ keyPress(ev)
         this.rotVel=0;
     }
 }
+isAlive()
+{
+    return this._alive;
+}
 collision(gameobject,component)
 {
-    if(component.getTag()=="line")
+    if(component.getTag()=="line"|| component.getTag()=="Head")
     {
 
         this.coll=true;
         if(!this.break.is)
+        {
         this.HALT=true;
+        this._alive = false;
+        }
     }
     if(component.getTag()=="Frame")
     {
 
         this.coll=true;
         this.HALT=true;
+        this._alive = false;
     }
 }
 draw(ctx)
@@ -71,19 +83,22 @@ draw(ctx)
 this.tail.draw(ctx);
 
 ctx.lineWidth=1;
+ctx.font = "5px Calibri";
+ctx.fillText(this.score,this.position.x-1.75,this.position.y-5);
 this.useTransfMat(ctx);
-this.coll ? ctx.fillStyle="Red":ctx.fillStyle="Yellow";
+ctx.fillStyle="Yellow";
 ctx.beginPath();
 ctx.arc(0,0,this.radius,0,Math.PI*2,false);
 ctx.fill();
-ctx.strokeStyle="red";
-ctx.beginPath();
-ctx.moveTo(0,0);
-ctx.lineTo(this.radius,0);
-ctx.stroke();
+//ctx.strokeStyle="red";
+//ctx.beginPath();
+//ctx.moveTo(0,0);
+//ctx.lineTo(this.radius,0);
+//ctx.stroke();
 this.coll=false;
 
 }
+
 update()
 {
 if(this.HALT) return;
@@ -111,5 +126,30 @@ this.break.is=false;
 this.tail.continueLine(this.position);
 }
 }
+addPoints(points)
+{
+    this.score+=points;
+}
+clearTail()
+{
+    this.tail.clear(this.position);
+}
+reset(position)
+{
 
+  this.position=position;
+  this.lastPosition=position;
+  this.clearTail();
+  this.distance=0;
+  this.lastDistance=0;
+  this._alive = true;
+  this.HALT=false;
+  this.break=
+  {
+      length:40,
+      interval:300,
+      last:0,
+      is:false
+  }
+}
 }

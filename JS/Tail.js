@@ -1,6 +1,7 @@
 import { AABBComponent } from "./Components/AABBComponent.js";
 import { StaticCircleComponent } from "./Components/lineCircleComponent.js";
 import { GameObject } from "./GameObject.js";
+import { Physics } from "./Physics.js";
 import { Vector } from "./Vector.js";
 
 export class Tail extends GameObject
@@ -12,8 +13,8 @@ constructor(position,parent)
   this.positions[0].push(position.copy()); 
   this.parent = parent;
   this.lastPoint = null;
-  this.break=false;
-  this.currentIndex=0;
+  this.break=false;  this.currentIndex=0;
+
 }
 draw(ctx)
 {
@@ -45,7 +46,7 @@ addPoint(position)
     this.positions[this.currentIndex].push(position.copy());
     if(this.positions[this.currentIndex].length>3)
     {
-        var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-3]);
+        var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-4]);
         temp.setTag("line");
     this.addComponent(temp);
     }
@@ -72,5 +73,14 @@ this.currentIndex++;
 this.positions[this.currentIndex]=new Array();
 this.addPoint(position);
 console.log(this.positions);
+}
+clear(position)
+{
+    this.currentIndex=0;
+   this.positions=  new Array(new Array());
+    this.lastPoint = null;
+    this.break=false; 
+    this.addPoint(position)
+    Physics.removeCHBP(this);
 }
 }

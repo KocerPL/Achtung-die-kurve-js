@@ -22,9 +22,10 @@ export class Main
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
     static ratio = 1.7;
+    static lastAliveCount = -1;
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
-    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(795.5,595.5));
+    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,595.5));
     // if true then width *ratio < height
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
@@ -34,7 +35,8 @@ export class Main
         this.frameHitbox.setTag("Frame");
         this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),65,68,"blue"));
         this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),37,39,"red"));
-
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),188,190,"green"));
+        this.lastAliveCount = this._getAlives().length;
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -56,12 +58,34 @@ export class Main
             this.ctx.clearRect(0,0,1024,1024/this.ratio);
             //Draw
            this.draw();
+           let Alives = this._getAlives();
+            if(Alives.length<this.lastAliveCount) 
+            {
+            for(let i=0;i<Alives.length;i++)
+            {
+                Alives[i].addPoints(5);
+            }
+            
+            }
+            if(Alives.length<=1)
+            {
+                for(var i=0;i<this.gameObjects.length;i++)
+                {
+                    if(this.gameObjects[i] instanceof Player)
+                    {
+                        this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10));
+                    }
+                }
+            }
+            this.lastAliveCount= Alives.length;
+            this.ctx.font = "20px Calibri";
+           this.ctx.fillText("Alive: "+Alives.length,5,45);
             //Fps measurement
             if(this.renderFPS)  
             {
                 this.ctx.fillStyle="#ffffff";
                 this.ctx.font = "20px Calibri";
-                this.ctx.fillText("Fps: "+this.fps,0,20);
+                this.ctx.fillText("Fps: "+this.fps,5,25);
             }
             this.frames++;
             if(this.lastFpsMeasure+1000<=time)
@@ -103,8 +127,21 @@ this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/
     {
         console.log("FRAME");
     }
+    static _getAlives()
+    {
+        let alive = new Array();
+        for(var i=0;i<this.gameObjects.length;i++)
+        {
+            if(this.gameObjects[i] instanceof Player && this.gameObjects[i].isAlive())
+            {
+                alive.push(this.gameObjects[i]);
+            }
+        }
+        return alive;
+    }
 }
 Main.start();
+
 /*
 All game objects must have:
 - draw method 

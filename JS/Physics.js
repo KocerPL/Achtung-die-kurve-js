@@ -59,6 +59,19 @@ export class Physics
                }
             }
         }
+        for(var i=0;i<this.circleComponents.length;i++)
+        {
+            for(var j=i+1;j<this.circleComponents.length;j++)
+            {
+                let c0 = this.circleComponents[i];
+                let c1 = this.circleComponents[j]
+               if(this.CircleCircleCollision(c0,c1))
+               {
+                   c0.parent.collision(c1.parent,c0);
+                   c1.parent.collision(c0.parent,c1);
+               }
+            }
+        }
         this.circleComponents = new Array();
     }
     static updateFCcollision() // Frame circle component collision
@@ -79,7 +92,7 @@ export class Physics
     {
         if(cir.pos.x+cir.radius>fra.dpos.x) return true;
         if(cir.pos.y+cir.radius>fra.dpos.y) return true;
-        if(cir.pos.y-cir.radius<fra.pos.y) return true;
+        if(cir.pos.x-cir.radius<fra.pos.x) return true;
         if(cir.pos.y-cir.radius<fra.pos.y) return true;
         return false;
     }
@@ -98,6 +111,16 @@ export class Physics
             }
         }
         return false;
+    }
+    static removeCHBP(parent)//removeCircleHitboxesByParent
+    {
+        for(let i=this.circleStatics.length-1;i>=0;i--)
+        {
+            if(this.circleStatics[i].parent==parent)
+            {
+                this.circleStatics.splice(i,1);
+            }
+        }
     }
     static calcDist(vec1,vec2)
     {
