@@ -2,7 +2,7 @@ import { GameObject } from "./GameObject.js";
 import { Vector } from "./Vector.js";
 import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
-import { CircleComponent } from "./Components/lineCircleComponent.js";
+import { CircleComponent } from "./Components/LineCircleComponent.js";
 
 export class Player extends GameObject
 {

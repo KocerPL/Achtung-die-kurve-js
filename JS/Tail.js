@@ -1,5 +1,5 @@
 import { AABBComponent } from "./Components/AABBComponent.js";
-import { StaticCircleComponent } from "./Components/lineCircleComponent.js";
+import { StaticCircleComponent } from "./Components/LineCircleComponent.js";
 import { GameObject } from "./GameObject.js";
 import { Physics } from "./Physics.js";
 import { Vector } from "./Vector.js";
