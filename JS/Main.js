@@ -3,6 +3,7 @@ import { Physics } from "./Physics.js";
 import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
 import { FrameHitbox } from "./Components/FrameHitbox.js";
+import { Counter } from "./Counter.js";
 export class Main
 {
     // object array
@@ -25,6 +26,7 @@ export class Main
     static lastAliveCount = -1;
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
+    static resetTrig=false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,595.5));
     // if true then width *ratio < height
     static min = window.innerWidth/this.ratio<window.innerHeight;
@@ -33,9 +35,19 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
         this.frameHitbox.setTag("Frame");
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),37,39,"red"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),188,190,"green"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"red"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"green"));
+       // this.gameObjects.push(new Counter(new Vector(100,0),0,4,"Comic sans",3));
+       for(var i=0;i<this.gameObjects.length;i++)
+       {
+       if(this.gameObjects[i] instanceof Player)
+
+       {
+           this.gameObjects[i].stop();
+       }
+        }
+      this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
         this.lastAliveCount = this._getAlives().length;
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
@@ -67,15 +79,19 @@ export class Main
             }
             
             }
-            if(Alives.length<=1)
+            if(Alives.length<=1 && this.resetTrig==false)
             {
                 for(var i=0;i<this.gameObjects.length;i++)
-                {
-                    if(this.gameObjects[i] instanceof Player)
-                    {
-                        this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10));
-                    }
-                }
+             {
+             if(this.gameObjects[i] instanceof Player)
+
+             {
+                 this.gameObjects[i].stop();
+             }
+              }
+            this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
+                
+                this.resetTrig=true;
             }
             this.lastAliveCount= Alives.length;
             this.ctx.font = "20px Calibri";
@@ -97,9 +113,22 @@ export class Main
         this.lastTime=time;
         }
     }
+    static reset()
+    {
+        for(var i=0;i<this.gameObjects.length;i++)
+        {
+            if(this.gameObjects[i] instanceof Player)
+
+            {
+                this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360);
+            }
+        }
+        this.resetTrig=false;
+        
+    }
     static draw()
     {
-       this.gameObjects.forEach((element)=>{this.ctx.save();element.draw(this.ctx); this.ctx.restore()});
+       this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
        this.ctx.lineWidth = 5;
        this.ctx.strokeStyle="yellow";
        this.ctx.strokeRect(2.5,2.5,797.5,597.5);
@@ -107,7 +136,7 @@ export class Main
     static update()
     {
         
-        this.gameObjects.forEach((element)=>{element.update()});
+        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
        
     }
    
@@ -125,7 +154,7 @@ this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/
     }
     static collision()
     {
-        console.log("FRAME");
+        //console.log("FRAME");
     }
     static _getAlives()
     {

@@ -134,7 +134,11 @@ clearTail()
 {
     this.tail.clear(this.position);
 }
-reset(position)
+stop()
+{
+    this.HALT = true;
+}
+reset(position,rot)
 {
 
   this.position=position;
@@ -143,6 +147,7 @@ reset(position)
   this.distance=0;
   this.lastDistance=0;
   this._alive = true;
+  this.rotation = rot;
   this.HALT=false;
   this.break=
   {
