@@ -60,8 +60,9 @@ isAlive()
 }
 collision(gameobject,component)
 {
-    if(component.getTag()=="line"|| (component.getTag()=="Head"&& gameobject.color != this.color))
+    if(component.getTag()=="line"|| component.getTag()=="Head")
     {
+
         this.coll=true;
         if(!this.break.is)
         {
@@ -104,6 +105,7 @@ if(this.HALT) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
+let pos = this.position;
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
 if(this.distance-(this.vel*4)>this.lastDistance)

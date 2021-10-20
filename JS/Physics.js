@@ -64,7 +64,7 @@ export class Physics
             for(var j=i+1;j<this.circleComponents.length;j++)
             {
                 let c0 = this.circleComponents[i];
-                let c1 = this.circleComponents[j];
+                let c1 = this.circleComponents[j]
                if(this.CircleCircleCollision(c0,c1))
                {
                    c0.parent.collision(c1.parent,c0);
