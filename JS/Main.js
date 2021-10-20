@@ -122,7 +122,7 @@ export class Main
     static update()
     {
         
-        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
+        this.gameObjects.forEach((element)=>{element.update()});
        
     }
    
