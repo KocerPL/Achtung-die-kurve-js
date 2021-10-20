@@ -26,6 +26,7 @@ export class Main
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,595.5));
+    static pause = false;
     // if true then width *ratio < height
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
@@ -33,11 +34,16 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
         this.frameHitbox.setTag("Frame");
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),37,39,"red"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),188,190,"green"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),37,39,"red"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),188,190,"green"));
+        
         this.lastAliveCount = this._getAlives().length;
+        window.addEventListener("keydown",this.keyPress.bind(this),false);
         document.body.appendChild(this.canvas);
+        for(var k=0;k<6;k++)
+        { this.update();}
+        this.pause=true;
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
     static animationLoop(time)
@@ -59,27 +65,10 @@ export class Main
             //Draw
            this.draw();
            let Alives = this._getAlives();
-            if(Alives.length<this.lastAliveCount) 
-            {
-            for(let i=0;i<Alives.length;i++)
-            {
-                Alives[i].addPoints(5);
-            }
             
-            }
-            if(Alives.length<=1)
-            {
-                for(var i=0;i<this.gameObjects.length;i++)
-                {
-                    if(this.gameObjects[i] instanceof Player)
-                    {
-                        this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10));
-                    }
-                }
-            }
-            this.lastAliveCount= Alives.length;
             this.ctx.font = "20px Calibri";
            this.ctx.fillText("Alive: "+Alives.length,5,45);
+           if(this.pause) this.ctx.fillText("PAUZA",5,65);
             //Fps measurement
             if(this.renderFPS)  
             {
@@ -106,11 +95,45 @@ export class Main
     }
     static update()
     {
-        
+        if(!this.pause)
+        {
+            let Alives = this._getAlives();
+            if(Alives.length<this.lastAliveCount) 
+            {
+            for(let i=0;i<Alives.length;i++)
+            {
+                Alives[i].addPoints(5);
+            }
+            
+            }
+            if(Alives.length<=1)
+            {
+                console.log("reset!!!");
+                for(var i=0;i<this.gameObjects.length;i++)
+                {
+                    if(this.gameObjects[i] instanceof Player)
+                    {
+                        
+                        this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10));
+                      
+                    }
+                }
+                for(var k=0;k<6;k++)
+                { this.update();}
+                this.pause=true;
+            }
+            this.lastAliveCount= Alives.length;
         this.gameObjects.forEach((element)=>{element.update()});
-       
+        }
     }
-   
+   static keyPress(ev)
+   {
+       if(32==ev.keyCode)
+       {
+           if(ev.type=="keydown")
+           this.pause=!this.pause;
+       }
+   }
     static resize()
     {
     this.min = window.innerWidth/this.ratio<window.innerHeight;
