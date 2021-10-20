@@ -35,16 +35,26 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
         this.frameHitbox.setTag("Frame");
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),37,39,"red"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),0,new Vector(1,1),188,190,"green"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"red"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"green"));
+       // this.gameObjects.push(new Counter(new Vector(100,0),0,4,"Comic sans",3));
+       for(var i=0;i<this.gameObjects.length;i++)
+       {
+       if(this.gameObjects[i] instanceof Player)
+
+       {
+           this.gameObjects[i].stop();
+       }
+        }
+      this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
         this.lastAliveCount = this._getAlives().length;
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
     static animationLoop(time)
     {
-        requestAnimationFrame(this.animationLoop.bind(this),false);
+    requestAnimationFrame(this.animationLoop.bind(this),false);
         if(this.lastTime+(1000/this.maxFps)<=time)
         {
             let delta = time-this.lastTime;
@@ -69,15 +79,19 @@ export class Main
             }
             
             }
-            if(Alives.length<=1)
+            if(Alives.length<=1 && this.resetTrig==false)
             {
                 for(var i=0;i<this.gameObjects.length;i++)
-                {
-                    if(this.gameObjects[i] instanceof Player)
-                    {
-                        this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10));
-                    }
-                }
+             {
+             if(this.gameObjects[i] instanceof Player)
+
+             {
+                 this.gameObjects[i].stop();
+             }
+              }
+            this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
+                
+                this.resetTrig=true;
             }
             this.lastAliveCount= Alives.length;
             this.ctx.font = "20px Calibri";
@@ -97,7 +111,7 @@ export class Main
                 this.frames=0;
             }
         this.lastTime=time;
-       }
+        }
     }
     static reset()
     {
@@ -122,7 +136,7 @@ export class Main
     static update()
     {
         
-        this.gameObjects.forEach((element)=>{element.update()});
+        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
        
     }
    
@@ -135,7 +149,7 @@ export class Main
     this.canvas.style.marginRight = ((window.innerWidth-this.canvas.width)/2)+"px";
   //  this.ctx.scale(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
   this.caMatr = new DOMMatrix();
-    this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
     this.ctx.setTransform(this.caMatr);
     }
     static collision()
