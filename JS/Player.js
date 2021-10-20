@@ -2,7 +2,7 @@ import { GameObject } from "./GameObject.js";
 import { Vector } from "./Vector.js";
 import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
-import { CircleComponent } from "./Components/lineCircleComponent.js";
+import { CircleComponent } from "./Components/LineCircleComponent.js";
 
 export class Player extends GameObject
 {
@@ -132,7 +132,11 @@ clearTail()
 {
     this.tail.clear(this.position);
 }
-reset(position)
+stop()
+{
+    this.HALT = true;
+}
+reset(position,rot)
 {
 
   this.position=position;
@@ -141,6 +145,7 @@ reset(position)
   this.distance=0;
   this.lastDistance=0;
   this._alive = true;
+  this.rotation = rot;
   this.HALT=false;
   this.break=
   {

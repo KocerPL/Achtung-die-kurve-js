@@ -1,5 +1,5 @@
 import { AABBComponent } from "./Components/AABBComponent.js";
-import { StaticCircleComponent } from "./Components/lineCircleComponent.js";
+import { StaticCircleComponent } from "./Components/LineCircleComponent.js";
 import { GameObject } from "./GameObject.js";
 import { Physics } from "./Physics.js";
 import { Vector } from "./Vector.js";
@@ -54,7 +54,7 @@ addPoint(position)
 }
 collision(gameobject,component)
     {
-console.log("coll");
+//console.log("coll");
     }
 breakLine()
 {
@@ -72,7 +72,7 @@ this.break=false;
 this.currentIndex++;
 this.positions[this.currentIndex]=new Array();
 this.addPoint(position);
-console.log(this.positions);
+//console.log(this.positions);
 }
 clear(position)
 {

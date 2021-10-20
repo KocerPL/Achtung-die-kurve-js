@@ -3,6 +3,7 @@ import { Physics } from "./Physics.js";
 import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
 import { FrameHitbox } from "./Components/FrameHitbox.js";
+import { Counter } from "./Counter.js";
 export class Main
 {
     // object array
@@ -25,6 +26,7 @@ export class Main
     static lastAliveCount = -1;
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
+    static resetTrig=false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,595.5));
     static pause = false;
     // if true then width *ratio < height
@@ -34,10 +36,19 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
         this.frameHitbox.setTag("Frame");
-        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),37,39,"red"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*680+30,Math.random()*560+30),Math.random()*360,new Vector(1,1),188,190,"green"));
-        
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"red"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"green"));
+       // this.gameObjects.push(new Counter(new Vector(100,0),0,4,"Comic sans",3));
+       for(var i=0;i<this.gameObjects.length;i++)
+       {
+       if(this.gameObjects[i] instanceof Player)
+
+       {
+           this.gameObjects[i].stop();
+       }
+        }
+      this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
         this.lastAliveCount = this._getAlives().length;
         window.addEventListener("keydown",this.keyPress.bind(this),false);
         document.body.appendChild(this.canvas);
@@ -48,7 +59,7 @@ export class Main
     }
     static animationLoop(time)
     {
-    requestAnimationFrame(this.animationLoop.bind(this),false);
+        requestAnimationFrame(this.animationLoop.bind(this),false);
         if(this.lastTime+(1000/this.maxFps)<=time)
         {
             let delta = time-this.lastTime;
@@ -66,6 +77,22 @@ export class Main
            this.draw();
            let Alives = this._getAlives();
             
+            }
+            if(Alives.length<=1 && this.resetTrig==false)
+            {
+                for(var i=0;i<this.gameObjects.length;i++)
+             {
+             if(this.gameObjects[i] instanceof Player)
+
+             {
+                 this.gameObjects[i].stop();
+             }
+              }
+            this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
+                
+                this.resetTrig=true;
+            }
+            this.lastAliveCount= Alives.length;
             this.ctx.font = "20px Calibri";
            this.ctx.fillText("Alive: "+Alives.length,5,45);
            if(this.pause) this.ctx.fillText("PAUZA",5,65);
@@ -84,11 +111,24 @@ export class Main
                 this.frames=0;
             }
         this.lastTime=time;
+       }
+    
+    static reset()
+    {
+        for(var i=0;i<this.gameObjects.length;i++)
+        {
+            if(this.gameObjects[i] instanceof Player)
+
+            {
+                this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360);
+            }
         }
+        this.resetTrig=false;
+        
     }
     static draw()
     {
-       this.gameObjects.forEach((element)=>{this.ctx.save();element.draw(this.ctx); this.ctx.restore()});
+       this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
        this.ctx.lineWidth = 5;
        this.ctx.strokeStyle="yellow";
        this.ctx.strokeRect(2.5,2.5,797.5,597.5);
@@ -125,6 +165,9 @@ export class Main
             this.lastAliveCount= Alives.length;
         this.gameObjects.forEach((element)=>{element.update()});
         }
+        
+        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
+       
     }
    static keyPress(ev)
    {
@@ -143,12 +186,12 @@ export class Main
     this.canvas.style.marginRight = ((window.innerWidth-this.canvas.width)/2)+"px";
   //  this.ctx.scale(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
   this.caMatr = new DOMMatrix();
-this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+    this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
     this.ctx.setTransform(this.caMatr);
     }
     static collision()
     {
-        console.log("FRAME");
+        //console.log("FRAME");
     }
     static _getAlives()
     {

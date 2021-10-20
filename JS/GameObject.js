@@ -21,6 +21,10 @@ export class GameObject
     {
 
     }
+    setScale(vec)
+    {
+        this.scaleVec= vec.copy();
+    }
     updateComponents(parent)
     {
         for( var c of this.components)
