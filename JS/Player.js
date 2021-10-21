@@ -10,8 +10,8 @@ export class Player extends GameObject
 constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 {
     super(position,rotation,scale);
-    this.radius =4;
-    this.vel =1;
+    this.radius =3;
+    this.vel =1.2;
     this.distance=0;
     this.rotVel=0;
     this.color=color;
@@ -45,14 +45,14 @@ keyPress(ev)
     if(this.leftKeyCode==ev.keyCode)
     {
         if(ev.type=="keydown")
-        this.rotVel=-1.8;
+        this.rotVel=-this.vel*2;
         else
         this.rotVel=0;
     }
     else if(this.rightKeyCode==ev.keyCode)
     {
         if(ev.type=="keydown")
-        this.rotVel=1.8;
+        this.rotVel=this.vel*2;
         else
         this.rotVel=0;
     }

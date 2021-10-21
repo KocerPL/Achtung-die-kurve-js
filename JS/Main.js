@@ -28,7 +28,7 @@ export class Main
     static unitVectorMax= new Vector(1024,1024/this.ratio);
     static caMatr = new DOMMatrix();
     static resetTrig=false;
-    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,595.5));
+    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,596.5));
     // if true then width *ratio < height
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
@@ -36,14 +36,14 @@ export class Main
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
         this.frameHitbox.setTag("Frame");
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"blue"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"red"));
-        this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"green"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"Blue"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"Red"));
+        this.gameObjects.push(new Player(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"Green"));
        this.forPlayers((p)=>{ 
            p.setStop(true);
            p.setDrawDirection(true);
        });
-      this.gameObjects.push(new Counter(new Vector(405,281),0,10,"Comic Sans MS",3,()=>{
+      this.gameObjects.push(new Counter(new Vector(405,280),0,10,"Comic Sans MS",3,()=>{
           this.forPlayers((p)=>{ 
               p.setStop(false);
               p.setDrawDirection(false);
@@ -75,18 +75,7 @@ export class Main
            this.lastTime=time;
         }
     }
-    //Iterates for all Players in gameobjects
-    static forPlayers(func)
-    {
-        for(var i=0;i<this.gameObjects.length;i++)
-        {
-            if(this.gameObjects[i] instanceof Player)
-
-            {
-                func(this.gameObjects[i]);
-            }
-        }
-    }
+    
     static draw(time)
     {
         //Draws gameobjects
@@ -152,6 +141,18 @@ export class Main
              });
            }));
            this.resetTrig = true;
+        }
+    }
+    //Iterates for all Players in gameobjects
+    static forPlayers(func)
+    {
+        for(var i=0;i<this.gameObjects.length;i++)
+        {
+            if(this.gameObjects[i] instanceof Player)
+
+            {
+                func(this.gameObjects[i]);
+            }
         }
     }
    //Resizes Canva and applies scale vector to main matrix

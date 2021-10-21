@@ -9,22 +9,23 @@ static addScore(score)
 {
 if(!score instanceof ScoreComponent) throw new Error("argument1 must be instance of score component");
 this.scoreComponents.push(score);
+this.sortedScores = this.scoreComponents;
 }
 static update()
 {
-    this.sortedScores = this.scoreComponents;
+   
     for(var i=1; i<this.sortedScores.length;i++)
     {
         var j =i-1;
         var key = this.sortedScores[i];
-      while(j>=0 && key.getScore()<this.sortedScores[j].getScore())
+      while(j>=0 && key.getScore()>this.sortedScores[j].getScore())
       {
         this.sortedScores[j + 1] = this.sortedScores[j];
         --j;
       }
       this.sortedScores[j + 1] = key;
     }
-    this.sortedScores.reverse();
+    //this.sortedScores.reverse();
 }
 static draw(ctx)
 {
