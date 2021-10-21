@@ -5,6 +5,7 @@ import { Vector } from "./Vector.js";
 import { FrameHitbox } from "./Components/FrameHitbox.js";
 import { Counter } from "./Counter.js";
 import { Scoreboard } from "./Scoreboard.js";
+import { Menu } from "./Menu.js";
 export class Main
 {
     // object array
@@ -15,6 +16,11 @@ export class Main
     static updateTime=1000/60;
     static updateDelta=0;
     //fpsMeasurement variables
+    static STATE = Object.freeze( {
+        GAME: 1,
+        MENU: 2
+    });
+    static State = this.STATE.MENU;
     static fps =0;
     static frames=0;
     static lastFpsMeasure=0;
@@ -35,6 +41,12 @@ export class Main
     {
         this.resize();
         window.addEventListener('resize',this.resize.bind(this),false);
+       
+        document.body.appendChild(this.canvas);
+        requestAnimationFrame(this.animationLoop.bind(this),false);
+    }
+    static startGame()
+    {
         this.frameHitbox.setTag("Frame");
         this.gameObjects.push(new Player(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"Blue"));
         this.gameObjects.push(new Player(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"Red"));
@@ -50,8 +62,6 @@ export class Main
         });
       }));
         this.lastAliveCount = this._getAlives().length;
-        document.body.appendChild(this.canvas);
-        requestAnimationFrame(this.animationLoop.bind(this),false);
     }
     static animationLoop(time)
     {
@@ -78,20 +88,12 @@ export class Main
     
     static draw(time)
     {
-        //Draws gameobjects
-       this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
-       this.ctx.lineWidth = 5;
-       this.ctx.strokeStyle="yellow";
-       this.ctx.strokeRect(2.5,2.5,797.5,597.5);
-       //scoreboard
-       this.ctx.save();
-       Scoreboard.draw(this.ctx);
-       this.ctx.restore()
-        /*   //Info logging stuff
-           let Alives = this._getAlives();
-           this.ctx.font = "20px Calibri";
-          this.ctx.fillText("Alive: "+Alives.length,5,45);
-        */
+      if(this.State==this.STATE.GAME) this.drawGame();
+      else if(this.State==this.STATE.MENU) 
+      {this.ctx.save();
+          Menu.draw(this.ctx);
+          this.ctx.restore();
+      }
        //Fps measurement
        if(this.renderFPS)  
        {
@@ -107,10 +109,31 @@ export class Main
            this.frames=0;
        }
     }
+    static drawGame()
+    {
+  //Draws gameobjects
+  this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
+  this.ctx.lineWidth = 5;
+  this.ctx.strokeStyle="yellow";
+  this.ctx.strokeRect(2.5,2.5,797.5,597.5);
+  //scoreboard
+  this.ctx.save();
+  Scoreboard.draw(this.ctx);
+  this.ctx.restore()
+   /*   //Info logging stuff
+      let Alives = this._getAlives();
+      this.ctx.font = "20px Calibri";
+     this.ctx.fillText("Alive: "+Alives.length,5,45);
+   */
+    }
     static update()
     {
-       this.checkConditions();    
-        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
+        if(this.State==this.STATE.GAME) {
+            this.checkConditions();    
+            this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
+        }
+      else if(this.State=this.STATE.MENU) Menu.update();
+      
     }
     //checks if player has died, and if it is time to reset
     static checkConditions()
