@@ -1,10 +1,11 @@
+import { Vector } from "./Vector.js";
 import { ScoreComponent } from "./Components/ScoreComponent.js";
 export class Scoreboard 
 {
 static scoreComponents = new Array();
 static sortedScores = new Array();
-static x =805
-static y=0;
+static position =new Vector(802,0);
+static size = new Vector(222,650);
 static addScore(score)
 {
 if(!score instanceof ScoreComponent) throw new Error("argument1 must be instance of score component");
@@ -29,15 +30,41 @@ static update()
 }
 static draw(ctx)
 {
-    ctx.font = "20px Calibri";
-    ctx.fillText("Scoreboard",this.x,this.y+20);
-    ctx.font = "15px Calibri";
-    var actualY = 20;
+  let pos = this.position;
+  let size = this.size;
+  let alternate = true;
+  this.drawBackground(ctx);
+  const font = "Comic Sans MS";
+  const spacer = 5;
+  const scoreSize =25;
+  ctx.fillStyle="white";
+    ctx.font = "35px "+font;
+    ctx.textAlign = "center";
+    ctx.fillText("Scoreboard",pos.x+(size.x/2),pos.y+35);
+    ctx.textAlign = "left";
+    ctx.font = scoreSize+"px "+font;
+    var actualY = 35+spacer;
     for(var i=0; i<this.sortedScores.length;i++)
     {
+      if(alternate)
+      {
+        alternate=false;
+        ctx.fillStyle="#4d4d4d";
+        ctx.fillRect( pos.x,pos.y+actualY,size.x,scoreSize+(spacer/2));
+      }
+      else alternate =true;
         ctx.fillStyle=this.sortedScores[i].parent.color;
-        ctx.fillText(this.sortedScores[i].parent.color+":  "+this.sortedScores[i].getScore(),this.x,this.y+actualY+15);
-        actualY+=15;
+        ctx.textAlign = "left";
+        ctx.fillText(this.sortedScores[i].parent.color+":",pos.x,pos.y+actualY+scoreSize);
+        ctx.fillStyle="yellow";
+        ctx.textAlign = "right";
+        ctx.fillText(this.sortedScores[i].getScore(),pos.x+size.x,pos.y+actualY+scoreSize)
+        actualY+=scoreSize+spacer;
     }
+}
+static drawBackground(ctx)
+{
+  ctx.fillStyle="#0d0d0d";
+  ctx.fillRect(this.position.x,this.position.y,this.size.x,this.size.y);
 }
 }

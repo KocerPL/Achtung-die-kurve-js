@@ -87,10 +87,11 @@ export class Main
        this.ctx.save();
        Scoreboard.draw(this.ctx);
        this.ctx.restore()
-       //Info logging stuff
-       let Alives = this._getAlives();
-       this.ctx.font = "20px Calibri";
-      this.ctx.fillText("Alive: "+Alives.length,5,45);
+        /*   //Info logging stuff
+           let Alives = this._getAlives();
+           this.ctx.font = "20px Calibri";
+          this.ctx.fillText("Alive: "+Alives.length,5,45);
+        */
        //Fps measurement
        if(this.renderFPS)  
        {
@@ -128,7 +129,7 @@ export class Main
         if(Alives.length<=1 && this.resetTrig==false)
         {
             this.forPlayers((p)=>{ 
-                p.reset(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360);
+                p.reset(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360);
                 p.setStop(true);
                 p.setDrawDirection(true);
             });
