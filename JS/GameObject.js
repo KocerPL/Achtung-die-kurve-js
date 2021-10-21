@@ -42,6 +42,7 @@ export class GameObject
    addComponent(component)
    {
        this.components.push(component)
+       return component;
    }
    removeComponent(tag)
    {

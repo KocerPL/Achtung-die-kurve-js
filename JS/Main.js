@@ -4,6 +4,7 @@ import { Player } from "./Player.js";
 import { Vector } from "./Vector.js";
 import { FrameHitbox } from "./Components/FrameHitbox.js";
 import { Counter } from "./Counter.js";
+import { Scoreboard } from "./Scoreboard.js";
 export class Main
 {
     // object array
@@ -38,16 +39,16 @@ export class Main
         this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),65,68,"blue"));
         this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),37,39,"red"));
         this.gameObjects.push(new Player(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360,new Vector(1,1),188,190,"green"));
-       // this.gameObjects.push(new Counter(new Vector(100,0),0,4,"Comic sans",3));
-       for(var i=0;i<this.gameObjects.length;i++)
-       {
-       if(this.gameObjects[i] instanceof Player)
-
-       {
-           this.gameObjects[i].stop();
-       }
-        }
-      this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
+       this.forPlayers((p)=>{ 
+           p.setStop(true);
+           p.setDrawDirection(true);
+       });
+      this.gameObjects.push(new Counter(new Vector(405,281),0,10,"Comic Sans MS",3,()=>{
+          this.forPlayers((p)=>{ 
+              p.setStop(false);
+              p.setDrawDirection(false);
+        });
+      }));
         this.lastAliveCount = this._getAlives().length;
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
@@ -57,6 +58,7 @@ export class Main
     requestAnimationFrame(this.animationLoop.bind(this),false);
         if(this.lastTime+(1000/this.maxFps)<=time)
         {
+            //Update Calc
             let delta = time-this.lastTime;
             this.updateDelta+=delta;
             while(this.updateDelta>this.updateTime)
@@ -64,82 +66,95 @@ export class Main
                 this.updateDelta-=this.updateTime;
                 //Update
                 Physics.update();
+                Scoreboard.update();
                 this.update();
             }
-            
             this.ctx.clearRect(0,0,1024,1024/this.ratio);
             //Draw
-           this.draw();
-           let Alives = this._getAlives();
-            if(Alives.length<this.lastAliveCount) 
-            {
-            for(let i=0;i<Alives.length;i++)
-            {
-                Alives[i].addPoints(5);
-            }
-            
-            }
-            if(Alives.length<=1 && this.resetTrig==false)
-            {
-                for(var i=0;i<this.gameObjects.length;i++)
-             {
-             if(this.gameObjects[i] instanceof Player)
-
-             {
-                 this.gameObjects[i].stop();
-             }
-              }
-            this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,this.reset.bind(this)));
-                
-                this.resetTrig=true;
-            }
-            this.lastAliveCount= Alives.length;
-            this.ctx.font = "20px Calibri";
-           this.ctx.fillText("Alive: "+Alives.length,5,45);
-            //Fps measurement
-            if(this.renderFPS)  
-            {
-                this.ctx.fillStyle="#ffffff";
-                this.ctx.font = "20px Calibri";
-                this.ctx.fillText("Fps: "+this.fps,5,25);
-            }
-            this.frames++;
-            if(this.lastFpsMeasure+1000<=time)
-            {
-                this.fps=this.frames;
-                this.lastFpsMeasure=time; 
-                this.frames=0;
-            }
-        this.lastTime=time;
+           this.draw(time);
+           this.lastTime=time;
         }
     }
-    static reset()
+    //Iterates for all Players in gameobjects
+    static forPlayers(func)
     {
         for(var i=0;i<this.gameObjects.length;i++)
         {
             if(this.gameObjects[i] instanceof Player)
 
             {
-                this.gameObjects[i].reset(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360);
+                func(this.gameObjects[i]);
             }
         }
-        this.resetTrig=false;
-        
     }
-    static draw()
+    static draw(time)
     {
+        //Draws gameobjects
        this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
        this.ctx.lineWidth = 5;
        this.ctx.strokeStyle="yellow";
        this.ctx.strokeRect(2.5,2.5,797.5,597.5);
+       //scoreboard
+       this.ctx.save();
+       Scoreboard.draw(this.ctx);
+       this.ctx.restore()
+       //Info logging stuff
+       let Alives = this._getAlives();
+       this.ctx.font = "20px Calibri";
+      this.ctx.fillText("Alive: "+Alives.length,5,45);
+       //Fps measurement
+       if(this.renderFPS)  
+       {
+           this.ctx.fillStyle="#ffffff";
+           this.ctx.font = "20px Calibri";
+           this.ctx.fillText("Fps: "+this.fps,5,25);
+       }
+       this.frames++;
+       if(this.lastFpsMeasure+1000<=time)
+       {
+           this.fps=this.frames;
+           this.lastFpsMeasure=time; 
+           this.frames=0;
+       }
     }
     static update()
     {
-        
+       this.checkConditions();    
         this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
-       
     }
-   
+    //checks if player has died, and if it is time to reset
+    static checkConditions()
+    {
+        let Alives = this._getAlives();
+         //Adds points if player died
+        if(Alives.length<this.lastAliveCount) 
+        {
+        for(let i=0;i<Alives.length;i++)
+        {
+            Alives[i].addPoints(1);
+        }
+        }
+        this.lastAliveCount = Alives.length;
+        //Resets game if there is no alive players
+        if(Alives.length<=1 && this.resetTrig==false)
+        {
+            this.forPlayers((p)=>{ 
+                p.reset(new Vector(Math.random()*700+10,Math.random()*580+10),Math.random()*360);
+                p.setStop(true);
+                p.setDrawDirection(true);
+            });
+           
+           this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,()=>{
+               this.forPlayers((p)=>{ 
+                   p.setStop(false);
+                   p.setDrawDirection(false);
+                   this.resetTrig = false;
+             });
+           }));
+           this.resetTrig = true;
+        }
+    }
+   //Resizes Canva and applies scale vector to main matrix
     static resize()
     {
     this.min = window.innerWidth/this.ratio<window.innerHeight;
@@ -147,9 +162,9 @@ export class Main
     this.canvas.width = this.min?window.innerWidth: window.innerHeight*this.ratio;
     this.canvas.style.marginLeft = ((window.innerWidth-this.canvas.width)/2)+"px";
     this.canvas.style.marginRight = ((window.innerWidth-this.canvas.width)/2)+"px";
-  //  this.ctx.scale(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
-  this.caMatr = new DOMMatrix();
-this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+     //  this.ctx.scale(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+    this.caMatr = new DOMMatrix();
+    this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
     this.ctx.setTransform(this.caMatr);
     }
     static collision()
@@ -159,13 +174,12 @@ this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/
     static _getAlives()
     {
         let alive = new Array();
-        for(var i=0;i<this.gameObjects.length;i++)
-        {
-            if(this.gameObjects[i] instanceof Player && this.gameObjects[i].isAlive())
+        this.forPlayers((p)=>{
+            if(p.isAlive())
             {
-                alive.push(this.gameObjects[i]);
+                alive.push(p);
             }
-        }
+        });
         return alive;
     }
 }

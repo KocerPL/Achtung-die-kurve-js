@@ -3,6 +3,7 @@ import { Vector } from "./Vector.js";
 import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
 import { CircleComponent } from "./Components/LineCircleComponent.js";
+import { ScoreComponent } from "./Components/ScoreComponent.js";
 
 export class Player extends GameObject
 {
@@ -22,6 +23,8 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this._alive = true;
     this.HALT=false;
     this.score =0;
+    this._scoreComp = this.addComponent(new ScoreComponent(this));
+    this._drawDirection=false;
     this.break=
     {
         length:40,
@@ -83,20 +86,32 @@ draw(ctx)
 this.tail.draw(ctx);
 
 ctx.lineWidth=1;
-ctx.font = "5px Calibri";
-ctx.fillText(this.score,this.position.x-1.75,this.position.y-5);
+//ctx.font = "5px Calibri";
+//ctx.fillText(this.score,this.position.x-1.75,this.position.y-5);
 this.useTransfMat(ctx);
 ctx.fillStyle="Yellow";
 ctx.beginPath();
 ctx.arc(0,0,this.radius,0,Math.PI*2,false);
 ctx.fill();
-//ctx.strokeStyle="red";
-//ctx.beginPath();
-//ctx.moveTo(0,0);
-//ctx.lineTo(this.radius,0);
-//ctx.stroke();
+ctx.strokeStyle="red";
+if(this._drawDirection)
+{
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = this.color;
+ctx.beginPath();
+ctx.moveTo(this.radius+2,0);
+ctx.lineTo(this.radius+8,0);
+ctx.lineTo(this.radius+5,3);
+ctx.moveTo(this.radius+8,0);
+ctx.lineTo(this.radius+5,-3);
+ctx.stroke();
+}
 this.coll=false;
 
+}
+setDrawDirection(bool)
+{
+    this._drawDirection=bool;
 }
 
 update()
@@ -128,15 +143,15 @@ this.tail.continueLine(this.position);
 }
 addPoints(points)
 {
-    this.score+=points;
+    this._scoreComp.addPoints(points);
 }
 clearTail()
 {
     this.tail.clear(this.position);
 }
-stop()
+setStop(stop)
 {
-    this.HALT = true;
+    this.HALT = stop;
 }
 reset(position,rot)
 {
