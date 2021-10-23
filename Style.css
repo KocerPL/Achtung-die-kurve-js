@@ -4,9 +4,11 @@ body
     padding: 0;
     overflow: hidden;
     background-color: gray;
+    
 }
 canvas
 {
     margin:auto;
     background-color: black;
+    cursor: url('cursor.cur'), auto;	
 }

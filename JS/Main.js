@@ -6,15 +6,18 @@ import { FrameHitbox } from "./Components/FrameHitbox.js";
 import { Counter } from "./Counter.js";
 import { Scoreboard } from "./Scoreboard.js";
 import { Menu } from "./Menu.js";
+import { MouseListener } from "./MouseListener.js";
 export class Main
 {
     // object array
     static objectArray = new Array();
     //loop variables
+    static cursorhov= false;
     static lastTime=0;
     static maxFps=61;
     static updateTime=1000/60;
     static updateDelta=0;
+   static leftMargin = 0;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
         GAME: 1,
@@ -32,6 +35,7 @@ export class Main
     static ratio = 1.7;
     static lastAliveCount = -1;
     static unitVectorMax= new Vector(1024,1024/this.ratio);
+    static currentProportion =new Vector(1,1);
     static caMatr = new DOMMatrix();
     static resetTrig=false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,596.5));
@@ -40,8 +44,9 @@ export class Main
     static start()
     {
         this.resize();
+      
         window.addEventListener('resize',this.resize.bind(this),false);
-       
+        MouseListener.init(this.currentProportion);
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -185,11 +190,14 @@ export class Main
     this.min = window.innerWidth/this.ratio<window.innerHeight;
     this.canvas.height= this.min?window.innerWidth/this.ratio: window.innerHeight;
     this.canvas.width = this.min?window.innerWidth: window.innerHeight*this.ratio;
-    this.canvas.style.marginLeft = ((window.innerWidth-this.canvas.width)/2)+"px";
+    this.leftMargin=((window.innerWidth-this.canvas.width)/2)
+    this.canvas.style.marginLeft = this.leftMargin+"px";
     this.canvas.style.marginRight = ((window.innerWidth-this.canvas.width)/2)+"px";
      //  this.ctx.scale(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
     this.caMatr = new DOMMatrix();
     this.caMatr.scaleSelf(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+    this.currentProportion = new Vector(this.canvas.width/this.unitVectorMax.x,this.canvas.height/this.unitVectorMax.y);
+    MouseListener.updateRatio(this.currentProportion);
     this.ctx.setTransform(this.caMatr);
     }
     static collision()
