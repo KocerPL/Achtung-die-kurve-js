@@ -1,18 +1,35 @@
-import { ListenerComponent } from "./Components/listenerComponent.js";
+import { ListenerComponent } from "./Components/ListenerComponent.js";
 import { ButtonComponent } from "./Components/MenuComponents/ButtonComponent.js";
+import { SwitchComponent } from "./Components/MenuComponents/SwitchComponent.js";
 import { Main } from "./Main.js";
 import { Vector } from "./Vector.js";
 export class Menu
 {
   static componentArray = new Array();
   static mouseListener = new ListenerComponent(this);
+  static enabledPlayers=0;
   static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true},this.startGame.bind(this)));
-  static GreenButton = this.addComponent(new ButtonComponent(this,new Vector(342,300),new Vector(160,30),{text:"Green",color:"Green",frame:false},()=>{if(this.GreenButton.clicked){Menu.GreenButton.style.color="Green"; this.GreenButton.clicked=false;} else {Menu.GreenButton.style.color="rgba(0,255,0,0.1)"; this.GreenButton.clicked=true;}}));
+  static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(342,300),new Vector(160,30),{text:"Green  (<,>)",textcolor:"Green",color:"gray",frame:false}));
+  static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(342,260),new Vector(160,30),{text:"Blue  (a,d)",textcolor:"Blue",color:"Blue",frame:false}));
+  static RedButton = this.addComponent(new SwitchComponent(this,new Vector(342,220),new Vector(160,30),{text:"Red  (←,→)",textcolor:"Red",color:"Red",frame:false}));
+  static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(342,180),new Vector(190,30),{text:"Orange  (1,q)",textcolor:"orange",color:"orange",frame:false}));
 static update()
 {
+  this.enabledPlayers=0;
   for(var i=0;i<this.componentArray.length;i++)
   {
 this.componentArray[i].update();
+if(this.componentArray[i] instanceof SwitchComponent && this.componentArray[i].getClick())
+{
+  this.enabledPlayers++;
+}
+  }
+  if(this.StartGameButton.getClick())
+  {
+    if(this.enabledPlayers>1)
+    this.startGame();
+    else alert("You need at least 2 players to start game!!");
+    this.StartGameButton._click =false;
   }
 }
 static startGame()
