@@ -1,6 +1,7 @@
 import { ListenerComponent } from "./Components/ListenerComponent.js";
-import { ButtonComponent } from "./Components/MenuComponents/ButtonComponent.js";
-import { SwitchComponent } from "./Components/MenuComponents/SwitchComponent.js";
+import { ButtonComponent } from "./Components/GuiComponents/ButtonComponent.js";
+import { SwitchComponent } from "./Components/GuiComponents/SwitchComponent.js";
+import { TextComponent } from "./Components/GuiComponents/TextComponent.js";
 import { Main } from "./Main.js";
 import { Vector } from "./Vector.js";
 export class Menu
@@ -8,6 +9,8 @@ export class Menu
   static componentArray = new Array();
   static mouseListener = new ListenerComponent(this);
   static enabledPlayers=0;
+  static Title = this.addComponent(new TextComponent(this,new Vector(1024/2,100),"Achtung die kurve",{color:"white",textAlign:"center",font:"Comic Sans MS",fontSize:50}));
+  static Author = this.addComponent(new TextComponent(this,new Vector(1024/2,135),"Remake by Kocer",{color:"green",textAlign:"center",font:"Segoe Script",fontSize:25}));
   static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true},this.startGame.bind(this)));
   static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(342,300),new Vector(160,30),{text:"Green  (<,>)",textcolor:"Green",color:"gray",frame:false}));
   static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(342,260),new Vector(160,30),{text:"Blue  (a,d)",textcolor:"Blue",color:"Blue",frame:false}));
@@ -43,14 +46,14 @@ static draw(ctx)
   {
 this.componentArray[i].draw(ctx);
   }
-    ctx.font = "50px Comic Sans MS";
+   /* ctx.font = "50px Comic Sans MS";
     ctx.textAlign="center";
     ctx.fillStyle="#ffffff";
     ctx.fillText("Achtung die Kurve!",1024/2,100);
     ctx.font = "30px Comic Sans MS";
     ctx.fillStyle="Green";
     ctx.fillText("Remake by Kocer",1024/2,140);
-    this.StartGameButton.draw(ctx);
+  */
 }    
 static mouse(pos,desc)
 {
