@@ -1,20 +1,43 @@
+import { Vector } from "../../Vector.js";
 import { Component } from "../Component.js";
+import { TextComponent } from "./TextComponent.js";
 
 export class ButtonComponent extends Component
 {
-    constructor(parent,position,size,style)
+    constructor(parent,position,size,style,textStyle)
     {
         super(parent);
         this.position = position.copy();
         this.size = size.copy();
         this.style= style ?? {};
+        this.margin =2.5;
         this.style.color ??= "gray";
         this.style.textcolor ??= "white";
         this._hover=false;
+        this.textComponent = this.addComponent(new TextComponent(this,new Vector(this.position.x+this.margin,this.position.y+this.size.y-this.margin),this.style.text,textStyle??={color:this.style.textcolor,textBaseLine:"bottom",font:this.style.font??="Comic sans MS",fontSize:this.size.y-(2*this.margin)}) )
+       // console.log(this.textComponent);
         this.color = "black";
         this._click=false;
       //  window.addEventListener('mousedown',this.checkClick.bind(this),false);
        // window.addEventListener('mousemove',this.checkHover.bind(this),false);
+    }
+    setTextAlign(txtAlign)
+    {
+        switch(txtAlign)
+        {
+            case "center":
+                this.textComponent.setPos(new Vector(this.position.x+(this.size.x/2),this.position.y+this.size.y-this.margin));
+                this.textComponent.setConf({textAlign:"center"});
+                break;
+            case "start" || "left":
+                this.textComponent.setPos(new Vector(this.position.x+this.margin,this.position.y+this.size.y-this.margin));
+                this.textComponent.setConf({textAlign:"start"});
+            break;
+            case "end" || "right":
+                this.textComponent.setPos(new Vector(this.position.x+this.size.x-this.margin,this.position.y+this.size.y-this.margin));
+                this.textComponent.setConf({textAlign:"end"});
+            break; 
+        }
     }
     mouse(pos,ev)
     {
@@ -29,7 +52,7 @@ export class ButtonComponent extends Component
             && this.size.x+this.position.x>pos.x
             && this.size.y+this.position.y>pos.y)
             {
-                console.log(ev);
+              //  console.log(ev);
                 if(ev=="mousedown")
                 {
                 this._click =true;
@@ -79,6 +102,7 @@ export class ButtonComponent extends Component
         ctx.font = this.size.y-this.size.y/10+"px Comic Sans MS";
     ctx.textAlign="center";
     ctx.fillStyle=this.style.textcolor;
-    ctx.fillText(this.style.text,this.position.x+(this.size.x/2),this.position.y+this.size.y-3-this.size.y/10);
+    super.draw(ctx);
+   // ctx.fillText(this.style.text,this.position.x+(this.size.x/2),this.position.y+this.size.y-3-this.size.y/10);
     }
 }

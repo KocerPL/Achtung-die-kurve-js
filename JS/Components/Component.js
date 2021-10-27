@@ -31,5 +31,6 @@ export class Component
     addComponent(comp)
     {
         this.components.push(comp);
+        return comp;
     }
 }

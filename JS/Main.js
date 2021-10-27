@@ -47,6 +47,7 @@ export class Main
       
         window.addEventListener('resize',this.resize.bind(this),false);
         MouseListener.init(this.currentProportion);
+        Menu.init();
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }

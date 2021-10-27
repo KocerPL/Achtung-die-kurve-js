@@ -18,7 +18,7 @@ export class MouseListener
     }
     static onMouse(ev)
     {
-console.log(ev);
+//console.log(ev);
 if(ev.type=="mousedown")
 Main.canvas.style.cursor = "url('hover.cur'), auto";
 if(ev.type=="mouseup")
