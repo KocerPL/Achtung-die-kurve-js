@@ -18,6 +18,7 @@ export class Main
     static updateTime=1000/60;
     static updateDelta=0;
    static leftMargin = 0;
+   static pause = false;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
         GAME: 1,
@@ -30,6 +31,7 @@ export class Main
     static renderFPS = true;
     static gameObjects= new Array();
     //Canvas variables
+   
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
     static ratio = 1.7;
@@ -51,6 +53,31 @@ export class Main
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
+    static onKey(ev)
+    {
+        //console.log(ev);
+        if(ev.keyCode==32) 
+        {
+        this.pause= !this.pause
+        if(this.resetTrig)
+        {
+            this.forPlayers((p)=>{ 
+                p.reset(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360);
+                p.setStop(true);
+                p.setDrawDirection(true);
+            });
+           
+           this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,()=>{
+               this.forPlayers((p)=>{ 
+                   p.setStop(false);
+                   p.setDrawDirection(false);
+                   this.resetTrig = false;
+             });
+           }));
+           this.resetTrig = false;
+        }
+        };
+    }
     static startGame()
     {
         this.frameHitbox.setTag("Frame");
@@ -69,6 +96,7 @@ export class Main
         });
       }));
         this.lastAliveCount = this._getAlives().length;
+        window.addEventListener("keydown",this.onKey.bind(this),false);
     }
     static animationLoop(time)
     {
@@ -104,6 +132,7 @@ export class Main
        //Fps measurement
        if(this.renderFPS)  
        {
+        this.ctx.textAlign = "left";
            this.ctx.fillStyle="#ffffff";
            this.ctx.font = "20px Calibri";
            this.ctx.fillText("Fps: "+this.fps,5,25);
@@ -127,7 +156,18 @@ export class Main
   this.ctx.save();
   Scoreboard.draw(this.ctx);
   this.ctx.restore()
-   /*   //Info logging stuff
+  this.ctx.textAlign = "left";
+  this.ctx.fillStyle="#ffffff";
+  this.ctx.font = "20px Calibri";
+  if(this.pause)
+  this.ctx.fillText("|| Paused",5,50);
+  if(this.resetTrig)
+  {
+  this.ctx.font = "50px Papyrus";
+  this.ctx.textAlign = "center";
+  this.ctx.fillText("Click space for next round",400,500);
+  } 
+  /*   //Info logging stuff
       let Alives = this._getAlives();
       this.ctx.font = "20px Calibri";
      this.ctx.fillText("Alive: "+Alives.length,5,45);
@@ -135,9 +175,10 @@ export class Main
     }
     static update()
     {
+       // console.log(this.pause);
         if(this.State==this.STATE.GAME) {
             this.checkConditions();    
-            this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {element.update()}});
+            this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {if(!this.pause)  element.update()}});
         }
       else if(this.State=this.STATE.MENU) Menu.update();
       
@@ -158,20 +199,8 @@ export class Main
         //Resets game if there is no alive players
         if(Alives.length<=1 && this.resetTrig==false)
         {
-            this.forPlayers((p)=>{ 
-                p.reset(new Vector(Math.random()*690+20,Math.random()*580+10),Math.random()*360);
-                p.setStop(true);
-                p.setDrawDirection(true);
-            });
-           
-           this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,()=>{
-               this.forPlayers((p)=>{ 
-                   p.setStop(false);
-                   p.setDrawDirection(false);
-                   this.resetTrig = false;
-             });
-           }));
-           this.resetTrig = true;
+        this.resetTrig=true;
+         this.pause=true;
         }
     }
     //Iterates for all Players in gameobjects

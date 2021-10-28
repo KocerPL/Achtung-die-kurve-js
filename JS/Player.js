@@ -7,6 +7,12 @@ import { ScoreComponent } from "./Components/ScoreComponent.js";
 
 export class Player extends GameObject
 {
+    static break={
+        length:20,
+        interval:250,
+        last:0,
+        is:false
+    };
 constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 {
     super(position,rotation,scale);
@@ -25,13 +31,8 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this.score =0;
     this._scoreComp = this.addComponent(new ScoreComponent(this));
     this._drawDirection=false;
-    this.break=
-    {
-        length:40,
-        interval:300,
-        last:0,
-        is:false
-    }
+    this.break=Object.assign({},Player.break);
+
 
     window.addEventListener("keydown",this.keyPress.bind(this),false);
     window.addEventListener("keyup",this.keyPress.bind(this),false);
@@ -164,12 +165,7 @@ reset(position,rot)
   this._alive = true;
   this.rotation = rot;
   this.HALT=false;
-  this.break=
-  {
-      length:40,
-      interval:300,
-      last:0,
-      is:false
-  }
+  this.break=Object.assign({},Player.break);
+
 }
 }
