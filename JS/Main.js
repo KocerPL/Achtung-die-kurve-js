@@ -10,7 +10,7 @@ import { MouseListener } from "./MouseListener.js";
 export class Main
 {
     // object array
-    static objectArray = new Array();
+   // static objectArray = new Array();
     //loop variables
     static cursorhov= false;
     static lastTime=0;
@@ -31,7 +31,6 @@ export class Main
     static renderFPS = true;
     static gameObjects= new Array();
     //Canvas variables
-   
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
     static ratio = 1.7;
