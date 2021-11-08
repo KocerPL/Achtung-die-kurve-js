@@ -44,10 +44,10 @@ export class Menu
   //static cyanButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,360),new Vector(130,30),{text:"> Cyan",textcolor:"Cyan",color:"gray",frame:false}));
  // static whiteButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,330),new Vector(130,30),{text:"> White",textcolor:"white",color:"gray",frame:false}));
   //static pinkButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,300),new Vector(130,30),{text:"> Purple",textcolor:"Purple",color:"gray",frame:false}));
-  static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,270),new Vector(130,30),{text:"> Green",textcolor:"Green",color:"gray",frame:false}));
-  static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(130,30),{text:"> Blue",textcolor:"Blue",color:"Blue",frame:false}));
-  static RedButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,210),new Vector(130,30),{text:"> Red",textcolor:"Red",color:"Red",frame:false}));
-  static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,180),new Vector(130,30),{text:"> Orange",textcolor:"orange",color:"orange",frame:false}));
+  static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,270),new Vector(160,30),{text:"> Green (<,>)",textcolor:"Green",color:"gray",frame:false}));
+  static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(160,30),{text:"> Blue (<-,->)",textcolor:"Blue",color:"Blue",frame:false}));
+  static RedButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,210),new Vector(160,30),{text:"> Red (a,d)",textcolor:"Red",color:"Red",frame:false}));
+  static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,180),new Vector(160,30),{text:"> Orange (1,q)",textcolor:"orange",color:"orange",frame:false}));
  
 
 static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true}));
