@@ -8,6 +8,7 @@ import { Scoreboard } from "./Scoreboard.js";
 import { Menu } from "./Menu.js";
 import { MouseListener } from "./MouseListener.js";
 import { KMath } from "./Utils.js";
+import { Bonus } from "./Bonus.js";
 export class Main
 {
     // object array
@@ -95,6 +96,7 @@ export class Main
               p.setDrawDirection(false);
         });
       }));
+      this.gameObjects.push(new Bonus(new Vector(100,100),Bonus.type.SPEED));
         this.lastAliveCount = this._getAlives().length;
         window.addEventListener("keydown",this.onKey.bind(this),false);
     }

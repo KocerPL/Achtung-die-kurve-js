@@ -31,6 +31,7 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this.score =0;
     this._scoreComp = this.addComponent(new ScoreComponent(this));
     this._drawDirection=false;
+    this.cooldown = new Array();
     this.break=Object.assign({},Player.break);
 
 
@@ -64,6 +65,16 @@ isAlive()
 }
 collision(gameobject,component)
 {
+ //   console.log(component.getTag());
+    if(component.getTag()=="Bonus")
+    {
+        this.vel=1.7;
+        this.cooldown.push({
+            func:function(){this.vel=1.2;console.log("ok");},
+            time:400 
+        });
+       // console.log("ok");
+    }
     if(component.getTag()=="line"|| component.getTag()=="Head")
     {
 
@@ -141,6 +152,20 @@ if(this.distance>this.break.length+this.break.last && this.break.is)
 this.break.is=false;
 this.tail.continueLine(this.position);
 }
+for(let i=this.cooldown.length-1;i>=0;i--)
+{
+    if(this.cooldown[i].time<=0)
+    {
+        let temp=this.cooldown[i].func.bind(this);
+        temp();
+        this.cooldown.splice(i,1);
+    }
+    else
+    {
+    this.cooldown[i].time--;
+    console.log(this.cooldown[i].time)
+    }
+}
 }
 addPoints(points)
 {
@@ -156,7 +181,8 @@ setStop(stop)
 }
 reset(position,rot)
 {
-
+this.vel=1.2;
+this.cooldown=new Array();
   this.position=position;
   this.lastPosition=position;
   this.clearTail();

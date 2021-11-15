@@ -21,6 +21,7 @@ this.pos = parent.position.copy();
 }
 update()
 {
+    
     this.radius= this.parent.radius;
     this.pos = this.parent.position.copy();
     Physics.addCircleComponent(this);

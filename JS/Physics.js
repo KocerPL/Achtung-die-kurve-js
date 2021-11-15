@@ -67,8 +67,8 @@ export class Physics
                 let c1 = this.circleComponents[j]
                if(this.CircleCircleCollision(c0,c1))
                {
-                   c0.parent.collision(c1.parent,c0);
-                   c1.parent.collision(c0.parent,c1);
+                   c0.parent.collision(c1.parent,c1);
+                   c1.parent.collision(c0.parent,c0);
                }
             }
         }
