@@ -15,7 +15,7 @@ export class GameObject
         this.rotation=rotation;
         this.components=new Array();
         this.scaleVec= scaleVec.copy();
-      
+        this.remove=false;
     }
     collision(gameobject,component)
     {

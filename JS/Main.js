@@ -9,6 +9,7 @@ import { Menu } from "./Menu.js";
 import { MouseListener } from "./MouseListener.js";
 import { KMath } from "./Utils.js";
 import { Bonus } from "./Bonus.js";
+import { BonusGenerator } from "./BonusGenerator.js";
 export class Main
 {
     // object array
@@ -182,8 +183,17 @@ export class Main
     {
        // console.log(this.pause);
         if(this.State==this.STATE.GAME) {
-            this.checkConditions();    
+            this.checkConditions();
+            BonusGenerator.update();    
             this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {if(!this.pause)  element.update()}});
+            for(let i= this.gameObjects.length-1;i>=0;i--) 
+            {
+                let element = this.gameObjects[i];
+                if(element instanceof GameObject && element.remove) 
+                {
+                    this.gameObjects.splice(i,1);
+                }
+            }
         }
       else if(this.State=this.STATE.MENU) Menu.update();
       

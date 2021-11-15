@@ -37,7 +37,7 @@ export class Bonus extends GameObject
     {
         if(comp.getTag()=="Head")
         {
-            this.position = Main.genPlayerPos();
+          this.remove =true;
         }
      
     }
