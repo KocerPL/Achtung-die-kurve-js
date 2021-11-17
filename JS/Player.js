@@ -4,6 +4,8 @@ import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
 import { CircleComponent } from "./Components/LineCircleComponent.js";
 import { ScoreComponent } from "./Components/ScoreComponent.js";
+import { Bonus } from "./Bonus.js";
+import { Main } from "./Main.js";
 
 export class Player extends GameObject
 {
@@ -68,13 +70,101 @@ collision(gameobject,component)
  //   console.log(component.getTag());
     if(component.getTag()=="Bonus")
     {
-        this.vel=1.7;
+        if(gameobject.target ==Bonus.target.ME)
+        {
+        if(gameobject.type==Bonus.type.SPEED)
+        {
+        this.vel+=0.5;
+     //   gameobject.remove = true;
         this.cooldown.push({
-            func:function(){this.vel=1.2;console.log("ok");},
+            func:function(){this.vel-=0.5;},
             time:400 
         });
+        return;
+        }
+        else if(gameobject.type==Bonus.type.STOP)
+        {
+            this.vel=0;
+            //   gameobject.remove = true;
+               this.cooldown.push({
+                   func:function(){this.vel=1.2;},
+                   time:250 
+               });
+               return; 
+        }
+        else if(gameobject.type==Bonus.type.SHRINK)
+        {
+            this.radius-=1;
+            //   gameobject.remove = true;
+               this.cooldown.push({
+                   func:function(){this.radius+=1;},
+                   time:250 
+               });
+               return; 
+        }
+        else if(gameobject.type==Bonus.type.MAGNIFI)
+        {
+            this.radius+=1;
+            //   gameobject.remove = true;
+               this.cooldown.push({
+                   func:function(){this.radius-=1;},
+                   time:250 
+               });
+               return; 
+        }
+        }
+        else if(Bonus.target.OTHERS == gameobject.target)
+        {
+            Main.forPlayers(
+                (e)=>{
+                    if(e!=this)
+                    {
+            if(gameobject.type==Bonus.type.SPEED&& e.isAlive())
+            {
+            e.vel+=0.5;
+         //   gameobject.remove = true;
+            e.cooldown.push({
+                func:function(){e.vel-=0.5;},
+                time:400 
+            });
+           
+            }
+            else if(gameobject.type==Bonus.type.STOP&& e.isAlive())
+            {
+                e.vel=0;
+                //   gameobject.remove = true;
+                   e.cooldown.push({
+                       func:function(){e.vel=1.2;},
+                       time:250 
+                   });
+                  
+            } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive())
+            {
+                e.radius-=1;
+                //   gameobject.remove = true;
+                   e.cooldown.push({
+                       func:function(){e.radius+=1;},
+                       time:250 
+                   });
+              
+            } else if(gameobject.type==Bonus.type.MAGNIFI&& e.isAlive())
+            {
+                e.radius+=1;
+                //   gameobject.remove = true;
+                   e.cooldown.push({
+                       func:function(){e.radius-=1;},
+                       time:250 
+                   });
+              
+            }
+        }
+        }
+            );
+        }
        // console.log("ok");
+      
     }
+    console.log(this.color+": "+component.getTag());
     if(component.getTag()=="line"|| component.getTag()=="Head")
     {
 
@@ -135,7 +225,7 @@ super.update();
 let pos = this.position;
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-(this.vel*4)>this.lastDistance)
+if(this.distance-8>this.lastDistance)
 {
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;
@@ -163,7 +253,7 @@ for(let i=this.cooldown.length-1;i>=0;i--)
     else
     {
     this.cooldown[i].time--;
-    console.log(this.cooldown[i].time)
+    //console.log(this.cooldown[i].time)
     }
 }
 }
@@ -187,6 +277,7 @@ this.cooldown=new Array();
   this.lastPosition=position;
   this.clearTail();
   this.distance=0;
+  this.radius =3;
   this.lastDistance=0;
   this._alive = true;
   this.rotation = rot;

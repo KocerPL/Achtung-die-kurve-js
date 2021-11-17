@@ -23,18 +23,25 @@ draw(ctx)
 for(var i=0;i<this.positions.length;i++)
 {
    
-    ctx.lineWidth=this.parent.radius*2;
+   
     ctx.beginPath();
     ctx.moveTo(this.positions[i][0].x,this.positions[i][0].y);
     for(var j=1;j<this.positions[i].length;j++)
     {
-     ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)
-    //Arc filling
-    // ctx.fillStyle="orange";
-    //ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.parent.radius,0,Math.PI*2,false);
-  //  ctx.fill();
+        ctx.lineWidth=this.positions[i][j].width;
+        ctx.lineCap = "round";
+   ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)
+   // Arc filling
+    //ctx.fillStyle=this.parent.color;
+  //  ctx.beginPath()
+// ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.parent.radius,0,Math.PI*2,false);
+  // ctx.fill()
+  
+  ctx.stroke();
+ 
+  ctx.moveTo(this.positions[i][j].x,this.positions[i][j].y);
     }
-   ctx.stroke();
+    ctx.closePath();
     
 }
 ctx.lineWidth=1;
@@ -43,10 +50,12 @@ addPoint(position)
 {
     if(!this.break && position instanceof Vector)
     {
-    this.positions[this.currentIndex].push(position.copy());
+        let tmpPos = position.copy();
+        const tmpRad = TailPoint.copyNumber(this.parent.radius);
+    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, tmpRad*2) );
     if(this.positions[this.currentIndex].length>3)
     {
-        var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-4]);
+        var temp= new StaticCircleComponent(this, tmpRad,this.positions[this.currentIndex][this.positions[this.currentIndex].length-4]);
         temp.setTag("line");
     this.addComponent(temp);
     }
@@ -83,4 +92,16 @@ clear(position)
     this.addPoint(position)
     Physics.removeCHBP(this);
 }
+}
+class TailPoint extends Vector
+{
+    constructor(x,y,width)
+    {
+        super(x,y);
+        this.width=width;
+    }
+    static copyNumber(num)
+    {
+        return new Number(num);
+    }
 }

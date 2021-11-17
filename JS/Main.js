@@ -48,7 +48,7 @@ export class Main
     static start()
     {
         this.resize();
-      
+      Bonus.initGraphics();
         window.addEventListener('resize',this.resize.bind(this),false);
         MouseListener.init(this.currentProportion);
         Menu.init();
@@ -68,12 +68,14 @@ export class Main
                 p.setStop(true);
                 p.setDrawDirection(true);
             });
-           
+            BonusGenerator.delBonus();
+            BonusGenerator.pause=true;
            this.gameObjects.push(new Counter(new Vector(405,301),0,10,"Comic Sans MS",3,()=>{
                this.forPlayers((p)=>{ 
                    p.setStop(false);
                    p.setDrawDirection(false);
                    this.resetTrig = false;
+                   BonusGenerator.pause=false;
              });
            }));
            this.resetTrig = false;
@@ -87,6 +89,7 @@ export class Main
         if(Menu.RedButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),37,39,"Red"));
         if(Menu.GreenButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),188,190,"Green"));
         if(Menu.OrangeButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),49,81,"Orange"));
+        BonusGenerator.pause=true;
        this.forPlayers((p)=>{ 
            p.setStop(true);
            p.setDrawDirection(true);
@@ -95,9 +98,11 @@ export class Main
           this.forPlayers((p)=>{ 
               p.setStop(false);
               p.setDrawDirection(false);
+              
         });
+        BonusGenerator.pause=false;
       }));
-      this.gameObjects.push(new Bonus(new Vector(100,100),Bonus.type.SPEED));
+   //   this.gameObjects.push(new Bonus(new Vector(100,100),Bonus.type.SPEED));
         this.lastAliveCount = this._getAlives().length;
         window.addEventListener("keydown",this.onKey.bind(this),false);
     }
@@ -184,7 +189,7 @@ export class Main
        // console.log(this.pause);
         if(this.State==this.STATE.GAME) {
             this.checkConditions();
-            BonusGenerator.update();    
+            if(!this.pause) BonusGenerator.update();    
             this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {if(!this.pause)  element.update()}});
             for(let i= this.gameObjects.length-1;i>=0;i--) 
             {
@@ -214,6 +219,7 @@ export class Main
         //Resets game if there is no alive players
         if(Alives.length<=1 && this.resetTrig==false)
         {
+           
         this.resetTrig=true;
          this.pause=true;
         }
@@ -268,7 +274,7 @@ Main.start();
 All game objects must have:
 - draw method 
 - update method
-- collision method
+- collision method(only with collision components)
 Collision detection: 
 - static method in object
 - pass in another object
