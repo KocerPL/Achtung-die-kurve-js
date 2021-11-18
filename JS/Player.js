@@ -9,6 +9,7 @@ import { Main } from "./Main.js";
 
 export class Player extends GameObject
 {
+    static distDef = 8;
     static break={
         length:20,
         interval:250,
@@ -45,6 +46,7 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this.addComponent(temp);
     //this.addComponent(new SATPolygon(this,new Vector(-10,-10),new Vector(-10,10),new Vector(10,10),new Vector(10,-10)));
 }
+
 keyPress(ev)
 {
     if(this.leftKeyCode==ev.keyCode)
@@ -93,7 +95,7 @@ collision(gameobject,component)
                });
                return; 
         }
-        else if(gameobject.type==Bonus.type.SHRINK)
+        else if(gameobject.type==Bonus.type.SHRINK&& e.radius-1>0)
         {
             this.radius-=1;
             //   gameobject.remove = true;
@@ -140,7 +142,7 @@ collision(gameobject,component)
                        time:250
                    });
                   
-            } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive())
+            } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive()&& e.radius-1>0)
             {
                 e.radius-=1;
                 //   gameobject.remove = true;
@@ -166,8 +168,8 @@ collision(gameobject,component)
        // console.log("ok");
       
     }
-    console.log(this.color+": "+component.getTag());
-    if(component.getTag()=="line"|| component.getTag()=="Head")
+   // console.log(this.color+": "+component.getTag());
+    if(component.getTag()=="line" || component.getTag()=="Head")
     {
 
         this.coll=true;
@@ -224,10 +226,9 @@ if(this.HALT) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
-let pos = this.position;
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-12>this.lastDistance)
+if(this.distance-this.radius>this.lastDistance)
 {
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;

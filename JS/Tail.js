@@ -1,4 +1,5 @@
 import { AABBComponent } from "./Components/AABBComponent.js";
+import { Component } from "./Components/Component.js";
 import { StaticCircleComponent } from "./Components/LineCircleComponent.js";
 import { GameObject } from "./GameObject.js";
 import { Physics } from "./Physics.js";
@@ -19,7 +20,7 @@ constructor(position,parent)
 draw(ctx)
 {
     ctx.lineCap = "round";
-    
+    ctx.lineJoin = "miter";
     ctx.strokeStyle=this.parent.color;
 for(var i=0;i<this.positions.length;i++)
 {
@@ -31,23 +32,23 @@ for(var i=0;i<this.positions.length;i++)
     for(var j=1;j<this.positions[i].length;j++)
     {
        
-        if(ctx.lineWidth != this.positions[i][j].width)
+    /*    if(ctx.lineWidth != this.positions[i][j].width)
         {
-            ctx.lineWidth=this.positions[i][j].width;
+           
             ctx.closePath();
             ctx.beginPath();
             if(j-1>=0)
             ctx.moveTo(this.positions[i][j-1].x,this.positions[i][j-1].y);
         }
-      
-   ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)
+    
+   ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)  */
    // Arc filling
-    //ctx.fillStyle=this.parent.color;
-  //  ctx.beginPath()
-// ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.parent.radius,0,Math.PI*2,false);
-  // ctx.fill()
+    ctx.fillStyle=this.parent.color;
+   ctx.beginPath()
+ ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.positions[i][j].width/2,0,Math.PI*2,false);
+   ctx.fill()
   
-  ctx.stroke();
+ // ctx.stroke();
  
  
     }
@@ -69,7 +70,7 @@ addPoint(position)
     {
         let tmpPos = position.copy();
         const tmpRad = TailPoint.copyNumber(this.parent.radius);
-    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, tmpRad*2) );
+    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, tmpRad*2,this) );
     if(this.positions[this.currentIndex].length>3)
     {
         var temp= new StaticCircleComponent(this, tmpRad,this.positions[this.currentIndex][this.positions[this.currentIndex].length-4]);
@@ -112,10 +113,15 @@ clear(position)
 }
 class TailPoint extends Vector
 {
-    constructor(x,y,width)
+    constructor(x,y,width,parent)
     {
         super(x,y);
         this.width=width;
+        this.parent=parent;
+    }
+    getTag()
+    {
+        return "line";
     }
     static copyNumber(num)
     {
