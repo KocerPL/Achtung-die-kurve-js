@@ -19,17 +19,27 @@ constructor(position,parent)
 draw(ctx)
 {
     ctx.lineCap = "round";
+    
     ctx.strokeStyle=this.parent.color;
 for(var i=0;i<this.positions.length;i++)
 {
    
-   
+    ctx.lineWidth=this.positions[i][0].width;
     ctx.beginPath();
     ctx.moveTo(this.positions[i][0].x,this.positions[i][0].y);
+   // ctx.lineCap = "round";
     for(var j=1;j<this.positions[i].length;j++)
     {
-        ctx.lineWidth=this.positions[i][j].width;
-        ctx.lineCap = "round";
+       
+        if(ctx.lineWidth != this.positions[i][j].width)
+        {
+            ctx.lineWidth=this.positions[i][j].width;
+            ctx.closePath();
+            ctx.beginPath();
+            if(j-1>=0)
+            ctx.moveTo(this.positions[i][j-1].x,this.positions[i][j-1].y);
+        }
+      
    ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)
    // Arc filling
     //ctx.fillStyle=this.parent.color;
@@ -39,10 +49,17 @@ for(var i=0;i<this.positions.length;i++)
   
   ctx.stroke();
  
-  ctx.moveTo(this.positions[i][j].x,this.positions[i][j].y);
+ 
     }
     ctx.closePath();
     
+}
+if(!this.break)
+{
+ctx.beginPath();
+ctx.moveTo(this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].x,this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].y);
+ctx.lineTo(this.parent.position.x,this.parent.position.y);
+ctx.stroke();
 }
 ctx.lineWidth=1;
 }

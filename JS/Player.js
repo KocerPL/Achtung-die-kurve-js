@@ -31,6 +31,7 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this._alive = true;
     this.HALT=false;
     this.score =0;
+    this.stop = false;
     this._scoreComp = this.addComponent(new ScoreComponent(this));
     this._drawDirection=false;
     this.cooldown = new Array();
@@ -132,10 +133,11 @@ collision(gameobject,component)
             else if(gameobject.type==Bonus.type.STOP&& e.isAlive())
             {
                 e.vel=0;
+                this.stop = true;
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.vel=1.2;},
-                       time:250 
+                       func:function(){e.vel=1.2;this.stop = true;},
+                       time:250
                    });
                   
             } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive())
@@ -225,7 +227,7 @@ super.update();
 let pos = this.position;
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-8>this.lastDistance)
+if(this.distance-12>this.lastDistance)
 {
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;
@@ -283,6 +285,6 @@ this.cooldown=new Array();
   this.rotation = rot;
   this.HALT=false;
   this.break=Object.assign({},Player.break);
-
+  this.stop = false;
 }
 }
