@@ -7,7 +7,8 @@ export class Bonus extends GameObject
         SPEED:1,
         STOP:2,
         SHRINK:3,
-        MAGNIFI:4
+        MAGNIFI:4,
+        INVISIBLE:5
     }); 
     static target= Object.freeze({
         ME:1,
@@ -25,12 +26,14 @@ export class Bonus extends GameObject
         this.type = type;
         this.target=target
         this.radius =10;
+        this.tested=false;
         let temp = new CircleComponent(this);
     temp.setTag("Bonus");
     this.addComponent(temp);
     }
     draw(ctx)
     {
+        if(!this.tested)  {this.tested=true; return;}
         this.useTransfMat(ctx);
         if(this.target==Bonus.target.ME)
         {
@@ -42,6 +45,8 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,1200,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }else  if(this.type== Bonus.type.MAGNIFI) {
             ctx.drawImage(Bonus.graphics,800,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } else  if(this.type== Bonus.type.INVISIBLE) {
+            ctx.drawImage(Bonus.graphics,1600,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } 
     }
     else if(this.target==Bonus.target.OTHERS)
@@ -54,6 +59,8 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,1400,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }  else  if(this.type== Bonus.type.MAGNIFI) {
             ctx.drawImage(Bonus.graphics,1000,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } else  if(this.type== Bonus.type.INVISIBLE) {
+            ctx.drawImage(Bonus.graphics,1800,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } 
     }
       /*  ctx.beginPath();
@@ -66,6 +73,7 @@ export class Bonus extends GameObject
     update()
     {
         super.update();
+       
     }
     collision(gmObj,comp)
     {

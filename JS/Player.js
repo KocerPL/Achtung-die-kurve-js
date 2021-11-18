@@ -9,7 +9,7 @@ import { Main } from "./Main.js";
 
 export class Player extends GameObject
 {
-    static distDef = 8;
+    static distDef = 3;
     static break={
         length:20,
         interval:250,
@@ -21,6 +21,8 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     super(position,rotation,scale);
     this.radius =3;
     this.vel =1.2;
+    this.alp = 0;
+    this.alpCh=true;
     this.distance=0;
     this.rotVel=0;
     this.color=color;
@@ -37,7 +39,7 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this._drawDirection=false;
     this.cooldown = new Array();
     this.break=Object.assign({},Player.break);
-
+    this.invisible = false;
 
     window.addEventListener("keydown",this.keyPress.bind(this),false);
     window.addEventListener("keyup",this.keyPress.bind(this),false);
@@ -95,7 +97,7 @@ collision(gameobject,component)
                });
                return; 
         }
-        else if(gameobject.type==Bonus.type.SHRINK&& e.radius-1>0)
+        else if(gameobject.type==Bonus.type.SHRINK&& this.radius-1>0)
         {
             this.radius-=1;
             //   gameobject.remove = true;
@@ -114,6 +116,17 @@ collision(gameobject,component)
                    time:250 
                });
                return; 
+        }
+        else if(gameobject.type==Bonus.type.INVISIBLE)
+        {
+            this.tail.breakLine();
+            this.break.is=true;
+            this.break.last = this.distance+100000;
+            this.invisible=true;
+            this.cooldown.push({
+                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position); this.break.last = this.distance},
+                time:200 
+            });
         }
         }
         else if(Bonus.target.OTHERS == gameobject.target)
@@ -160,6 +173,16 @@ collision(gameobject,component)
                        time:250 
                    });
               
+            }  else if(gameobject.type==Bonus.type.INVISIBLE)
+            {
+                e.tail.breakLine();
+                e.break.is=true;
+                e.break.last = e.distance+100000;
+                e.invisible=true;
+                e.cooldown.push({
+                    func:function(){e.invisible=false;e.break.is=false;e.tail.continueLine(e.position); e.break.last = e.distance},
+                    time:200 
+                });
             }
         }
         }
@@ -197,8 +220,15 @@ ctx.lineWidth=1;
 this.useTransfMat(ctx);
 ctx.fillStyle="Yellow";
 ctx.beginPath();
+if(this.invisible) 
+{
+if(this.alpCH==true){ this.alp+=0.05;} else {this.alp-=0.05};
+if(this.alp>1 || this.alp<0) this.alpCH= !this.alpCH;
+ctx.globalAlpha = this.alp; 
+}
 ctx.arc(0,0,this.radius,0,Math.PI*2,false);
 ctx.fill();
+ctx.globalAlpha = 1; 
 ctx.strokeStyle="red";
 if(this._drawDirection)
 {
@@ -228,7 +258,7 @@ this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-this.radius>this.lastDistance)
+if(this.distance-(this.radius*Player.distDef)>this.lastDistance)
 {
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;

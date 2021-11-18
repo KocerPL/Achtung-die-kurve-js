@@ -12,8 +12,8 @@ export class BonusGenerator
     {
     //    let temp =KMath.randFR(1,2);
       //  console.log(temp)
-       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,4)),
-       Math.round(KMath.randFR(1,2))));
+       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,5))
+       ,Math.round(KMath.randFR(1,2))));
     }
     static delBonus()
     {

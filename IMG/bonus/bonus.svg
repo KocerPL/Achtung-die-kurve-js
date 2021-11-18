@@ -5,17 +5,71 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1600.001"
+   width="2000.0643"
    height="200.06487"
-   viewBox="0 0 423.33361 52.933827"
+   viewBox="0 0 529.18371 52.933827"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
    sodipodi:docname="bonus.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient913">
+      <stop
+         style="stop-color:#ffcc00;stop-opacity:1;"
+         offset="0"
+         id="stop909" />
+      <stop
+         style="stop-color:#806500;stop-opacity:0"
+         offset="1"
+         id="stop911" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient913"
+       id="linearGradient907"
+       x1="435.9805"
+       y1="25.512463"
+       x2="462.19708"
+       y2="37.574749"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(173.59969,451.49598,26.211212)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient913"
+       id="linearGradient915"
+       x1="438.58038"
+       y1="13.450179"
+       x2="462.19708"
+       y2="37.574749"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(173.59969,451.49598,26.211212)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient913"
+       id="linearGradient941"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(173.59969,451.49598,26.211212)"
+       x1="438.58038"
+       y1="13.450179"
+       x2="462.19708"
+       y2="37.574749" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient913"
+       id="linearGradient943"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(173.59969,451.49598,26.211212)"
+       x1="435.9805"
+       y1="25.512463"
+       x2="462.19708"
+       y2="37.574749" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -24,10 +78,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.5209506"
-     inkscape:cx="506.12772"
-     inkscape:cy="274.76914"
+     inkscape:cx="1126.465"
+     inkscape:cy="292.38989"
      inkscape:document-units="mm"
-     inkscape:current-layer="g997"
+     inkscape:current-layer="g929"
      inkscape:document-rotation="0"
      showgrid="false"
      fit-margin-top="0"
@@ -236,6 +290,75 @@
          x="12.936772"
          y="12.936772"
          inkscape:transform-center-x="-0.76219481" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g892"
+     inkscape:label="Warstwa 2 kopia kopia kopia"
+     style="display:inline"
+     transform="translate(-1.6717633,0.00879038)">
+    <ellipse
+       style="fill:#00ae00;fill-opacity:1;stroke:#ffff00;stroke-width:1.45496;stroke-opacity:1"
+       id="circle884"
+       cx="451.51465"
+       cy="26.706329"
+       rx="24.600122"
+       ry="24.591917" />
+    <rect
+       style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:0.827311;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       id="rect886"
+       width="52.10638"
+       height="52.089001"
+       x="425.41882"
+       y="0.42231429" />
+    <path
+       style="opacity:1;fill:url(#linearGradient915);fill-opacity:1;stroke:url(#linearGradient907);stroke-width:7.27657;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 465.7536,37.452955 439.59484,16.1114"
+       id="path899" />
+    <circle
+       style="opacity:1;fill:#ffcc00;fill-opacity:1;stroke:#806500;stroke-width:7.27657;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0"
+       id="path919"
+       cx="438.89783"
+       cy="15.926122"
+       r="3.237771" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g929"
+     inkscape:label="Warstwa 2 kopia kopia kopia kopia"
+     style="display:inline"
+     transform="translate(-1.6717633,0.00879038)">
+    <g
+       id="g939"
+       transform="translate(52.916596)">
+      <g
+         id="g932">
+        <ellipse
+           style="fill:#ff0000;fill-opacity:1;stroke:#ffff00;stroke-width:1.45496;stroke-opacity:1"
+           id="ellipse921"
+           cx="451.51465"
+           cy="26.706329"
+           rx="24.600122"
+           ry="24.591917" />
+      </g>
+      <rect
+         style="fill:none;fill-opacity:0;stroke:#000000;stroke-width:0.827311;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+         id="rect923"
+         width="52.10638"
+         height="52.089001"
+         x="425.41882"
+         y="0.42231429" />
+      <path
+         style="opacity:1;fill:url(#linearGradient941);fill-opacity:1;stroke:url(#linearGradient943);stroke-width:7.27657;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 465.7536,37.452955 439.59484,16.1114"
+         id="path925" />
+      <circle
+         style="opacity:1;fill:#ffcc00;fill-opacity:1;stroke:#806500;stroke-width:7.27657;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0"
+         id="circle927"
+         cx="438.89783"
+         cy="15.926122"
+         r="3.237771" />
     </g>
   </g>
   <g

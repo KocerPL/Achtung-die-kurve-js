@@ -32,23 +32,23 @@ for(var i=0;i<this.positions.length;i++)
     for(var j=1;j<this.positions[i].length;j++)
     {
        
-    /*    if(ctx.lineWidth != this.positions[i][j].width)
+        if(ctx.lineWidth != this.positions[i][j].width)
         {
-           
+            ctx.lineWidth = this.positions[i][j].width;
             ctx.closePath();
             ctx.beginPath();
             if(j-1>=0)
             ctx.moveTo(this.positions[i][j-1].x,this.positions[i][j-1].y);
         }
     
-   ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)  */
+   ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)  
    // Arc filling
-    ctx.fillStyle=this.parent.color;
-   ctx.beginPath()
- ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.positions[i][j].width/2,0,Math.PI*2,false);
-   ctx.fill()
+ //   ctx.fillStyle=this.parent.color;
+ //  ctx.beginPath()
+ //ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.positions[i][j].width/2,0,Math.PI*2,false);
+ //  ctx.fill()
   
- // ctx.stroke();
+ ctx.stroke();
  
  
     }

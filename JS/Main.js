@@ -22,6 +22,7 @@ export class Main
     static updateDelta=0;
    static leftMargin = 0;
    static pause = false;
+   static tp= false;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
         GAME: 1,
