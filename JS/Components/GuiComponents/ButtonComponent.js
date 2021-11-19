@@ -14,6 +14,7 @@ export class ButtonComponent extends Component
         this.style.color ??= "gray";
         this.style.textcolor ??= "white";
         this._hover=false;
+        this.hidden=false;
         this.textComponent = this.addComponent(new TextComponent(this,new Vector(this.position.x+this.margin,this.position.y+this.size.y-this.margin),this.style.text,textStyle??={color:this.style.textcolor,textBaseLine:"bottom",font:this.style.font??="Comic sans MS",fontSize:this.size.y-(2*this.margin)}) )
        // console.log(this.textComponent);
         this.color = "black";
@@ -41,6 +42,7 @@ export class ButtonComponent extends Component
     }
     mouse(pos,ev)
     {
+        if(this.hidden) return;
         //console.log("mos");
         if(ev=="mousemove")
         {
@@ -80,10 +82,12 @@ export class ButtonComponent extends Component
     }
     draw(ctx)
     {
-        if(this.style.frame)
-        {
+        if(this.hidden) return;
         ctx.fillStyle=this.color;
         ctx.fillRect(this.position.x,this.position.y,this.size.x,this.size.y);
+        if(this.style.frame)
+        {
+       
         ctx.strokeStyle="red";
         ctx.strokeRect(this.position.x,this.position.y,this.size.x,this.size.y);
         }

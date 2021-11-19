@@ -93,6 +93,9 @@ export class Physics
     if(this.calcDist(pos,pos2) < rad+rad2) return true;
     return false;
     }
+    // Only part of code that I can't understand how it's fully working below \/
+    // credits to: https://www.jeffreythompson.org/collision-detection/line-circle.php
+    // to line 149
     static lineCircleColl(point,point2,width,circle)
     {
   let x1 = point.x;
@@ -168,17 +171,6 @@ export class Physics
       }
     static updateCCcollision()
     {
-        for(var i=0;i<this.circleComponents.length;i++)
-        {
-            for(var j=0;j<this.circleStatics.length;j++)
-            {
-                if(this.CircleCircleCollision(this.circleComponents[i],this.circleStatics[j]))
-               {
-                  this.circleComponents[i].parent.collision(this.circleStatics[j].parent,this.circleStatics[j]);
-                   this.circleStatics[j].parent.collision( this.circleComponents[i].parent,this.circleComponents[i]);
-               }
-            }
-        }
         for(var i=0;i<this.circleComponents.length;i++)
         {
             for(var j=i+1;j<this.circleComponents.length;j++)

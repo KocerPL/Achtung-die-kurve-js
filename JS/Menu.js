@@ -5,6 +5,8 @@ import { TextComponent } from "./Components/GuiComponents/TextComponent.js";
 import {ChooseKeyComponent} from "./Components/GuiComponents/ChooseKeyComponent.js";
 import { Main } from "./Main.js";
 import { Vector } from "./Vector.js";
+import { ControlsGroup } from "./Components/GuiComponents/groups/ControlsGroup.js";
+import { GroupComponent } from "./Components/GuiComponents/GroupComponent.js";
 export class Menu
 {
   static componentArray = new Array();
@@ -12,13 +14,15 @@ export class Menu
   static enabledPlayers=0;
   //head
   static Title = this.addComponent(new TextComponent(this,new Vector(1024/2,100),"Achtung die kurve",{color:"Yellow",textAlign:"center",font:"Comic Sans MS",fontSize:50}));
-  static Author = this.addComponent(new TextComponent(this,new Vector((1024/2)-40,135),"Remake by",{color:"green",textAlign:"center",font:"Segoe Script",fontSize:25}));
+  static Author = this.addComponent(new TextComponent(this,new Vector((1024/2)-50,135),"Javascript remake by",{color:"green",textAlign:"center",font:"Segoe Script",fontSize:25}));
   static Version = this.addComponent(new TextComponent(this,new Vector(5,595),"Version 5.0, Release 1",{color:"White",textAlign:"left",font:"Calibri",fontSize:15}));
-  static Kocer = this.addComponent(new ButtonComponent(this,new Vector(552,115),new Vector(80,30),{text:"Kocer",color:"Yellow",textcolor:"Green", frame:false,font:"Segoe Script"}));
+  static Kocer = this.addComponent(new ButtonComponent(this,new Vector(612,115),new Vector(80,30),{text:"Kocer",color:"Yellow",textcolor:"Green", frame:false,font:"Segoe Script"}));
+  
   static buttonsAlign = 302;
   static desc ={
     colors:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign,170),"Colors: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25})),
-   // left:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+130,170),"Left: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25}))
+    left:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+150,170),"Left: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25})),
+    right:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+300,170),"Right: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25}))
   };
   /*
   
@@ -44,11 +48,17 @@ export class Menu
   //static cyanButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,360),new Vector(130,30),{text:"> Cyan",textcolor:"Cyan",color:"gray",frame:false}));
  // static whiteButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,330),new Vector(130,30),{text:"> White",textcolor:"white",color:"gray",frame:false}));
   //static pinkButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,300),new Vector(130,30),{text:"> Purple",textcolor:"Purple",color:"gray",frame:false}));
-  static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,270),new Vector(160,30),{text:"> Green (<,>)",textcolor:"Green",color:"gray",frame:false}));
-  static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(160,30),{text:"> Blue (<-,->)",textcolor:"Blue",color:"Blue",frame:false}));
-  static RedButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,210),new Vector(160,30),{text:"> Red (a,d)",textcolor:"Red",color:"Red",frame:false}));
-  static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,180),new Vector(160,30),{text:"> Orange (1,q)",textcolor:"orange",color:"orange",frame:false}));
- 
+//  static GreenButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,270),new Vector(160,30),{text:"> Green (<,>)",textcolor:"Green",color:"gray",frame:false}));
+static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,270),",",".",">Green","green"))
+// static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(160,30),{text:"> Blue (<-,->)",textcolor:"Blue",color:"Blue",frame:false}));
+ static BlueGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,240),"ArrowLeft","ArrowRight",">Blue","blue")) 
+ //static RedButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,210),new Vector(160,30),{text:"> Red (a,d)",textcolor:"Red",color:"Red",frame:false}));
+ static RedGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,210),"a","d",">Red","red")) 
+ // static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,180),new Vector(160,30),{text:"> Orange (1,q)",textcolor:"orange",color:"orange",frame:false}));
+ static OrangeGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,180),"1","q",">Orange","orange")) 
+ static VioletGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,300),"z","x",">Violet","violet")) 
+ static GrayGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,330),"End","PageDown",">Gray","gray")) 
+ //static buttonChoose = this.addComponent(new ChooseKeyComponent(this,new Vector(this.buttonsAlign+300,270),new Vector(30,30),"A",{frame:true}))
 
 static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true}));
   static init()
@@ -61,7 +71,7 @@ static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(4
   for(var i=0;i<this.componentArray.length;i++)
   {
 this.componentArray[i].update();
-if(this.componentArray[i] instanceof SwitchComponent && this.componentArray[i].getClick())
+if(this.componentArray[i] instanceof ControlsGroup && this.componentArray[i].export().active)
 {
   this.enabledPlayers++;
 }
@@ -105,7 +115,7 @@ static mouse(pos,desc)
   //console.log("ok");
   for(var i=0;i<this.componentArray.length;i++)
   {
-if(this.componentArray[i] instanceof ButtonComponent)
+if(this.componentArray[i] instanceof ButtonComponent || this.componentArray[i] instanceof GroupComponent)
 {
   this.componentArray[i].mouse(pos,desc);
 }

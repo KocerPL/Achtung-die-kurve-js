@@ -16,7 +16,7 @@ export class Player extends GameObject
         last:0,
         is:false
     };
-constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
+constructor(position,rotation,scale,leftKey,rightKey,color)
 {
     super(position,rotation,scale);
     this.lastRot = rotation;
@@ -28,8 +28,8 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     this.rotVel=0;
     this.color=color;
     this.lastDistance=0;
-    this.leftKeyCode=leftKeyCode;
-    this.rightKeyCode=rightKeyCode;
+    this.leftKey=leftKey;
+    this.rightKey=rightKey;
     this.tail= new Tail(position,this);
     this.lastPosition=position;
     this._alive = true;
@@ -53,14 +53,15 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 
 keyPress(ev)
 {
-    if(this.leftKeyCode==ev.keyCode)
+    
+    if(this.leftKey==ev.key)
     {
         if(ev.type=="keydown")
         this.rotVel=-this.vel*2;
         else
         this.rotVel=0;
     }
-    else if(this.rightKeyCode==ev.keyCode)
+    else if(this.rightKey==ev.key)
     {
         if(ev.type=="keydown")
         this.rotVel=this.vel*2;
@@ -91,10 +92,9 @@ collision(gameobject,component)
         }
         else if(gameobject.type==Bonus.type.STOP)
         {
-            this.vel=0;
-            //   gameobject.remove = true;
+            this.stop =true;
                this.cooldown.push({
-                   func:function(){this.vel=1.2;},
+                   func:function(){this.stop=false},
                    time:250 
                });
                return; 
@@ -152,11 +152,11 @@ collision(gameobject,component)
             }
             else if(gameobject.type==Bonus.type.STOP&& e.isAlive())
             {
-                e.vel=0;
-                this.stop = true;
+               
+                e.stop = true;
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.vel=1.2;this.stop = true;},
+                       func:function(){e.stop = false;},
                        time:250
                    });
                   
@@ -258,6 +258,21 @@ setDrawDirection(bool)
 update()
 {
 if(this.HALT) return;
+for(let i=this.cooldown.length-1;i>=0;i--)
+{
+    if(this.cooldown[i].time<=0)
+    {
+        let temp=this.cooldown[i].func.bind(this);
+        temp();
+        this.cooldown.splice(i,1);
+    }
+    else
+    {
+    this.cooldown[i].time--;
+    //console.log(this.cooldown[i].time)
+    }
+}
+if(this.stop) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
@@ -281,20 +296,7 @@ if(this.distance>this.break.length+this.break.last && this.break.is)
 this.break.is=false;
 this.tail.continueLine(this.position);
 }
-for(let i=this.cooldown.length-1;i>=0;i--)
-{
-    if(this.cooldown[i].time<=0)
-    {
-        let temp=this.cooldown[i].func.bind(this);
-        temp();
-        this.cooldown.splice(i,1);
-    }
-    else
-    {
-    this.cooldown[i].time--;
-    //console.log(this.cooldown[i].time)
-    }
-}
+
 }
 addPoints(points)
 {
@@ -312,6 +314,7 @@ reset(position,rot)
 {
 this.vel=1.2;
 this.cooldown=new Array();
+this.invisible =false;
   this.position=position;
   this.lastPosition=position;
   this.clearTail();

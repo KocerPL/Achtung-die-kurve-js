@@ -10,6 +10,7 @@ import { MouseListener } from "./MouseListener.js";
 import { KMath } from "./Utils.js";
 import { Bonus } from "./Bonus.js";
 import { BonusGenerator } from "./BonusGenerator.js";
+import { ControlsGroup } from "./Components/GuiComponents/groups/ControlsGroup.js";
 export class Main
 {
     // object array
@@ -86,10 +87,22 @@ export class Main
     static startGame()
     {
         this.frameHitbox.setTag("Frame");
-        if(Menu.BlueButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),65,68,"Blue"));
+      /*  if(Menu.BlueGroup)  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),65,68,"Blue"));
         if(Menu.RedButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),37,39,"Red"));
         if(Menu.GreenButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),188,190,"Green"));
         if(Menu.OrangeButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),49,81,"Orange"));
+        */
+       for(let e of Menu.componentArray)
+       {
+           if( e instanceof ControlsGroup)
+           {
+              let k =  e.export();
+            if(k.active)
+            {
+                this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),k.leftKey,k.rightKey,k.color));
+            }
+           }
+       }
         BonusGenerator.pause=true;
        this.forPlayers((p)=>{ 
            p.setStop(true);

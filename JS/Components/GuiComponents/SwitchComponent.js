@@ -4,7 +4,7 @@ export class SwitchComponent extends ButtonComponent
     constructor(parent,position,size,style)
     {
         super(parent,position,size,style);
-        this._click=true;
+        this._click=false;
     }
     mouse(pos,ev)
     {
@@ -36,7 +36,7 @@ export class SwitchComponent extends ButtonComponent
     }
     draw(ctx)
     {
-        if(!this._click) ctx.globalAlpha = 0.5; else this.color=this.style.color;
+        if(!this._click) ctx.globalAlpha = 0.1; 
         super.draw(ctx);
         ctx.globalAlpha = 1;
     }

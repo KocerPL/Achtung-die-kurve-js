@@ -30,9 +30,9 @@ for(var i=0;i<this.positions.length;i++)
     for(var j=1;j<this.positions[i].length;j++)
     {
        
-        if(ctx.lineWidth != this.positions[i][j].width)
+        if(ctx.lineWidth != this.positions[i][j-1].width)
         {
-            ctx.lineWidth = this.positions[i][j].width;
+            ctx.lineWidth = this.positions[i][j-1].width;
             ctx.closePath();
             ctx.beginPath();
             ctx.moveTo(this.positions[i][j-1].x,this.positions[i][j-1].y);
@@ -52,6 +52,7 @@ for(var i=0;i<this.positions.length;i++)
 }
 if(!this.break)
 {
+    ctx.lineWidth=this.parent.radius*2;
 ctx.beginPath();
 ctx.moveTo(this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].x,this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].y);
 ctx.lineTo(this.parent.position.x,this.parent.position.y);
