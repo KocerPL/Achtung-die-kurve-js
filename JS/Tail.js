@@ -15,7 +15,7 @@ constructor(position,parent)
   this.parent = parent;
   this.lastPoint = null;
   this.break=false;  this.currentIndex=0;
-
+Physics.addLineArray(this.positions);
 }
 draw(ctx)
 {
@@ -37,10 +37,8 @@ for(var i=0;i<this.positions.length;i++)
             ctx.lineWidth = this.positions[i][j].width;
             ctx.closePath();
             ctx.beginPath();
-            if(j-1>=0)
             ctx.moveTo(this.positions[i][j-1].x,this.positions[i][j-1].y);
         }
-    
    ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)  
    // Arc filling
  //   ctx.fillStyle=this.parent.color;
@@ -49,8 +47,7 @@ for(var i=0;i<this.positions.length;i++)
  //  ctx.fill()
   
  ctx.stroke();
- 
- 
+
     }
     ctx.closePath();
     
@@ -71,27 +68,16 @@ addPoint(position)
         let tmpPos = position.copy();
         const tmpRad = TailPoint.copyNumber(this.parent.radius);
     this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, tmpRad*2,this) );
-    if(this.positions[this.currentIndex].length>3)
-    {
-        var temp= new StaticCircleComponent(this, tmpRad,this.positions[this.currentIndex][this.positions[this.currentIndex].length-4]);
-        temp.setTag("line");
-    this.addComponent(temp);
-    }
     }
 }
 collision(gameobject,component)
     {
 //console.log("coll");
     }
-breakLine()
+breakLine(pos)
 {
+    this.addPoint(pos);
     this.break=true;
-    var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-2]);
-    temp.setTag("line");
-this.addComponent(temp);
-var temp= new StaticCircleComponent(this,this.parent.radius,this.positions[this.currentIndex][this.positions[this.currentIndex].length-1]);
-temp.setTag("line");
-this.addComponent(temp);
 }
 continueLine(position)
 {
@@ -104,7 +90,8 @@ this.addPoint(position);
 clear(position)
 {
     this.currentIndex=0;
-   this.positions=  new Array(new Array());
+   this.positions.splice(0,this.positions.length);
+   this.positions[0]=new Array();
     this.lastPoint = null;
     this.break=false; 
     this.addPoint(position)
@@ -118,6 +105,7 @@ class TailPoint extends Vector
         super(x,y);
         this.width=width;
         this.parent=parent;
+        this.col = false;
     }
     getTag()
     {

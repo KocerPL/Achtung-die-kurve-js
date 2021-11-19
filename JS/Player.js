@@ -9,7 +9,7 @@ import { Main } from "./Main.js";
 
 export class Player extends GameObject
 {
-    static distDef = 3;
+    static distDef = 2;
     static break={
         length:20,
         interval:250,
@@ -19,6 +19,7 @@ export class Player extends GameObject
 constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
 {
     super(position,rotation,scale);
+    this.lastRot = rotation;
     this.radius =3;
     this.vel =1.2;
     this.alp = 0;
@@ -46,6 +47,7 @@ constructor(position,rotation,scale,leftKeyCode,rightKeyCode,color)
     let temp = new CircleComponent(this);
     temp.setTag("Head");
     this.addComponent(temp);
+    this.tail.addPoint(this.position);
     //this.addComponent(new SATPolygon(this,new Vector(-10,-10),new Vector(-10,10),new Vector(10,10),new Vector(10,-10)));
 }
 
@@ -100,26 +102,29 @@ collision(gameobject,component)
         else if(gameobject.type==Bonus.type.SHRINK&& this.radius-1>0)
         {
             this.radius-=1;
+            this.tail.addPoint(this.position);
             //   gameobject.remove = true;
                this.cooldown.push({
-                   func:function(){this.radius+=1;},
+                   func:function(){this.radius+=1; this.tail.addPoint(this.position);},
                    time:250 
                });
                return; 
         }
         else if(gameobject.type==Bonus.type.MAGNIFI)
         {
+           
             this.radius+=1;
+            this.tail.addPoint(this.position);
             //   gameobject.remove = true;
                this.cooldown.push({
-                   func:function(){this.radius-=1;},
+                   func:function(){this.radius-=1;this.tail.addPoint(this.position);},
                    time:250 
                });
                return; 
         }
         else if(gameobject.type==Bonus.type.INVISIBLE)
         {
-            this.tail.breakLine();
+            this.tail.breakLine(this.position);
             this.break.is=true;
             this.break.last = this.distance+100000;
             this.invisible=true;
@@ -175,7 +180,7 @@ collision(gameobject,component)
               
             }  else if(gameobject.type==Bonus.type.INVISIBLE)
             {
-                e.tail.breakLine();
+                e.tail.breakLine(e.position);
                 e.break.is=true;
                 e.break.last = e.distance+100000;
                 e.invisible=true;
@@ -196,7 +201,7 @@ collision(gameobject,component)
     {
 
         this.coll=true;
-        if(!this.break.is)
+        if(!this.break.is && !this.invisible)
         {
         this.HALT=true;
         this._alive = false;
@@ -258,15 +263,16 @@ this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-(this.radius*Player.distDef)>this.lastDistance)
+if(this.distance-(this.radius*Player.distDef)>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot  ))
 {
+this.lastRot =this.rotation;
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;
 this.lastPosition = this.position;
 }
 if(this.distance-this.break.interval>this.break.last && !this.break.is)
 {
-    this.tail.breakLine();
+    this.tail.breakLine(this.position);
     this.break.is=true;
     this.break.last = this.distance;
 }

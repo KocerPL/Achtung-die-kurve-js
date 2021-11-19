@@ -22,7 +22,7 @@ export class Physics
     }
     static addStaticComponent(item)
     {
-        this.circleStatics.push(item);
+      //  this.circleStatics.push(item);
     }
     static addCircleComponent(item)
     {
@@ -34,6 +34,8 @@ export class Physics
         this.updateAABB();
         this.updateFCcollision();
         this.updateCCcollision();
+        this.updateLCcollision();
+        this.circleComponents = new Array();
     }
     static updateAABB()
     {
@@ -56,19 +58,34 @@ export class Physics
     {
         for(let arr of this.linePointerArray) 
         {
-            for(let i =0;i<arr.length;i++)
-            {
-                for(let j=1; j<arr[i].length;j++  )
+           // console.log(arr);
+           for(let k=0;k<this.circleComponents.length;k++)
+           {
+                 for(let i =0;i<arr.length;i++)
                 {
-                    for(let k=0;k<this.circleComponents.length;k++)
-                    {
-                        if(this.lineCircleColl(arr[i][j].copy(),arr[i][j-1].copy(),arr[i][j].width,this.circleComponents[k]))
+               
+                    for(let j=arr[i].length-1; j>0;j--)
+                    { 
+                   
+                     //   console.log("lag");
+                        if(this.lineCircleColl(arr[i][j].copy(),arr[i][j-1].copy(),arr[i][j].width,this.circleComponents[k]) && (i<arr.length-1 || j<arr[i].length-3  ||arr[i][j].parent.parent != this.circleComponents[k].parent) )
                         {
                             this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
+                          // console.log(i+"=i | j="+j);
                         }
                     }
+                    
+                }
+                
+                let i = arr.length-1;
+                let j = arr[i].length-1;
+                if(this.lineCircleColl(arr[i][j].copy(),arr[i][j].parent.parent.position.copy(),arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent )
+                {
+                    this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
+                  // console.log(i+"=i | j="+j);
                 }
             }
+            
         } 
     }
     static CCcoll2(pos,pos2,rad,rad2)
@@ -78,8 +95,6 @@ export class Physics
     }
     static lineCircleColl(point,point2,width,circle)
     {
-         // is either end INSIDE the circle?
-  // if so, return true immediately
   let x1 = point.x;
   let x2 =point2.x;
   let y1 = point.y;
@@ -105,7 +120,7 @@ export class Physics
 
   // is this point actually on the line segment?
   // if so keep going, but if not, return false
-  var onSegment = linePoint(x1,y1,x2,y2, closestX,closestY);
+  var onSegment = this.linePoint(x1,y1,x2,y2, closestX,closestY);
   
   if (!onSegment) return false;
 
@@ -116,21 +131,27 @@ export class Physics
   // get distance to closest point
   distX = closestX - cx;
   distY = closestY - cy;
-  var distance = sqrt( (distX*distX) + (distY*distY) );
+  var distance = Math.sqrt( (distX*distX) + (distY*distY) );
 
-  if (distance <= r) {
+  if (distance <= r+(width/2)) {
     return true;
   }
   return false;
     }
+    static dist(x,y,x2,y2)
+    {
+      let  disX = x - x2;
+  let disY = y - y2;
+ return Math.sqrt( (disX*disX) + (disY*disY) );
+    }
     static linePoint( x1,  y1,  x2,  y2,  px,  py) {
 
         // get distance from the point to the two ends of the line
-        let d1 = dist(px,py, x1,y1);
-        let d2 = dist(px,py, x2,y2);
+        let d1 = this.dist(px,py, x1,y1);
+        let d2 = this.dist(px,py, x2,y2);
       
         // get the length of the line
-        let lineLen = dist(x1,y1, x2,y2);
+        let lineLen = this.dist(x1,y1, x2,y2);
       
         // since lets are so minutely accurate, add
         // a little buffer zone that will give collision
@@ -171,7 +192,7 @@ export class Physics
                }
             }
         }
-        this.circleComponents = new Array();
+      
     }
     static updateFCcollision() // Frame circle component collision
     {
