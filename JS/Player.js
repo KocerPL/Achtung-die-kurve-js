@@ -25,6 +25,9 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.alp = 0;
     this.alpCh=true;
     this.distance=0;
+    this.crashSound = new Audio("/MSC/crashSound.wav");
+    this.bonusSound = new Audio("/MSC/bonusPicked.wav");
+    this.crashSound.playbackRate=3;
     this.rotVel=0;
     this.color=color;
     this.lastDistance=0;
@@ -78,6 +81,7 @@ collision(gameobject,component)
  //   console.log(component.getTag());
     if(component.getTag()=="Bonus")
     {
+       if(Main.soundsOn) this.bonusSound.play();
         if(gameobject.target ==Bonus.target.ME)
         {
         if(gameobject.type==Bonus.type.SPEED)
@@ -203,6 +207,7 @@ collision(gameobject,component)
         this.coll=true;
         if(!this.break.is && !this.invisible)
         {
+          if(Main.soundsOn)  this.crashSound.play();
         this.HALT=true;
         this._alive = false;
         }

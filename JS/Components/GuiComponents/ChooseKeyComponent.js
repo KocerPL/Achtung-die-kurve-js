@@ -11,9 +11,9 @@ export class ChooseKeyComponent extends ButtonComponent
         this.defStyle=style;
         this.key =key;
         this.awaitKey=false;
-        this.textComponent.position =new Vector(this.position.x+(size.x/2),this.position.y+this.size.y)
+    //    this.textComponent.position =new Vector(this.position.x+(size.x/2),this.position.y+this.size.y)
         this.textComponent.setText(key);    
-        this.textComponent.textAlign="center";   
+        this.setTextAlign("center");   
         window.addEventListener("keydown",this.onKey.bind(this));
     }
     mouse(pos,ev)

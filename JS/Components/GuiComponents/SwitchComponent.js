@@ -5,6 +5,8 @@ export class SwitchComponent extends ButtonComponent
     {
         super(parent,position,size,style);
         this._click=false;
+        this.defText = style.text;
+      this.style.onClickText ??= this.style.text ;
     }
     mouse(pos,ev)
     {
@@ -22,6 +24,14 @@ export class SwitchComponent extends ButtonComponent
                 if(ev=="mousedown")
                 {
                 this._click = !this._click;
+                if(!this._click)
+                {
+                    this.textComponent.text=this.defText;
+                }
+                else
+                {
+                    this.textComponent.text=this.style.onClickText; 
+                }
                 }
                 else if(ev=="mouseup")
                var o=1;// this._click=false;
@@ -36,8 +46,15 @@ export class SwitchComponent extends ButtonComponent
     }
     draw(ctx)
     {
-        if(!this._click) ctx.globalAlpha = 0.1; 
+        if(!this._click)
+        {
+            ctx.globalAlpha = 0.1;
+          
+        } 
+      
+       
         super.draw(ctx);
+       
         ctx.globalAlpha = 1;
     }
 }

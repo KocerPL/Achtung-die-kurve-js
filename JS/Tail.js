@@ -18,7 +18,7 @@ Physics.addLineArray(this.positions);
 draw(ctx)
 {
     ctx.lineCap = "round";
-    ctx.lineJoin = "miter";
+    ctx.lineJoin = "round";
     ctx.strokeStyle=this.parent.color;
 for(var i=0;i<this.positions.length;i++)
 {

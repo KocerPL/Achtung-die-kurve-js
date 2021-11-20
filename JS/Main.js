@@ -35,6 +35,7 @@ export class Main
     static lastFpsMeasure=0;
     static renderFPS = true;
     static gameObjects= new Array();
+    static soundsOn =false;
     //Canvas variables
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
@@ -44,8 +45,10 @@ export class Main
     static currentProportion =new Vector(1,1);
     static caMatr = new DOMMatrix();
     static resetTrig=false;
+    static playmusic = false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,596.5));
     // if true then width *ratio < height
+    static music = new Audio("/MSC/Kocer - ChordJump.mp3");
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
     {
@@ -54,6 +57,7 @@ export class Main
         window.addEventListener('resize',this.resize.bind(this),false);
         MouseListener.init(this.currentProportion);
         Menu.init();
+        
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
@@ -63,6 +67,13 @@ export class Main
         if(ev.keyCode==32) 
         {
         this.pause= !this.pause
+        if(this.playmusic)
+        {
+        if(this.pause)
+        {
+            this.music.pause();
+        }else this.music.play();
+    }
         if(this.resetTrig)
         {
             this.forPlayers((p)=>{ 
@@ -86,6 +97,12 @@ export class Main
     }
     static startGame()
     {
+        this.soundsOn = Menu.soundButton.getClick();
+        this.playmusic = Menu.musicButton.getClick() ;
+       if(this.playmusic== true) 
+       {this.music.play();
+        this.music.loop=true;
+       }
         this.frameHitbox.setTag("Frame");
       /*  if(Menu.BlueGroup)  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),65,68,"Blue"));
         if(Menu.RedButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),37,39,"Red"));
