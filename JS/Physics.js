@@ -68,7 +68,8 @@ export class Physics
                     { 
                    
                      //   console.log("lag");
-                        if(this.lineCircleColl(arr[i][j].copy(),arr[i][j-1].copy(),arr[i][j].width,this.circleComponents[k]) && (i<arr.length-1 || j<arr[i].length-3  ||arr[i][j].parent.parent != this.circleComponents[k].parent)  )
+                        if(this.lineCircleColl(arr[i][j].copy(),arr[i][j-1].copy(),arr[i][j].width,this.circleComponents[k]) && (arr[i][j].parent.parent != this.circleComponents[k].parent || i<arr.length-1 || j<arr[i].length-3  )
+                          )
                         {
                             this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
                           // console.log(i+"=i | j="+j);
@@ -90,7 +91,7 @@ export class Physics
     }
     static CCcoll2(pos,pos2,rad,rad2)
     {
-    if(this.calcDist(pos,pos2) < rad+rad2) return true;
+    if(this.calcDist(pos,pos2) < (rad+rad2)) return true;
     return false;
     }
     // Only part of code that I can't understand how it's fully working below \/
@@ -105,9 +106,14 @@ export class Physics
   let r = circle.radius;
   let cx = circle.pos.x;
   let cy = circle.pos.y;
-  var inside1 = this.CCcoll2(point, circle.pos,point.width,r);
-  var inside2 =this.CCcoll2(point2, circle.pos,point2.width,r);
-  if (inside1 || inside2) return true;
+    let inside1 = this.CCcoll2(point, circle.pos,point.width/2,r);
+  let inside2 =this.CCcoll2(point2, circle.pos,point2.width/2,r);
+  
+  if (inside1 || inside2)
+  {
+     //console.log("coll");
+     return true;
+  }
 
   // get length of the line
   var distX = x1 - x2;
@@ -223,16 +229,6 @@ export class Physics
             }
         }
         return false;
-    }
-    static removeCHBP(parent)//removeCircleHitboxesByParent
-    {
-        for(let i=this.circleStatics.length-1;i>=0;i--)
-        {
-            if(this.circleStatics[i].parent==parent)
-            {
-                this.circleStatics.splice(i,1);
-            }
-        }
     }
     static calcDist(vec1,vec2)
     {

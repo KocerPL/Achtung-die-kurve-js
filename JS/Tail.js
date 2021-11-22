@@ -8,11 +8,12 @@ export class Tail extends GameObject
 constructor(position,parent)
 {
     super(position,0,new Vector(1,1));
-  this.positions= new Array(new Array());
-  this.positions[0].push(position.copy()); 
+  this.positions= new Array(new Array(0));
   this.parent = parent;
+  this.positions[0][0] = new TailPoint(position.x,position.y,this.parent.radius*2,this); 
   this.lastPoint = null;
-  this.break=false;  this.currentIndex=0;
+  this.break=false;
+    this.currentIndex=0;
 Physics.addLineArray(this.positions);
 }
 draw(ctx)
@@ -52,7 +53,7 @@ for(var i=0;i<this.positions.length;i++)
 }
 if(!this.break)
 {
-    ctx.lineWidth=this.parent.radius*2;
+    ctx.lineWidth=this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].width;
 ctx.beginPath();
 ctx.moveTo(this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].x,this.positions[this.positions.length-1][this.positions[this.positions.length-1].length-1].y);
 ctx.lineTo(this.parent.position.x,this.parent.position.y);
@@ -65,8 +66,7 @@ addPoint(position)
     if(!this.break && position instanceof Vector)
     {
         let tmpPos = position.copy();
-        const tmpRad = TailPoint.copyNumber(this.parent.radius);
-    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, tmpRad*2,this) );
+    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, this.parent.radius*2,this) );
     }
 }
 collision(gameobject,component)
@@ -94,7 +94,6 @@ clear(position)
     this.lastPoint = null;
     this.break=false; 
     this.addPoint(position)
-    Physics.removeCHBP(this);
 }
 }
 class TailPoint extends Vector
@@ -102,7 +101,7 @@ class TailPoint extends Vector
     constructor(x,y,width,parent)
     {
         super(x,y);
-        this.width=width;
+        this.width=new Number(width);
         this.parent=parent;
         this.col = false;
     }
@@ -113,5 +112,9 @@ class TailPoint extends Vector
     static copyNumber(num)
     {
         return new Number(num);
+    }
+    copy()
+    {
+        return new TailPoint(this.x,this.y,this.width,this.parent);
     }
 }
