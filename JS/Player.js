@@ -23,6 +23,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     super(position,rotation,scale);
     this.lastRot = rotation;
     this.hold=false;
+    this.hold2=false;
     this.radius =3;
     this.vel =1.2;
     this.alp = 0;
@@ -85,10 +86,10 @@ keyPress(ev)
             if(ev.type=="keydown" && !this.hold)
             {
                 this.rotation+=90;
-                this.hold=true;
+                this.hold2=true;
              }
              else
-             this.hold=false;
+             this.hold2=false;
             return;
         }
         if(ev.type=="keydown")
@@ -123,7 +124,7 @@ collision(gameobject,component)
         {
             this.stop =true;
                this.cooldown.push({
-                   func:function(){this.stop=false},
+                   func:function(){this.stop=false;this.tail.addPoint(this.position)},
                    time:250 
                });
                return; 
@@ -193,25 +194,27 @@ collision(gameobject,component)
                 e.stop = true;
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.stop = false;},
+                       func:function(){e.stop = false; e.tail.addPoint(e.position)},
                        time:250
                    });
                   
             } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive()&& e.radius-1>0)
             {
                 e.radius-=1;
+                e.tail.addPoint(e.position);
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.radius+=1;},
+                       func:function(){e.radius+=1;e.tail.addPoint(e.position);},
                        time:250 
                    });
               
             } else if(gameobject.type==Bonus.type.MAGNIFI&& e.isAlive())
             {
                 e.radius+=1;
+                e.tail.addPoint(e.position);
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.radius-=1;},
+                       func:function(){e.radius-=1;e.tail.addPoint(e.position);},
                        time:250 
                    });
               
@@ -373,6 +376,7 @@ this.invisible =false;
   this.clearTail();
   this.distance=0;
   this.hold=false;
+  this.hold2=false;
   this.curve90=false;
   this.lastDistance=0;
   this._alive = true;

@@ -63,7 +63,7 @@ ctx.lineWidth=1;
 }
 addPoint(position)
 {
-    if(!this.break && position instanceof Vector)
+    if(!this.break && position instanceof Vector && !this.parent.stop)
     {
         let tmpPos = position.copy();
     this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, this.parent.radius*2,this) );

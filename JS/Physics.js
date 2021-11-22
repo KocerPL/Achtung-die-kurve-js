@@ -77,7 +77,8 @@ export class Physics
                     }
                     
                 }
-                
+                if(arr.length>0&& arr[arr.length-1].length>0)
+                {
                 let i = arr.length-1;
                 let j = arr[i].length-1;
                 if(this.lineCircleColl(arr[i][j].copy(),arr[i][j].parent.parent.position.copy(),arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent && arr[i][j].parent.parent.invisible == false)
@@ -85,6 +86,7 @@ export class Physics
                     this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
                   // console.log(i+"=i | j="+j);
                 }
+            }
             }
             
         } 
