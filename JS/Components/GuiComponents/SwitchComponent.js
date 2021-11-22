@@ -4,9 +4,12 @@ export class SwitchComponent extends ButtonComponent
     constructor(parent,position,size,style)
     {
         super(parent,position,size,style);
-        this._click=false;
+        this._click=style.def??= false;
+        
         this.defText = style.text;
+        
       this.style.onClickText ??= this.style.text ;
+      if(this._click) this.textComponent.text=this.style.onClickText; 
     }
     mouse(pos,ev)
     {
@@ -48,7 +51,7 @@ export class SwitchComponent extends ButtonComponent
     {
         if(!this._click)
         {
-            ctx.globalAlpha = 0.1;
+            ctx.globalAlpha = 0.3;
           
         } 
       

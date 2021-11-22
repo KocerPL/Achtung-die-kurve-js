@@ -6,6 +6,8 @@ import { CircleComponent } from "./Components/LineCircleComponent.js";
 import { ScoreComponent } from "./Components/ScoreComponent.js";
 import { Bonus } from "./Bonus.js";
 import { Main } from "./Main.js";
+import { Particle } from "./Particle.js";
+import { KMath } from "./Utils.js";
 
 export class Player extends GameObject
 {
@@ -20,6 +22,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
 {
     super(position,rotation,scale);
     this.lastRot = rotation;
+    this.hold=false;
     this.radius =3;
     this.vel =1.2;
     this.alp = 0;
@@ -44,7 +47,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.cooldown = new Array();
     this.break=Object.assign({},Player.break);
     this.invisible = false;
-
+    this.curve90 = false;
     window.addEventListener("keydown",this.keyPress.bind(this),false);
     window.addEventListener("keyup",this.keyPress.bind(this),false);
     let temp = new CircleComponent(this);
@@ -59,6 +62,17 @@ keyPress(ev)
     
     if(this.leftKey==ev.key)
     {
+        if(this.curve90)
+        {
+            if(ev.type=="keydown" && !this.hold)
+         {
+            this.rotation-=90;
+            this.hold=true;
+         }
+            else
+            this.hold=false;
+        return;
+        }
         if(ev.type=="keydown")
         this.rotVel=-this.vel*2;
         else
@@ -66,6 +80,17 @@ keyPress(ev)
     }
     else if(this.rightKey==ev.key)
     {
+        if(this.curve90)
+        {
+            if(ev.type=="keydown" && !this.hold)
+            {
+                this.rotation+=90;
+                this.hold=true;
+             }
+             else
+             this.hold=false;
+            return;
+        }
         if(ev.type=="keydown")
         this.rotVel=this.vel*2;
         else
@@ -136,6 +161,14 @@ collision(gameobject,component)
                 func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position); this.break.last = this.distance},
                 time:200 
             });
+        } else if(gameobject.type==Bonus.type.CURVE90)
+        {
+            this.rotVel=0;
+            this.curve90=true;
+            this.cooldown.push({
+                func:function(){ this.curve90=false;},
+                time:400 
+            });
         }
         }
         else if(Bonus.target.OTHERS == gameobject.target)
@@ -192,6 +225,14 @@ collision(gameobject,component)
                     func:function(){e.invisible=false;e.break.is=false;e.tail.continueLine(e.position); e.break.last = e.distance},
                     time:200 
                 });
+            } else if(gameobject.type==Bonus.type.CURVE90)
+            {
+                e.rotVel=0;
+                e.curve90=true;
+               e.cooldown.push({
+                    func:function(){ e.curve90=false;},
+                    time:400 
+                });
             }
         }
         }
@@ -207,18 +248,24 @@ collision(gameobject,component)
         this.coll=true;
         if(!this.break.is && !this.invisible)
         {
-          if(Main.soundsOn)  this.crashSound.play();
-        this.HALT=true;
-        this._alive = false;
+         this.death();
         }
     }
     if(component.getTag()=="Frame")
     {
-
-        this.coll=true;
-        this.HALT=true;
-        this._alive = false;
+        this.death();
+      
     }
+}
+death()
+{
+    if(Main.soundsOn)  this.crashSound.play();
+    for(var i =0;i<10;i++)
+    {
+        new Particle(Vector.add(this.position,this.velVec),KMath.randFR(1,1.4),KMath.randFR(0,360),KMath.randFR(0.2,0.35),KMath.randFR(20,30));
+    }
+  this.HALT=true;
+  this._alive = false;
 }
 draw(ctx)
 {
@@ -262,7 +309,7 @@ setDrawDirection(bool)
 
 update()
 {
-if(this.HALT) return;
+if(this.HALT || Main.pause) return;
 for(let i=this.cooldown.length-1;i>=0;i--)
 {
     if(this.cooldown[i].time<=0)
@@ -325,6 +372,8 @@ this.invisible =false;
   this.clearTail();
   this.distance=0;
   this.radius =3;
+  this.hold=false;
+  this.curve90=false;
   this.lastDistance=0;
   this._alive = true;
   this.rotation = rot;

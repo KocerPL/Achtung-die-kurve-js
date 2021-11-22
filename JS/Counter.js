@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObject.js";
+import { Main } from "./Main.js";
 import { Vector } from "./Vector.js";
 
 export class Counter extends GameObject
@@ -28,6 +29,7 @@ export class Counter extends GameObject
     }
     update()
     {
+        if(Main.pause) return;
         if(this.dec) this.min+=0.03; else  this.min-=0.03;
         if(this.min>2)
         {

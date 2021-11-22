@@ -24,6 +24,7 @@ export class Main
    static leftMargin = 0;
    static pause = false;
    static tp= false;
+   static genBonus= true;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
         GAME: 1,
@@ -99,6 +100,7 @@ export class Main
     {
         this.soundsOn = Menu.soundButton.getClick();
         this.playmusic = Menu.musicButton.getClick() ;
+        this.genBonus = Menu.bonusButton.getClick() ;
        if(this.playmusic== true) 
        {this.music.play();
         this.music.loop=true;
@@ -221,7 +223,7 @@ export class Main
         if(this.State==this.STATE.GAME) {
             this.checkConditions();
             if(!this.pause) BonusGenerator.update();    
-            this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {if(!this.pause)  element.update()}});
+            this.gameObjects.forEach((element)=>{if(element instanceof GameObject) { element.update()}});
             for(let i= this.gameObjects.length-1;i>=0;i--) 
             {
                 let element = this.gameObjects[i];

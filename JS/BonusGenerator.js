@@ -2,6 +2,7 @@ import { Bonus } from "./Bonus.js";
 import {Main} from "./Main.js";
 import { Vector } from "./Vector.js";
 import {KMath} from "./Utils.js";
+
 export class BonusGenerator
 {
     static timer =0;
@@ -12,7 +13,7 @@ export class BonusGenerator
     {
     //    let temp =KMath.randFR(1,2);
       //  console.log(temp)
-       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,5))
+       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,6))
        ,Math.round(KMath.randFR(1,2))));
     }
     static delBonus()
@@ -26,7 +27,7 @@ export class BonusGenerator
     }
     static update()
     {
-        if(!this.pause)
+        if(!this.pause && Main.genBonus)
         {
        // console.log(this.timer);
         this.timer++;

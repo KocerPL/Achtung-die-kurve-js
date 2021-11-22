@@ -35,6 +35,7 @@ static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.but
  static VioletGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,300),"z","x",">Violet","violet")) 
  static GrayGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,330),"End","PageDown",">Gray","gray")) 
  //static buttonChoose = this.addComponent(new ChooseKeyComponent(this,new Vector(this.buttonsAlign+300,270),new Vector(30,30),"A",{frame:true}))
+ static bonusButton = this.addComponent(new SwitchComponent(this,new Vector(362,470),new Vector(100,20),{text:"Bonus: off",onClickText:"Bonus: on",color:"Yellow", frame:true,def:true}));
 static musicButton = this.addComponent(new SwitchComponent(this,new Vector(472,470),new Vector(100,20),{text:"Music: off",onClickText:"Music: on",color:"Yellow", frame:true}));
 static soundButton = this.addComponent(new SwitchComponent(this,new Vector(582,470),new Vector(100,20),{text:"Sounds: off",onClickText:"Sounds: on",color:"Yellow", frame:true}));
 static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true}));
