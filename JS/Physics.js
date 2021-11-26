@@ -108,6 +108,14 @@ export class Physics
   let r = circle.radius;
   let cx = circle.pos.x;
   let cy = circle.pos.y;
+    // get length of the line
+  var distX = x1 - x2;
+  var distY = y1 - y2;
+  var len = Math.sqrt( (distX*distX) + (distY*distY) );
+  if(!this.CCcoll2(circle.pos,point,len,r)|| !this.CCcoll2(circle.pos,point2,len,r))
+  {
+    return false;
+  }
     let inside1 = this.CCcoll2(point, circle.pos,point.width/2,r);
   let inside2 =this.CCcoll2(point2, circle.pos,point2.width/2,r);
   
@@ -117,10 +125,7 @@ export class Physics
      return true;
   }
 
-  // get length of the line
-  var distX = x1 - x2;
-  var distY = y1 - y2;
-  var len = Math.sqrt( (distX*distX) + (distY*distY) );
+  
 
   // get dot product of the line and circle
   var dot = ( ((cx-x1)*(x2-x1)) + ((cy-y1)*(y2-y1)) ) / Math.pow(len,2);

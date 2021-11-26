@@ -15,7 +15,7 @@ export class ButtonComponent extends Component
         this.style.textcolor ??= "white";
         this._hover=false;
         this.hidden=false;
-        this.textComponent = this.addComponent(new TextComponent(this,new Vector(this.position.x+this.margin,this.position.y+this.size.y-this.margin),this.style.text,textStyle??={color:this.style.textcolor,textBaseLine:"bottom",font:this.style.font??="Comic sans MS",fontSize:this.size.y-(2*this.margin)}) )
+        this.textComponent = this.addComponent(new TextComponent(this,new Vector(this.position.x+this.margin,this.position.y+this.size.y-this.margin),this.style.text,textStyle??={color:this.style.textcolor,textBaseLine:"bottom",font:this.style.font??="PatrickHand",fontSize:this.size.y-(2*this.margin)}) )
        // console.log(this.textComponent);
         this.color = "black";
         this._click=false;

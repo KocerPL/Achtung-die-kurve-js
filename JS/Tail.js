@@ -40,10 +40,10 @@ for(var i=0;i<this.positions.length;i++)
         }
    ctx.lineTo(this.positions[i][j].x,this.positions[i][j].y)  
    // Arc filling
- //   ctx.fillStyle=this.parent.color;
- //  ctx.beginPath()
+   //ctx.fillStyle=this.parent.color;
+ // ctx.beginPath()
  //ctx.arc(this.positions[i][j].x,this.positions[i][j].y,this.positions[i][j].width/2,0,Math.PI*2,false);
- //  ctx.fill()
+ ///ctx.fill()
   
  ctx.stroke();
 

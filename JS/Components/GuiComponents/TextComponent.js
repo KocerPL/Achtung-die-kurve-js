@@ -12,7 +12,7 @@ constructor(parent,pos,text,conf)
     this.color =conf.color ??= "black";
     this.stroke =conf.stroke ??=false;
     this.fontSize =conf.fontSize ??= 20;
-    this.font=conf.font ??="Calibri";
+    this.font=conf.font ??="PatrickHand";
     this.textBaseLine =conf.textBaseLine ??= "alphabetic";
     this.direction=conf.direction ??="inherit";
     this.alpha =conf.alpha;

@@ -16,6 +16,11 @@ export class Main
     // object array
    // static objectArray = new Array();
     //loop variables
+    static mainFont = new FontFace(
+        "PatrickHand",
+        "url(PatrickHand-Regular.ttf)"
+      );
+      
     static cursorhov= false;
     static lastTime=0;
     static maxFps=61;
@@ -53,6 +58,9 @@ export class Main
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
     {
+        this.mainFont.load().then((font) => {
+            document.fonts.add(font);
+        });
         this.resize();
       Bonus.initGraphics();
         window.addEventListener('resize',this.resize.bind(this),false);

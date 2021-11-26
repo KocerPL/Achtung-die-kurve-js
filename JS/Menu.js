@@ -13,16 +13,16 @@ export class Menu
   static mouseListener = new ListenerComponent(this);
   static enabledPlayers=0;
   //head
-  static Title = this.addComponent(new TextComponent(this,new Vector(1024/2,100),"Achtung, die Kurve!",{color:"Yellow",textAlign:"center",font:"Comic Sans MS",fontSize:50}));
-  static Author = this.addComponent(new TextComponent(this,new Vector((1024/2)-50,135),"Javascript remake by",{color:"green",textAlign:"center",font:"Segoe Script",fontSize:25}));
-  static Version = this.addComponent(new TextComponent(this,new Vector(5,595),"Version 5.0, Release 1",{color:"White",textAlign:"left",font:"Calibri",fontSize:15}));
-  static Kocer = this.addComponent(new ButtonComponent(this,new Vector(612,115),new Vector(80,30),{text:"Kocer",color:"Yellow",textcolor:"Green", frame:false,font:"Segoe Script"}));
+  static Title = this.addComponent(new TextComponent(this,new Vector(1024/2,100),"Achtung, die Kurve!",{color:"Yellow",textAlign:"center",font:"PatrickHand",fontSize:50}));
+  static Author = this.addComponent(new TextComponent(this,new Vector((1024/2)-50,135),"Javascript remake by",{color:"green",textAlign:"center",font:"PatrickHand",fontSize:25}));
+  static Version = this.addComponent(new TextComponent(this,new Vector(5,595),"Version 5.0, Release 1",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:15}));
+  static Kocer = this.addComponent(new ButtonComponent(this,new Vector(562,114),new Vector(80,30),{text:"Kocer",color:"Yellow",textcolor:"Green", frame:false,font:"PatrickHand"}));
   
   static buttonsAlign = 302;
   static desc ={
-    colors:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign,170),"Colors: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25})),
-    left:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+150,170),"Left: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25})),
-    right:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+300,170),"Right: ",{color:"White",textAlign:"left",font:"Comic Sans MS",fontSize:25}))
+    colors:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign,170),"Colors: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25})),
+    left:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+150,170),"Left: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25})),
+    right:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+300,170),"Right: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25}))
   };
   
 static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,270),",",".",">Green","green"))
