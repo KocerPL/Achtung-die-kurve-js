@@ -36,6 +36,8 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.rotVel=0;
     this.color=color;
     this.lastDistance=0;
+    this._leftKeyClick =false;
+    this._rightKeyClick =false;
     this.leftKey=leftKey.toUpperCase();
     this.rightKey=rightKey.toUpperCase();
     this.tail= new Tail(position,this);
@@ -76,9 +78,11 @@ keyPress(ev)
         return;
         }
         if(ev.type=="keydown")
-        this.rotVel=-this.vel*2;
+        {
+        this._leftKeyClick =true
+      }
         else
-        this.rotVel=0;
+        this._leftKeyClick =false
     }
     else if(this.rightKey==ev.key.toUpperCase())
     {
@@ -94,9 +98,9 @@ keyPress(ev)
             return;
         }
         if(ev.type=="keydown")
-        this.rotVel=this.vel*2;
+        this._rightKeyClick =true
         else
-        this.rotVel=0;
+        this._rightKeyClick =false
     }
 }
 isAlive()
@@ -205,7 +209,7 @@ collision(gameobject,component)
                 e.awaitPoint=true
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.radius+=1;e.tail.addPoint(e.position);},
+                       func:function(){e.radius+=1;e.awaitPoint=true;},
                        time:250 
                    });
               
@@ -332,7 +336,13 @@ if(this.stop) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
-this.rotation+=this.rotVel;
+if(this._leftKeyClick)
+{
+this.rotation-=1.8*this.vel;
+}else if(this._rightKeyClick)
+{
+    this.rotation+=1.8*this.vel;
+}
 this.distance+=this.vel;
 if(this.distance-(this.radius*Player.distDef)>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
 {
@@ -380,6 +390,7 @@ this.invisible =false;
   this.hold=false;
   this.hold2=false;
   this.curve90=false;
+  this.awaitPoint=false
   this.lastDistance=0;
   this._alive = true;
   this.rotation = rot;

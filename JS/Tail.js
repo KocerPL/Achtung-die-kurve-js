@@ -93,7 +93,9 @@ clear(position)
    this.positions[0]=new Array();
     this.lastPoint = null;
     this.break=false; 
-    this.addPoint(position)
+   
+    let tmpPos = position.copy();
+    this.positions[this.currentIndex].push(new TailPoint(tmpPos.x,tmpPos.y, this.parent.radius*2,this) );
 }
 }
 class TailPoint extends Vector
