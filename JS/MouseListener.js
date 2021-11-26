@@ -16,6 +16,10 @@ export class MouseListener
     {
         this.ratioVec = ratioVec;
     }
+    static draw(ctx)
+    {
+
+    }
     static onMouse(ev)
     {
 //console.log(ev);
@@ -23,8 +27,9 @@ if(ev.type=="mousedown")
 Main.canvas.style.cursor = "url('hover.cur'), auto";
 if(ev.type=="mouseup")
 Main.canvas.style.cursor = "url('cursor.cur'), auto";
+//console.log(ev);
 //ev.preventDefault();
-let translatedVec= new Vector(((ev.layerX-Main.leftMargin)/this.ratioVec.x),ev.layerY/this.ratioVec.y);
+let translatedVec= new Vector(((ev.clientX-Main.leftMargin)/this.ratioVec.x),ev.clientY/this.ratioVec.y);
 for(let e of this.listenerComponents)
 {
     e.parent.mouse(translatedVec,ev.type);

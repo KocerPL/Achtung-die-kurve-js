@@ -9,10 +9,10 @@ export class ChooseKeyComponent extends ButtonComponent
         super(parent,position,size,style);
         this._click=true;
         this.defStyle=style;
-        this.key =key;
+        this.key =key.toUpperCase();
         this.awaitKey=false;
     //    this.textComponent.position =new Vector(this.position.x+(size.x/2),this.position.y+this.size.y)
-        this.textComponent.setText(key);    
+        this.textComponent.setText(this.key);    
         this.setTextAlign("center");   
         window.addEventListener("keydown",this.onKey.bind(this));
     }
@@ -55,8 +55,8 @@ export class ChooseKeyComponent extends ButtonComponent
       if(this.awaitKey)
       {
           if(ev.type =="keydown")
-          {          this.key= ev.key;
-        this.textComponent.setText( ev.key);
+          {          this.key= ev.key.toUpperCase();
+        this.textComponent.setText( this.key);
         this._click=true;
         this.awaitKey=false;
         this.color="black";

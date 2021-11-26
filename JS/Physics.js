@@ -84,7 +84,7 @@ export class Physics
                 if(this.lineCircleColl(arr[i][j].copy(),arr[i][j].parent.parent.position.copy(),arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent && arr[i][j].parent.parent.invisible == false)
                 {
                     this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
-                  // console.log(i+"=i | j="+j);
+                  console.log(i+"=i | j="+j+"| LAST="+arr[i][j].parent.currentIndex);
                 }
             }
             }

@@ -28,6 +28,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.vel =1.2;
     this.alp = 0;
     this.alpCh=true;
+    this.awaitPoint=false;
     this.distance=0;
     this.crashSound = new Audio("/MSC/crashSound.wav");
     this.bonusSound = new Audio("/MSC/bonusPicked.wav");
@@ -35,8 +36,8 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.rotVel=0;
     this.color=color;
     this.lastDistance=0;
-    this.leftKey=leftKey;
-    this.rightKey=rightKey;
+    this.leftKey=leftKey.toUpperCase();
+    this.rightKey=rightKey.toUpperCase();
     this.tail= new Tail(position,this);
     this.lastPosition=position;
     this._alive = true;
@@ -61,7 +62,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
 keyPress(ev)
 {
     
-    if(this.leftKey==ev.key)
+    if(this.leftKey==ev.key.toUpperCase())
     {
         if(this.curve90)
         {
@@ -79,7 +80,7 @@ keyPress(ev)
         else
         this.rotVel=0;
     }
-    else if(this.rightKey==ev.key)
+    else if(this.rightKey==ev.key.toUpperCase())
     {
         if(this.curve90)
         {
@@ -124,7 +125,7 @@ collision(gameobject,component)
         {
             this.stop =true;
                this.cooldown.push({
-                   func:function(){this.stop=false;this.tail.addPoint(this.position)},
+                   func:function(){this.stop=false; this.awaitPoint=true},
                    time:250 
                });
                return; 
@@ -132,10 +133,10 @@ collision(gameobject,component)
         else if(gameobject.type==Bonus.type.SHRINK&& this.radius-1>0)
         {
             this.radius-=1;
-            this.tail.addPoint(this.position);
+            this.awaitPoint=true
             //   gameobject.remove = true;
                this.cooldown.push({
-                   func:function(){this.radius+=1; this.tail.addPoint(this.position);},
+                   func:function(){this.radius+=1;  this.awaitPoint=true;},
                    time:250 
                });
                return; 
@@ -144,10 +145,10 @@ collision(gameobject,component)
         {
            
             this.radius+=1;
-            this.tail.addPoint(this.position);
+            this.awaitPoint=true
             //   gameobject.remove = true;
                this.cooldown.push({
-                   func:function(){this.radius-=1;this.tail.addPoint(this.position);},
+                   func:function(){this.radius-=1; this.awaitPoint=true;},
                    time:250 
                });
                return; 
@@ -194,14 +195,14 @@ collision(gameobject,component)
                 e.stop = true;
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.stop = false; e.tail.addPoint(e.position)},
+                       func:function(){e.stop = false;e.awaitPoint=true},
                        time:250
                    });
                   
             } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive()&& e.radius-1>0)
             {
                 e.radius-=1;
-                e.tail.addPoint(e.position);
+                e.awaitPoint=true
                 //   gameobject.remove = true;
                    e.cooldown.push({
                        func:function(){e.radius+=1;e.tail.addPoint(e.position);},
@@ -211,10 +212,10 @@ collision(gameobject,component)
             } else if(gameobject.type==Bonus.type.MAGNIFI&& e.isAlive())
             {
                 e.radius+=1;
-                e.tail.addPoint(e.position);
+                e.awaitPoint=true
                 //   gameobject.remove = true;
                    e.cooldown.push({
-                       func:function(){e.radius-=1;e.tail.addPoint(e.position);},
+                       func:function(){e.radius-=1;e.awaitPoint=true},
                        time:250 
                    });
               
@@ -333,8 +334,9 @@ this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
 this.rotation+=this.rotVel;
 this.distance+=this.vel;
-if(this.distance-(this.radius*Player.distDef)>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot  ))
+if(this.distance-(this.radius*Player.distDef)>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
 {
+    this.awaitPoint=false;
 this.lastRot =this.rotation;
 this.tail.addPoint(this.position);
 this.lastDistance = this.distance;
