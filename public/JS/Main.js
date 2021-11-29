@@ -52,12 +52,17 @@ export class Main
     static caMatr = new DOMMatrix();
     static resetTrig=false;
     static playmusic = false;
+    static socket=false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,596.5));
     // if true then width *ratio < height
     static music = new Audio("/MSC/Kocer - ChordJump.mp3");
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
     {
+        console.log("ws://"+document.location.host);
+       Main.socket = new WebSocket("ws://"+document.location.host+":53720");
+Main.socket.onopen = () => {  socket.send("Hello!");};
+Main.socket.onmessage = (data) => {  console.log(data);};
         this.mainFont.load().then((font) => {
             document.fonts.add(font);
         });
