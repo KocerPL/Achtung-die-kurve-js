@@ -28,7 +28,12 @@ export class Main
     static updateDelta=0;
    static leftMargin = 0;
    static pause = false;
-   static tp= false;
+   static noborder =false;
+   static border ={
+       current:0,
+       direction:true,
+       cooldown:0
+   }
    static genBonus= true;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
@@ -70,6 +75,7 @@ export class Main
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
+    
     static onKey(ev)
     {
         //console.log(ev);
@@ -85,6 +91,8 @@ export class Main
     }
         if(this.resetTrig)
         {
+            this.border.cooldown=-1;
+            this.noborder=false;
             this.forPlayers((p)=>{ 
                 p.reset(this.genPlayerPos(),Math.random()*360);
                 p.setStop(true);
@@ -159,7 +167,7 @@ export class Main
             {
                 this.updateDelta-=this.updateTime;
                 //Update
-                Physics.update();
+                
                 Scoreboard.update();
                 this.update();
             }
@@ -201,9 +209,16 @@ export class Main
     {
   //Draws gameobjects
   this.gameObjects.forEach((element)=>{if(element instanceof GameObject) {this.ctx.save();element.draw(this.ctx); this.ctx.restore()}});
+  if(this.noborder)
+  {
+      if(this.border.current>1) this.border.direction=false; else if(this.border.current<0.1) this.border.direction=true;
+      if(!this.pause ) if(this.border.direction) this.border.current+=0.03; else this.border.current-=0.03;
+      this.ctx.globalAlpha=this.border.current;
+  }
   this.ctx.lineWidth = 5;
   this.ctx.strokeStyle="yellow";
-  this.ctx.strokeRect(2.5,2.5,797.5,597.5);
+  this.ctx.strokeRect(this.frameHitbox.pos.x-2.5,this.frameHitbox.pos.y-2.5,this.frameHitbox.dpos.x+2.5,this.frameHitbox.dpos.y+2.5);
+  this.ctx.globalAlpha=1;
   //scoreboard
   this.ctx.save();
   Scoreboard.draw(this.ctx);
@@ -229,8 +244,18 @@ export class Main
     {
        // console.log(this.pause);
         if(this.State==this.STATE.GAME) {
+            Physics.update();
             this.checkConditions();
-            if(!this.pause) BonusGenerator.update();    
+            if(!this.pause) 
+            {BonusGenerator.update();
+                if(this.border.cooldown>0)
+                this.border.cooldown--;
+                else if(this.border.cooldown==0)
+                {
+                    this.noborder=false;
+                    this.border.cooldown=-1;
+                }
+            }    
             this.gameObjects.forEach((element)=>{if(element instanceof GameObject) { element.update()}});
             for(let i= this.gameObjects.length-1;i>=0;i--) 
             {
@@ -307,6 +332,15 @@ export class Main
             }
         });
         return alive;
+    }
+    static applyGlobalBonus(bonus)
+    {
+      //  console.log("You really wanna apply bonus....? Im too lazy to program that")
+        if(bonus.type == Bonus.type.NOBORDER)
+        {
+            Main.noborder= true;
+            Main.border.cooldown+=500;
+        }
     }
 }
 Main.start();

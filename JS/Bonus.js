@@ -9,11 +9,13 @@ export class Bonus extends GameObject
         SHRINK:3,
         MAGNIFI:4,
         INVISIBLE:5,
-        CURVE90:6
+        CURVE90:6,
+        NOBORDER:7
     }); 
     static target= Object.freeze({
         ME:1,
-         OTHERS:2
+         OTHERS:2,
+         ALL:3
     }); 
     static graphics =new Image();
         static initGraphics()
@@ -25,7 +27,12 @@ export class Bonus extends GameObject
         super(pos,0,new Vector(1,1));
         this.velVec=new Vector(0,0);
         this.type = type;
+        if(type<7)
         this.target=target
+        else
+        {
+            this.target=Bonus.target.ALL;
+        }
         this.radius =10;
         this.tested=false;
         let temp = new CircleComponent(this);
@@ -66,6 +73,12 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,1800,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }  else  if(this.type== Bonus.type.CURVE90) {
             ctx.drawImage(Bonus.graphics,2200,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } 
+    }
+    else if(this.target==Bonus.target.ALL)
+    {
+        if(this.type== Bonus.type.NOBORDER) {
+            ctx.drawImage(Bonus.graphics,0,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } 
     }
       /*  ctx.beginPath();

@@ -113,7 +113,7 @@ isAlive()
 {
     return this._alive;
 }
-collision(gameobject,component)
+collision(gameobject,component,side)
 {
  //   console.log(component.getTag());
     if(component.getTag()=="Bonus")
@@ -256,6 +256,10 @@ collision(gameobject,component)
         }
             );
         }
+        else if(Bonus.target.ALL == gameobject.target)
+        {
+            Main.applyGlobalBonus(gameobject);
+        }
        // console.log("ok");
       
     }
@@ -271,6 +275,31 @@ collision(gameobject,component)
     }
     if(component.getTag()=="Frame")
     {
+        if(Main.noborder)
+        {
+            this.tail.breakLine(this.position);
+            this.cooldown.push({
+                func:function(){this.tail.continueLine(this.position); },
+                time:1 
+            });
+            if(side=="top")
+            {  
+                this.position.y =590; 
+               // this.tail.continueLine(this.position);
+            }
+            else if(side=="down")
+            {
+                this.position.y =10; 
+            }
+            else if(side=="left")
+            {
+                this.position.x =793; 
+            }else if(side=="right")
+            {
+                this.position.x =10; 
+            }
+        }
+        else
         this.death();
       
     }

@@ -31,7 +31,7 @@ export class Physics
     static update()
     {
         //AABB MUST BE FIRST FOR BOUNDING BOXES!!!!!!!!!!!!!!!
-        this.updateAABB();
+     //   this.updateAABB();
         this.updateFCcollision();
         this.updateCCcollision();
         this.updateLCcollision();
@@ -72,7 +72,7 @@ export class Physics
                           )
                         {
                             this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
-                          // console.log(i+"=i | j="+j);
+                        console.log(i+"=i | j="+j);
                         }
                     }
                     
@@ -206,9 +206,10 @@ export class Physics
         {
             for(var j=0;j<this.circleComponents.length;j++)
             {
-                if(this.circleFrameCollision(this.circleComponents[j],this.frameHitboxes[i]))
+                let temp = this.circleFrameCollision(this.circleComponents[j],this.frameHitboxes[i]);
+                if(temp)
                {
-                  this.circleComponents[j].parent.collision(this.frameHitboxes[i].parent,this.frameHitboxes[i]);
+                  this.circleComponents[j].parent.collision(this.frameHitboxes[i].parent,this.frameHitboxes[i],temp);
                    this.frameHitboxes[i].parent.collision( this.circleComponents[j].parent,this.circleComponents[j]);
                }
             }
@@ -216,10 +217,10 @@ export class Physics
     }
     static circleFrameCollision(cir,fra)
     {
-        if(cir.pos.x+cir.radius>fra.dpos.x) return true;
-        if(cir.pos.y+cir.radius>fra.dpos.y) return true;
-        if(cir.pos.x-cir.radius<fra.pos.x) return true;
-        if(cir.pos.y-cir.radius<fra.pos.y) return true;
+        if(cir.pos.x+cir.radius>fra.dpos.x) return "right";
+        if(cir.pos.y+cir.radius>fra.dpos.y) return "down";
+        if(cir.pos.x-cir.radius<fra.pos.x) return "left";
+        if(cir.pos.y-cir.radius<fra.pos.y) return "top";
         return false;
     }
     static CircleCircleCollision(cir1,cir2)
