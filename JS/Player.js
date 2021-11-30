@@ -68,10 +68,13 @@ keyPress(ev)
     {
         if(this.curve90)
         {
-            if(ev.type=="keydown" && !this.hold)
+            if(ev.type=="keydown" )
          {
+             if(!this.hold)
+             {
             this.rotation-=90;
             this.hold=true;
+             }
          }
             else
             this.hold=false;
@@ -88,10 +91,13 @@ keyPress(ev)
     {
         if(this.curve90)
         {
-            if(ev.type=="keydown" && !this.hold)
+            if(ev.type=="keydown")
             {
+                if(!this.hold2)
+                {
                 this.rotation+=90;
                 this.hold2=true;
+                }
              }
              else
              this.hold2=false;
@@ -171,6 +177,8 @@ collision(gameobject,component)
         {
             this.rotVel=0;
             this.curve90=true;
+            this._leftKeyClick =false;
+            this._rightKeyClick=false;
             this.cooldown.push({
                 func:function(){ this.curve90=false;},
                 time:400 
@@ -237,6 +245,8 @@ collision(gameobject,component)
             {
                 e.rotVel=0;
                 e.curve90=true;
+                e._leftKeyClick =false;
+                e._rightKeyClick=false;
                e.cooldown.push({
                     func:function(){ e.curve90=false;},
                     time:400 
@@ -288,7 +298,7 @@ ctx.beginPath();
 if(this.invisible) 
 {
 if(this.alpCH==true){ this.alp+=0.05;} else {this.alp-=0.05};
-if(this.alp>1 || this.alp<0) this.alpCH= !this.alpCH;
+if(this.alp>1) this.alpCH= false; else if(this.alp<0.1) this.alpCH= true;
 ctx.globalAlpha = this.alp; 
 }
 ctx.arc(0,0,this.radius,0,Math.PI*2,false);
@@ -344,7 +354,7 @@ this.rotation-=1.8*this.vel;
     this.rotation+=1.8*this.vel;
 }
 this.distance+=this.vel;
-if(this.distance-(this.radius*Player.distDef)>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
+if(this.distance-((this.radius*Player.distDef)+(this.tail.positions[this.tail.positions.length-1][this.tail.positions[this.tail.positions.length-1].length-1].width/2))>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
 {
     this.awaitPoint=false;
 this.lastRot =this.rotation;

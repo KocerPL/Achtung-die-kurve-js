@@ -68,7 +68,7 @@ export class Physics
                     { 
                    
                      //   console.log("lag");
-                        if(this.lineCircleColl(arr[i][j].copy(),arr[i][j-1].copy(),arr[i][j].width,this.circleComponents[k]) && (arr[i][j].parent.parent != this.circleComponents[k].parent || i<arr.length-1 || j<arr[i].length-3  )
+                        if(this.lineCircleColl(arr[i][j],arr[i][j-1],arr[i][j].width,this.circleComponents[k]) && (arr[i][j].parent.parent != this.circleComponents[k].parent || i<arr.length-1 || j<arr[i].length-2  )
                           )
                         {
                             this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
@@ -81,7 +81,7 @@ export class Physics
                 {
                 let i = arr.length-1;
                 let j = arr[i].length-1;
-                if(this.lineCircleColl(arr[i][j].copy(),arr[i][j].parent.parent.position.copy(),arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent && arr[i][j].parent.parent.invisible == false)
+                if(this.lineCircleColl(arr[i][j],arr[i][j].parent.parent.position,arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent && arr[i][j].parent.parent.invisible == false)
                 {
                     this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
                   console.log(i+"=i | j="+j+"| LAST="+arr[i][j].parent.currentIndex);
@@ -112,9 +112,10 @@ export class Physics
   var distX = x1 - x2;
   var distY = y1 - y2;
   var len = Math.sqrt( (distX*distX) + (distY*distY) );
-  if(!this.CCcoll2(circle.pos,point,len,r)|| !this.CCcoll2(circle.pos,point2,len,r))
+  if(!this.CCcoll2(circle.pos,point,len,r) || !this.CCcoll2(circle.pos,point2,len,r))
   {
     return false;
+
   }
     let inside1 = this.CCcoll2(point, circle.pos,point.width/2,r);
   let inside2 =this.CCcoll2(point2, circle.pos,point2.width/2,r);
