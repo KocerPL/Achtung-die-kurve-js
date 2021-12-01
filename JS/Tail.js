@@ -23,7 +23,7 @@ draw(ctx)
     ctx.strokeStyle=this.parent.color;
 for(var i=0;i<this.positions.length;i++)
 {
-   
+   if(typeof this.positions[i][0] == undefined) break;
     ctx.lineWidth=this.positions[i][0].width;
     ctx.beginPath();
     ctx.moveTo(this.positions[i][0].x,this.positions[i][0].y);
