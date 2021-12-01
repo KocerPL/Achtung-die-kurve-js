@@ -7,6 +7,7 @@ import { Main } from "./Main.js";
 import { Vector } from "./Vector.js";
 import { ControlsGroup } from "./Components/GuiComponents/groups/ControlsGroup.js";
 import { GroupComponent } from "./Components/GuiComponents/GroupComponent.js";
+import { IncDecGroup } from "./Components/GuiComponents/groups/IncDecGroup.js";
 export class Menu
 {
   static componentArray = new Array();
@@ -15,7 +16,7 @@ export class Menu
   //head
   static Title = this.addComponent(new TextComponent(this,new Vector(1024/2,100),"Achtung, die Kurve!",{color:"Yellow",textAlign:"center",font:"PatrickHand",fontSize:50}));
   static Author = this.addComponent(new TextComponent(this,new Vector((1024/2)-50,135),"Javascript remake by",{color:"green",textAlign:"center",font:"PatrickHand",fontSize:25}));
-  static Version = this.addComponent(new TextComponent(this,new Vector(5,595),"Version 5.0, Release 1",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:15}));
+  static Version = this.addComponent(new TextComponent(this,new Vector(5,595),"Version 1.0, Release 1",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:15}));
   static Kocer = this.addComponent(new ButtonComponent(this,new Vector(562,114),new Vector(80,30),{text:"Kocer",color:"Yellow",textcolor:"Green", frame:false,font:"PatrickHand"}));
   
   static buttonsAlign = 302;
@@ -24,19 +25,21 @@ export class Menu
     left:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+150,170),"Left: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25})),
     right:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+300,170),"Right: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25}))
   };
-  
-static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,270),",",".",">Green","green"))
+  static maxPointGroupDesc =this.addComponent(new TextComponent(this,new Vector(560,450),"Amount of points to win game:",{color:"white",textAlign:"right",fontSize:17}));
+  static maxPointGroup = this.addComponent(new IncDecGroup(this,new Vector(564.5,435),new Vector(60,20)));
+static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,270),",",".",">Green","Green"))
 // static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(160,30),{text:"> Blue (<-,->)",textcolor:"Blue",color:"Blue",frame:false}));
- static BlueGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,240),"ArrowLeft","ArrowRight",">Blue","blue")) 
+ static BlueGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,240),"ArrowLeft","ArrowRight",">Blue","Blue")) 
  //static RedButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,210),new Vector(160,30),{text:"> Red (a,d)",textcolor:"Red",color:"Red",frame:false}));
- static RedGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,210),"a","d",">Red","red")) 
+ static RedGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,210),"a","d",">Red","Red")) 
  // static OrangeButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,180),new Vector(160,30),{text:"> Orange (1,q)",textcolor:"orange",color:"orange",frame:false}));
- static OrangeGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,180),"1","q",">Orange","orange")) 
- static VioletGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,300),"z","x",">Violet","violet")) 
- static GrayGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,330),"End","PageDown",">Gray","gray")) 
+ static OrangeGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,180),"1","q",">Orange","Orange")) 
+ static VioletGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,300),"z","x",">Violet","Violet")) 
+ static GrayGroup =this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,330),"End","PageDown",">Gray","Gray")) 
  //static buttonChoose = this.addComponent(new ChooseKeyComponent(this,new Vector(this.buttonsAlign+300,270),new Vector(30,30),"A",{frame:true}))
  static bonusButton = this.addComponent(new SwitchComponent(this,new Vector(362,470),new Vector(100,20),{text:"Bonus: off",onClickText:"Bonus: on",color:"Yellow", frame:true,def:true}));
-static musicButton = this.addComponent(new SwitchComponent(this,new Vector(472,470),new Vector(100,20),{text:"Music: off",onClickText:"Music: on",color:"Yellow", frame:true}));
+//static musicButton = this.addComponent(new SwitchComponent(this,new Vector(472,470),new Vector(100,20),{text:"Music: off",onClickText:"Music: on",color:"Yellow", frame:true}));
+static showFpsButton = this.addComponent(new SwitchComponent(this,new Vector(472,470),new Vector(100,20),{text:"Show fps: off",onClickText:"Show fps: on",color:"Yellow", frame:true}));
 static soundButton = this.addComponent(new SwitchComponent(this,new Vector(582,470),new Vector(100,20),{text:"Sounds: off",onClickText:"Sounds: on",color:"Yellow", frame:true}));
 static StartGameButton = this.addComponent(new ButtonComponent(this,new Vector(442,500),new Vector(160,30),{text:"Start",color:"Yellow", frame:true}));
   static init()

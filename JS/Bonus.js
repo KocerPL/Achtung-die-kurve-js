@@ -10,7 +10,9 @@ export class Bonus extends GameObject
         MAGNIFI:4,
         INVISIBLE:5,
         CURVE90:6,
-        NOBORDER:7
+        NOBORDER:7,
+        CLEARTAILS:8,
+        SHRINKBORDER:9
     }); 
     static target= Object.freeze({
         ME:1,
@@ -79,7 +81,11 @@ export class Bonus extends GameObject
     {
         if(this.type== Bonus.type.NOBORDER) {
             ctx.drawImage(Bonus.graphics,0,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
-        } 
+        } else if(this.type== Bonus.type.CLEARTAILS) {
+            ctx.drawImage(Bonus.graphics,200,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        }else if(this.type== Bonus.type.SHRINKBORDER) {
+            ctx.drawImage(Bonus.graphics,400,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        }
     }
       /*  ctx.beginPath();
         ctx.arc(0,0,this.radius,0,2*Math.PI,false);
@@ -95,7 +101,7 @@ export class Bonus extends GameObject
     }
     collision(gmObj,comp)
     {
-        if(comp.getTag()=="Head" || comp.getTag()=="line")
+        if(comp.getTag()=="Head" || comp.getTag()=="line" || comp.getTag()=="Frame")
         {
           this.remove =true;
         }

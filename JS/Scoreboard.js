@@ -1,5 +1,6 @@
 import { Vector } from "./Vector.js";
 import { ScoreComponent } from "./Components/ScoreComponent.js";
+import { Main } from "./Main.js";
 export class Scoreboard 
 {
 static scoreComponents = new Array();
@@ -34,16 +35,18 @@ static draw(ctx)
   let size = this.size;
   let alternate = true;
   this.drawBackground(ctx);
-  const font = "Comic Sans MS";
+  const font = "PatrickHand";
   const spacer = 5;
   const scoreSize =25;
   ctx.fillStyle="white";
     ctx.font = "35px "+font;
     ctx.textAlign = "center";
     ctx.fillText("Scoreboard",pos.x+(size.x/2),pos.y+35);
+    ctx.font = "20px "+font;
+    ctx.fillText("First to "+Main.maxScore+" point(s) wins!!",pos.x+(size.x/2),pos.y+55);
     ctx.textAlign = "left";
     ctx.font = scoreSize+"px "+font;
-    var actualY = 35+spacer;
+    var actualY = 60+spacer;
     for(var i=0; i<this.sortedScores.length;i++)
     {
       if(alternate)
@@ -55,7 +58,7 @@ static draw(ctx)
       else alternate =true;
         ctx.fillStyle=this.sortedScores[i].parent.color;
         ctx.textAlign = "left";
-        ctx.fillText(this.sortedScores[i].parent.color+":",pos.x,pos.y+actualY+scoreSize);
+        ctx.fillText((i+1) +". "+ this.sortedScores[i].parent.color+":",pos.x,pos.y+actualY+scoreSize);
         ctx.fillStyle="yellow";
         ctx.textAlign = "right";
         ctx.fillText(this.sortedScores[i].getScore(),pos.x+size.x,pos.y+actualY+scoreSize)

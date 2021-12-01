@@ -20,7 +20,7 @@ export class Main
         "PatrickHand",
         "url(PatrickHand-Regular.ttf)"
       );
-      
+    
     static cursorhov= false;
     static lastTime=0;
     static maxFps=61;
@@ -34,6 +34,9 @@ export class Main
        direction:true,
        cooldown:0
    }
+   static renderWin = false;
+   static maxScore =10;
+   static shrinkBorder = false;
    static genBonus= true;
     //fpsMeasurement variables
     static STATE = Object.freeze( {
@@ -44,7 +47,7 @@ export class Main
     static fps =0;
     static frames=0;
     static lastFpsMeasure=0;
-    static renderFPS = true;
+    static renderFPS = false;
     static gameObjects= new Array();
     static soundsOn =false;
     //Canvas variables
@@ -92,6 +95,10 @@ export class Main
         if(this.resetTrig)
         {
             this.border.cooldown=-1;
+            this.frameHitbox.pos =new Vector(5,5);
+             this.frameHitbox.dpos = new Vector(796.5,596.5);
+             this.shrinkBorder=false;
+
             this.noborder=false;
             this.forPlayers((p)=>{ 
                 p.reset(this.genPlayerPos(),Math.random()*360);
@@ -115,7 +122,9 @@ export class Main
     static startGame()
     {
         this.soundsOn = Menu.soundButton.getClick();
-        this.playmusic = Menu.musicButton.getClick() ;
+        this.maxScore = Menu.maxPointGroup.val;
+        //    this.playmusic = Menu.musicButton.getClick() ;
+    this.renderFPS = Menu.showFpsButton.getClick() ;
         this.genBonus = Menu.bonusButton.getClick() ;
        if(this.playmusic== true) 
        {this.music.play();
@@ -217,7 +226,7 @@ export class Main
   }
   this.ctx.lineWidth = 5;
   this.ctx.strokeStyle="yellow";
-  this.ctx.strokeRect(this.frameHitbox.pos.x-2.5,this.frameHitbox.pos.y-2.5,this.frameHitbox.dpos.x+2.5,this.frameHitbox.dpos.y+2.5);
+  this.ctx.strokeRect(this.frameHitbox.pos.x-2.5,this.frameHitbox.pos.y-2.5,5+this.frameHitbox.dpos.x-this.frameHitbox.pos.x,5+this.frameHitbox.dpos.y-this.frameHitbox.pos.y);
   this.ctx.globalAlpha=1;
   //scoreboard
   this.ctx.save();
@@ -234,6 +243,13 @@ export class Main
   this.ctx.textAlign = "center";
   this.ctx.fillText("Click space for next round",400,500);
   } 
+  if(this.renderWin)
+  {
+    this.ctx.font = "50px PatrickHand";
+      this.ctx.fillStyle = Scoreboard.sortedScores[0].parent.color;
+      this.ctx.textAlign = "center";
+  this.ctx.fillText("Player with color "+Scoreboard.sortedScores[0].parent.color+" wins!!!!",400,300);
+  }
   /*   //Info logging stuff
       let Alives = this._getAlives();
       this.ctx.font = "20px Calibri";
@@ -254,6 +270,13 @@ export class Main
                 {
                     this.noborder=false;
                     this.border.cooldown=-1;
+                }
+                if(this.shrinkBorder)
+                {
+                    this.frameHitbox.pos.x+=0.1;
+                    this.frameHitbox.pos.y+=0.1;
+                    this.frameHitbox.dpos.x -=0.1;
+                    this.frameHitbox.dpos.y -=0.1;
                 }
             }    
             this.gameObjects.forEach((element)=>{if(element instanceof GameObject) { element.update()}});
@@ -285,9 +308,17 @@ export class Main
         //Resets game if there is no alive players
         if(Alives.length<=1 && this.resetTrig==false)
         {
-           
+            this.pause=true;
+            Scoreboard.update()
+           if(Scoreboard.sortedScores[0].getScore()>=this.maxScore)
+           {
+                this.renderWin = true;
+           }
+           else
+           {
         this.resetTrig=true;
-         this.pause=true;
+      
+           }
         }
     }
     //Iterates for all Players in gameobjects
@@ -340,6 +371,12 @@ export class Main
         {
             Main.noborder= true;
             Main.border.cooldown+=500;
+        } else if(bonus.type == Bonus.type.CLEARTAILS)
+        {
+            this.forPlayers((e)=>{e.clearTail()});
+        } else if(bonus.type == Bonus.type.SHRINKBORDER)
+        {
+            this.shrinkBorder =true;
         }
     }
 }

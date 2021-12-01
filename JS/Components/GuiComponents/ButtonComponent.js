@@ -10,6 +10,7 @@ export class ButtonComponent extends Component
         this.position = position.copy();
         this.size = size.copy();
         this.style= style ?? {};
+        this.onclick=()=>{};
         this.margin =2.5;
         this.style.color ??= "gray";
         this.style.textcolor ??= "white";
@@ -57,6 +58,7 @@ export class ButtonComponent extends Component
               //  console.log(ev);
                 if(ev=="mousedown")
                 {
+                    this.onclick();
                 this._click =true;
                 }
                 else if(ev=="mouseup")

@@ -284,19 +284,19 @@ collision(gameobject,component,side)
             });
             if(side=="top")
             {  
-                this.position.y =590; 
+                this.position.y =Main.frameHitbox.dpos.y-5; 
                // this.tail.continueLine(this.position);
             }
             else if(side=="down")
             {
-                this.position.y =10; 
+                this.position.y =Main.frameHitbox.pos.y+5; 
             }
             else if(side=="left")
             {
-                this.position.x =793; 
+                this.position.x =Main.frameHitbox.dpos.x-5; 
             }else if(side=="right")
             {
-                this.position.x =10; 
+                this.position.x =Main.frameHitbox.pos.x+5; ; 
             }
         }
         else
