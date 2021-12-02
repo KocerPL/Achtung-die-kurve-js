@@ -80,7 +80,7 @@ export class ButtonComponent extends Component
     }
     onHover()
     {
-        this.color="gray";
+        this.color="#1c1c1c";
     }
     draw(ctx)
     {

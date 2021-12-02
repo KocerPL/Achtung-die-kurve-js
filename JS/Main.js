@@ -236,7 +236,7 @@ export class Main
   this.ctx.fillStyle="#ffffff";
   this.ctx.font = "20px Calibri";
   if(this.pause)
-  this.ctx.fillText("|| Paused",5,50);
+  this.ctx.fillText("⏸Paused",5,(this.renderFPS ? 25 : 50));
   if(this.resetTrig)
   {
   this.ctx.font = "50px Papyrus";
@@ -370,10 +370,10 @@ export class Main
         if(bonus.type == Bonus.type.NOBORDER)
         {
             Main.noborder= true;
-            Main.border.cooldown+=500;
+            Main.border.cooldown+=60;
         } else if(bonus.type == Bonus.type.CLEARTAILS)
         {
-            this.forPlayers((e)=>{e.clearTail()});
+            this.forPlayers((e)=>{e.clearTail(); e.break.last=e.distance;e.break.is=false});
         } else if(bonus.type == Bonus.type.SHRINKBORDER)
         {
             this.shrinkBorder =true;

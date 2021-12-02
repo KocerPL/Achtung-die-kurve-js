@@ -144,6 +144,7 @@ collision(gameobject,component,side)
         {
             this.radius-=1;
             this.awaitPoint=true
+           
             //   gameobject.remove = true;
                this.cooldown.push({
                    func:function(){this.radius+=1;  this.awaitPoint=true;},
@@ -170,7 +171,7 @@ collision(gameobject,component,side)
             this.break.last = this.distance+100000;
             this.invisible=true;
             this.cooldown.push({
-                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position); this.break.last = this.distance},
+                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position);  this.lastDistance = this.distance; this.break.last = this.distance},
                 time:200 
             });
         } else if(gameobject.type==Bonus.type.CURVE90)
@@ -238,7 +239,7 @@ collision(gameobject,component,side)
                 e.break.last = e.distance+100000;
                 e.invisible=true;
                 e.cooldown.push({
-                    func:function(){e.invisible=false;e.break.is=false;e.tail.continueLine(e.position); e.break.last = e.distance},
+                    func:function(){e.invisible=false;e.break.is=false;e.tail.continueLine(e.position); e.lastDistance = e.distance; e.break.last = e.distance},
                     time:200 
                 });
             } else if(gameobject.type==Bonus.type.CURVE90)
@@ -270,6 +271,7 @@ collision(gameobject,component,side)
         this.coll=true;
         if(!this.break.is && !this.invisible)
         {
+            console.log(this);
          this.death();
         }
     }
@@ -278,6 +280,7 @@ collision(gameobject,component,side)
         if(Main.noborder)
         {
             this.tail.breakLine(this.position);
+            this.break.last=this.distance;this.break.is=false
             this.cooldown.push({
                 func:function(){this.tail.continueLine(this.position); },
                 time:1 
