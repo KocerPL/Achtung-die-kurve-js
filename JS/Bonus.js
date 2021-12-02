@@ -35,7 +35,7 @@ export class Bonus extends GameObject
         {
             this.target=Bonus.target.ALL;
         }
-        this.radius =10;
+        this.radius =13;
         this.tested=false;
         let temp = new CircleComponent(this);
     temp.setTag("Bonus");
