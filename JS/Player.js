@@ -171,7 +171,7 @@ collision(gameobject,component,side)
             this.break.last = this.distance+100000;
             this.invisible=true;
             this.cooldown.push({
-                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position);  this.lastDistance = this.distance; this.break.last = this.distance},
+                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position); console.log(this.position); this.lastDistance = this.distance; this.break.last = this.distance},
                 time:200 
             });
         } else if(gameobject.type==Bonus.type.CURVE90)

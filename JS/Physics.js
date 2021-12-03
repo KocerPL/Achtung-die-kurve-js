@@ -72,7 +72,7 @@ export class Physics
                           )
                         {
                             this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
-                        console.log(i+"=i | j="+j);
+                        //console.log(i+"=i | j="+j);
                         }
                     }
                     
@@ -84,7 +84,7 @@ export class Physics
                 if(this.lineCircleColl(arr[i][j],arr[i][j].parent.parent.position,arr[i][j].width,this.circleComponents[k]) && arr[i][j].parent.parent != this.circleComponents[k].parent && arr[i][j].parent.parent.invisible == false)
                 {
                     this.circleComponents[k].parent.collision(arr[i][j].parent,arr[i][j]);
-                  console.log(i+"=i | j="+j+"| LAST="+arr[i][j].parent.currentIndex);
+                 // console.log(i+"=i | j="+j+"| LAST="+arr[i][j].parent.currentIndex);
                 }
             }
             }
@@ -96,7 +96,7 @@ export class Physics
     if(this.calcDist(pos,pos2) < (rad+rad2)) return true;
     return false;
     }
-    // Only part of code that I can't understand how it's fully working below \/
+    // Only part of code that I can't understand is this code, how it's fully working below \/
     // credits to: https://www.jeffreythompson.org/collision-detection/line-circle.php
     // to line 149
     static lineCircleColl(point,point2,width,circle)

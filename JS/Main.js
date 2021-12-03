@@ -147,6 +147,8 @@ export class Main
             }
            }
        }
+       Main.gameObjects.push(new Bonus(new Vector(500,500),Bonus.type.STOP,Bonus.target.ME));
+       Main.gameObjects.push(new Bonus(new Vector(450,500),Bonus.type.INVISIBLE,Bonus.target.ME));
         BonusGenerator.pause=true;
        this.forPlayers((p)=>{ 
            p.setStop(true);
