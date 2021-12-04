@@ -374,7 +374,7 @@ export class Main
         if(bonus.type == Bonus.type.NOBORDER)
         {
             Main.noborder= true;
-            Main.border.cooldown+=120;
+            Main.border.cooldown+=300;
         } else if(bonus.type == Bonus.type.CLEARTAILS)
         {
             this.forPlayers((e)=>{e.clearTail(); e.break.last=e.distance;e.break.is=false});

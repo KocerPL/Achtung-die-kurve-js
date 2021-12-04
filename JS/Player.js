@@ -58,7 +58,111 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     temp.setTag("Head");
     this.addComponent(temp);
     this.tail.addPoint(this.position);
-    //this.addComponent(new SATPolygon(this,new Vector(-10,-10),new Vector(-10,10),new Vector(10,10),new Vector(10,-10)));
+    this.bonusses = {
+        STOP:{
+            assignedTo:Bonus.type.STOP,
+            cooldown:0,
+            active:false,
+            increment:200,
+            activate:function(player)
+            {
+                player.awaitPoint=true
+                player.stop = true;
+                this.active= true;
+                this.cooldown = this.increment;
+            },
+            disable:function(player)
+            {
+                player.stop=false;
+                this.active=false;
+            }
+        },
+        INVISIBLE:{
+            assignedTo:Bonus.type.INVISIBLE,
+            cooldown:0,
+            active:false,
+            increment:200,
+            activate:function(player)
+            {
+                player.invisible=true;
+                player.break.is = false;
+                player.tail.breakLine(player.position);
+                this.active= true;
+                this.cooldown = this.increment;
+            },
+            disable:function(player)
+            {
+                player.invisible=false;
+                player.tail.continueLine(player.position);
+                this.active=false;
+                player.break.last = player.distance;
+            }
+        },
+        CURVE90:{
+            assignedTo:Bonus.type.CURVE90,
+            cooldown:0,
+            active:false,
+            increment:200,
+            activate:function(player)
+            {
+               player.curve90 = true;
+               player._leftKeyClick =false;
+               player._rightKeyClick=false;
+               player.rotVel=0;
+                this.active= true;
+                this.cooldown = this.increment;
+            },
+            disable:function(player)
+            {
+                player.curve90 = false;
+                this.active= false;
+            }
+        },
+        //Stacking bonusses
+        SPEED:{ 
+            assignedTo:Bonus.type.SPEED,
+            cooldown:0,
+            active:false,
+            activate:function(player)
+            {
+                player.vel+=0.5;
+             player.cooldown.push({
+                func:function(){ player.vel-=0.5},
+                time:200 
+            })
+            }
+        },
+        SHRINK:{ 
+            assignedTo:Bonus.type.SHRINK,
+            cooldown:0,
+            active:false,
+            activate:function(player)
+            {
+                player.awaitPoint =true;
+                player.radius-=1;
+             player.cooldown.push({
+                func:function(){ player.radius+=1;player.awaitPoint =true;},
+                time:200 
+            })
+            }
+        },
+        MAGNIFI:{ 
+            assignedTo:Bonus.type.MAGNIFI,
+            cooldown:0,
+            active:false,
+            activate:function(player)
+            {
+                player.awaitPoint =true;
+                player.radius+=1;
+             player.cooldown.push({
+                func:function(){ player.radius-=1;player.awaitPoint =true;},
+                time:200 
+            })
+            }
+        }
+       
+
+    }
 }
 
 keyPress(ev)
@@ -118,152 +222,48 @@ collision(gameobject,component,side)
  //   console.log(component.getTag());
     if(component.getTag()=="Bonus" && gameobject.active==true)
     {
-        gameobject.active=false;
-       if(Main.soundsOn) this.bonusSound.play();
-        if(gameobject.target ==Bonus.target.ME)
+        if(Main.soundsOn) this.bonusSound.play();
+        let bonus = gameobject;
+        bonus.active=false;
+        if(Bonus.target.ALL == bonus.target)
         {
-        if(gameobject.type==Bonus.type.SPEED)
+            Main.applyGlobalBonus(bonus);
+        } else if(Bonus.target.ME==bonus.target)
         {
-        this.vel+=0.5;
-     //   gameobject.remove = true;
-        this.cooldown.push({
-            func:function(){this.vel-=0.5;},
-            time:400 
-        });
-        return;
-        }
-        else if(gameobject.type==Bonus.type.STOP)
+           for(const [key, effect] of Object.entries(this.bonusses)) {
+            if(effect.assignedTo == bonus.type)
+            {
+               // console.log("Bonus recognized as: "+key)
+                if(effect.active == false)
+                {
+                    effect.activate(this);
+                }else
+                {
+                    effect.cooldown +=effect.increment;
+                }
+                break;
+            }
+           }
+        } else if(Bonus.target.OTHERS==bonus.target)
         {
-            this.stop =true;
-               this.cooldown.push({
-                   func:function(){this.stop=false; this.awaitPoint=true},
-                   time:250 
-               });
-               return; 
-        }
-        else if(gameobject.type==Bonus.type.SHRINK&& this.radius-1>0)
-        {
-            this.radius-=1;
-            this.awaitPoint=true
-           
-            //   gameobject.remove = true;
-               this.cooldown.push({
-                   func:function(){this.radius+=1;  this.awaitPoint=true;},
-                   time:250 
-               });
-               return; 
-        }
-        else if(gameobject.type==Bonus.type.MAGNIFI)
-        {
-           
-            this.radius+=1;
-            this.awaitPoint=true
-            //   gameobject.remove = true;
-               this.cooldown.push({
-                   func:function(){this.radius-=1; this.awaitPoint=true;},
-                   time:250 
-               });
-               return; 
-        }
-        else if(gameobject.type==Bonus.type.INVISIBLE)
-        {
-            this.tail.breakLine(this.position);
-            this.break.is=true;
-            this.break.last = this.distance+100000;
-            this.invisible=true;
-            this.cooldown.push({
-                func:function(){this.invisible=false;this.break.is=false;this.tail.continueLine(this.position); this.lastDistance = this.distance; this.break.last = this.distance},
-                time:200 
-            });
-        } else if(gameobject.type==Bonus.type.CURVE90)
-        {
-            this.rotVel=0;
-            this.curve90=true;
-            this._leftKeyClick =false;
-            this._rightKeyClick=false;
-            this.cooldown.push({
-                func:function(){ this.curve90=false;},
-                time:400 
-            });
-        }
-        }
-        else if(Bonus.target.OTHERS == gameobject.target)
-        {
-            Main.forPlayers(
-                (e)=>{
-                    if(e!=this)
+            Main.forPlayers((e)=>{
+                if(e==this || !e.isAlive()) return;
+            for(const [key, effect] of Object.entries(e.bonusses)) {
+                if(effect.assignedTo == bonus.type)
+                {
+                 //   console.log("Bonus recognized as: "+key)
+                    if(effect.active == false)
                     {
-            if(gameobject.type==Bonus.type.SPEED&& e.isAlive())
-            {
-            e.vel+=0.5;
-         //   gameobject.remove = true;
-            e.cooldown.push({
-                func:function(){e.vel-=0.5;},
-                time:400 
+                        effect.activate(e);
+                    }else
+                    {
+                        effect.cooldown +=effect.increment;
+                    }
+                    break;
+                }
+               }
             });
-           
-            }
-            else if(gameobject.type==Bonus.type.STOP&& e.isAlive())
-            {
-               
-                e.stop = true;
-                //   gameobject.remove = true;
-                   e.cooldown.push({
-                       func:function(){e.stop = false;e.awaitPoint=true},
-                       time:250
-                   });
-                  
-            } else if(gameobject.type==Bonus.type.SHRINK&& e.isAlive()&& e.radius-1>0)
-            {
-                e.radius-=1;
-                e.awaitPoint=true
-                //   gameobject.remove = true;
-                   e.cooldown.push({
-                       func:function(){e.radius+=1;e.awaitPoint=true;},
-                       time:250 
-                   });
-              
-            } else if(gameobject.type==Bonus.type.MAGNIFI&& e.isAlive())
-            {
-                e.radius+=1;
-                e.awaitPoint=true
-                //   gameobject.remove = true;
-                   e.cooldown.push({
-                       func:function(){e.radius-=1;e.awaitPoint=true},
-                       time:250 
-                   });
-              
-            }  else if(gameobject.type==Bonus.type.INVISIBLE)
-            {
-                e.tail.breakLine(e.position);
-                e.break.is=true;
-                e.break.last = e.distance+100000;
-                e.invisible=true;
-                e.cooldown.push({
-                    func:function(){e.invisible=false;e.break.is=false;e.tail.continueLine(e.position); e.lastDistance = e.distance; e.break.last = e.distance},
-                    time:200 
-                });
-            } else if(gameobject.type==Bonus.type.CURVE90)
-            {
-                e.rotVel=0;
-                e.curve90=true;
-                e._leftKeyClick =false;
-                e._rightKeyClick=false;
-               e.cooldown.push({
-                    func:function(){ e.curve90=false;},
-                    time:400 
-                });
-            }
         }
-        }
-            );
-        }
-        else if(Bonus.target.ALL == gameobject.target)
-        {
-            Main.applyGlobalBonus(gameobject);
-        }
-       // console.log("ok");
-      
     }
    // console.log(this.color+": "+component.getTag());
     if(component.getTag()=="line" || component.getTag()=="Head")
@@ -375,6 +375,17 @@ for(let i=this.cooldown.length-1;i>=0;i--)
     //console.log(this.cooldown[i].time)
     }
 }
+for(const [key, effect] of Object.entries(this.bonusses))
+{
+    if(effect.active)
+    {
+    effect.cooldown--;
+    if(effect.cooldown<1)
+    {
+        effect.disable(this);
+    }
+    }
+}
 if(this.stop) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
@@ -386,7 +397,7 @@ this.rotation-=1.8*this.vel;
 {
     this.rotation+=1.8*this.vel;
 }
-this.distance+=this.vel;
+if(!this.invisible) this.distance+=this.vel;
 if(this.distance-((this.radius*Player.distDef)+(this.tail.positions[this.tail.positions.length-1][this.tail.positions[this.tail.positions.length-1].length-1].width/2))>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
 {
     this.awaitPoint=false;
@@ -440,5 +451,110 @@ this.invisible =false;
   this.HALT=false;
   this.break=Object.assign({},Player.break);
   this.stop = false;
+  this.bonusses = {
+    STOP:{
+        assignedTo:Bonus.type.STOP,
+        cooldown:0,
+        active:false,
+        increment:200,
+        activate:function(player)
+        {
+            player.awaitPoint=true
+            player.stop = true;
+            this.active= true;
+            this.cooldown = this.increment;
+        },
+        disable:function(player)
+        {
+            player.stop=false;
+            this.active=false;
+        }
+    },
+    INVISIBLE:{
+        assignedTo:Bonus.type.INVISIBLE,
+        cooldown:0,
+        active:false,
+        increment:200,
+        activate:function(player)
+        {
+            player.invisible=true;
+            player.break.is = false;
+            player.tail.breakLine(player.position);
+            this.active= true;
+            this.cooldown = this.increment;
+        },
+        disable:function(player)
+        {
+            player.invisible=false;
+            player.tail.continueLine(player.position);
+            this.active=false;
+            player.break.last = player.distance;
+        }
+    },
+    CURVE90:{
+        assignedTo:Bonus.type.CURVE90,
+        cooldown:0,
+        active:false,
+        increment:200,
+        activate:function(player)
+        {
+           player.curve90 = true;
+           player._leftKeyClick =false;
+           player._rightKeyClick=false;
+           player.rotVel=0;
+            this.active= true;
+            this.cooldown = this.increment;
+        },
+        disable:function(player)
+        {
+            player.curve90 = false;
+            this.active= false;
+        }
+    },
+    //Stacking bonusses
+    SPEED:{ 
+        assignedTo:Bonus.type.SPEED,
+        cooldown:0,
+        active:false,
+        activate:function(player)
+        {
+            player.vel+=0.5;
+         player.cooldown.push({
+            func:function(){ player.vel-=0.5},
+            time:200 
+        })
+        }
+    },
+    SHRINK:{ 
+        assignedTo:Bonus.type.SHRINK,
+        cooldown:0,
+        active:false,
+        activate:function(player)
+        {
+            player.awaitPoint =true;
+            player.radius-=1;
+         player.cooldown.push({
+            func:function(){ player.radius+=1;player.awaitPoint =true;},
+            time:200 
+        })
+        }
+    },
+    MAGNIFI:{ 
+        assignedTo:Bonus.type.MAGNIFI,
+        cooldown:0,
+        active:false,
+        activate:function(player)
+        {
+            player.awaitPoint =true;
+            player.radius+=1;
+         player.cooldown.push({
+            func:function(){ player.radius-=1;player.awaitPoint =true;},
+            time:200 
+        })
+        }
+    }
+   
+
+}
 }
 }
