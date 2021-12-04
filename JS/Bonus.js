@@ -29,6 +29,7 @@ export class Bonus extends GameObject
         super(pos,0,new Vector(1,1));
         this.velVec=new Vector(0,0);
         this.type = type;
+        this.active=true;
         if(type<7)
         this.target=target
         else

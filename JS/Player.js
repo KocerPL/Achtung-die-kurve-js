@@ -116,8 +116,9 @@ isAlive()
 collision(gameobject,component,side)
 {
  //   console.log(component.getTag());
-    if(component.getTag()=="Bonus")
+    if(component.getTag()=="Bonus" && gameobject.active==true)
     {
+        gameobject.active=false;
        if(Main.soundsOn) this.bonusSound.play();
         if(gameobject.target ==Bonus.target.ME)
         {

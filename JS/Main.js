@@ -50,6 +50,8 @@ export class Main
     static renderFPS = false;
     static gameObjects= new Array();
     static soundsOn =false;
+    static updates=0;
+    static upds=0;
     //Canvas variables
     static canvas = document.createElement('canvas');
     static ctx = this.canvas.getContext("2d");
@@ -176,7 +178,7 @@ export class Main
             {
                 this.updateDelta-=this.updateTime;
                 //Update
-                
+                this.updates++;
                 Scoreboard.update();
                 this.update();
             }
@@ -204,12 +206,14 @@ export class Main
         this.ctx.textAlign = "left";
            this.ctx.fillStyle="#ffffff";
            this.ctx.font = "20px Calibri";
-           this.ctx.fillText("Fps: "+this.fps,5,25);
+           this.ctx.fillText("Fps: "+this.fps+"  Tps: "+this.upds,5,25);
        }
        this.frames++;
        if(this.lastFpsMeasure+1000<=time)
        {
+           this.upds = this.updates;
            this.fps=this.frames;
+           this.updates=0;
            this.lastFpsMeasure=time; 
            this.frames=0;
        }
