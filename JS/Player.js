@@ -280,12 +280,16 @@ collision(gameobject,component,side)
     {
         if(Main.noborder)
         {
-            this.tail.breakLine(this.position);
+           if(!this.invisible)
+           { 
+               this.tail.breakLine(this.position);
             this.break.last=this.distance;this.break.is=false
+           
             this.cooldown.push({
                 func:function(){this.tail.continueLine(this.position); },
                 time:1 
             });
+        }
             if(side=="top")
             {  
                 this.position.y =Main.frameHitbox.dpos.y-5; 

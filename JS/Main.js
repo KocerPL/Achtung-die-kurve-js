@@ -133,11 +133,6 @@ export class Main
         this.music.loop=true;
        }
         this.frameHitbox.setTag("Frame");
-      /*  if(Menu.BlueGroup)  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),65,68,"Blue"));
-        if(Menu.RedButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),37,39,"Red"));
-        if(Menu.GreenButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),188,190,"Green"));
-        if(Menu.OrangeButton.getClick())  this.gameObjects.push(new Player(this.genPlayerPos(),Math.random()*360,new Vector(1,1),49,81,"Orange"));
-        */
        for(let e of Menu.componentArray)
        {
            if( e instanceof ControlsGroup)
