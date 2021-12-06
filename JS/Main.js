@@ -36,6 +36,7 @@ export class Main
    }
    static renderWin = false;
    static maxScore =10;
+   static minDomin = 0;
    static shrinkBorder = false;
    static genBonus= true;
     //fpsMeasurement variables
@@ -62,7 +63,7 @@ export class Main
     static caMatr = new DOMMatrix();
     static resetTrig=false;
     static playmusic = false;
-    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,596.5));
+    static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,597));
     // if true then width *ratio < height
     static music = new Audio("/MSC/Kocer - ChordJump.mp3");
     static min = window.innerWidth/this.ratio<window.innerHeight;
@@ -125,6 +126,7 @@ export class Main
     {
         this.soundsOn = Menu.soundButton.getClick();
         this.maxScore = Menu.maxPointGroup.val;
+        this.minDomin = Menu.minDiffGroup.val;
         //    this.playmusic = Menu.musicButton.getClick() ;
     this.renderFPS = Menu.showFpsButton.getClick() ;
         this.genBonus = Menu.bonusButton.getClick() ;
@@ -309,7 +311,7 @@ export class Main
         {
             this.pause=true;
             Scoreboard.update()
-           if(Scoreboard.sortedScores[0].getScore()>=this.maxScore)
+           if(Scoreboard.sortedScores[0].getScore()>=this.maxScore && Scoreboard.sortedScores[1].getScore()+this.minDomin<=Scoreboard.sortedScores[0].getScore())
            {
                 this.renderWin = true;
            }

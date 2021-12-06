@@ -44,9 +44,11 @@ static draw(ctx)
     ctx.fillText("Scoreboard",pos.x+(size.x/2),pos.y+35);
     ctx.font = "20px "+font;
     ctx.fillText("First to "+Main.maxScore+" point(s) wins!!",pos.x+(size.x/2),pos.y+55);
+    ctx.font = "15px "+font;
+    ctx.fillText(Main.minDomin+" point(s) dominance",pos.x+(size.x/2),pos.y+70);
     ctx.textAlign = "left";
     ctx.font = scoreSize+"px "+font;
-    var actualY = 60+spacer;
+    var actualY = 75+spacer;
     for(var i=0; i<this.sortedScores.length;i++)
     {
       if(alternate)

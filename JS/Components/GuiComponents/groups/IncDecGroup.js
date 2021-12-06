@@ -5,7 +5,7 @@ import { TextComponent } from "../TextComponent.js";
 
 export class IncDecGroup extends GroupComponent
 {
-    constructor(parent,pos,size)
+    constructor(parent,pos,size,min,max,current)
     {
         super(parent);
         this.size = size;
@@ -13,9 +13,9 @@ export class IncDecGroup extends GroupComponent
         this.plusButton.setTextAlign("center");
         this.minusButton = this.addComponent(new ButtonComponent(parent,new Vector(pos.x+(this.size.x/3*2),pos.y),new Vector(this.size.x/3,this.size.y),{text:"-"}));
         this.minusButton.setTextAlign("center");
-        this.maxVal =99;
-        this.minVal=5
-        this.val =10;
+        this.maxVal =max;
+        this.minVal=min;
+        this.val =current;
         this.pos= pos;
         this.valDisplay = this.addComponent(new TextComponent(parent,new Vector(pos.x+(this.size.x/2),pos.y+(0.85*this.size.y)),this.val,{color:"white",fontSize:this.size.y,textAlign:"center"}));
         this.plusButton.onclick = ()=>

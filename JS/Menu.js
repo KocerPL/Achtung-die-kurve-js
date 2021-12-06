@@ -26,7 +26,9 @@ export class Menu
     right:this.addComponent(new TextComponent(Menu,new Vector(this.buttonsAlign+300,170),"Right: ",{color:"White",textAlign:"left",font:"PatrickHand",fontSize:25}))
   };
   static maxPointGroupDesc =this.addComponent(new TextComponent(this,new Vector(590,450),"Amount of points to win game:",{color:"white",textAlign:"right",fontSize:17}));
-  static maxPointGroup = this.addComponent(new IncDecGroup(this,new Vector(594.5,435),new Vector(60,20)));
+  static minDiffGroupDesc =this.addComponent(new TextComponent(this,new Vector(590,425),"Minimum points dominance:",{color:"white",textAlign:"right",fontSize:17}));
+  static minDiffGroup = this.addComponent(new IncDecGroup(this,new Vector(594.5,410),new Vector(60,20),0,5,2))
+  static maxPointGroup = this.addComponent(new IncDecGroup(this,new Vector(594.5,435),new Vector(60,20),5,99,10));
 static GreenGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,270),",",".",">Green","Green"))
 // static BlueButton = this.addComponent(new SwitchComponent(this,new Vector(this.buttonsAlign,240),new Vector(160,30),{text:"> Blue (<-,->)",textcolor:"Blue",color:"Blue",frame:false}));
  static BlueGroup = this.addComponent(new ControlsGroup(this,new Vector(this.buttonsAlign,240),"ArrowLeft","ArrowRight",">Blue","Blue")) 
