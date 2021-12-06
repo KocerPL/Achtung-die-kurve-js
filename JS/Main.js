@@ -98,7 +98,7 @@ export class Main
         this.frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,597));
         this.pause = false;
         this.noborder =false;
-        
+        this.resetTrig=false;
    this.border ={
        current:0,
        direction:true,
