@@ -65,7 +65,7 @@ export class Main
     static playmusic = false;
     static frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,597));
     // if true then width *ratio < height
-    static music = new Audio("/MSC/Kocer - ChordJump.mp3");
+  //  static music = new Audio("/MSC/Kocer - ChordJump.mp3");
     static min = window.innerWidth/this.ratio<window.innerHeight;
     static start()
     {
@@ -81,20 +81,39 @@ export class Main
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
     }
-    
+    static reset()
+    {
+        Physics.reset()
+        Scoreboard.reset()
+       // MouseListener.reset();
+        BonusGenerator.reset();
+        this.gameObjects = new Array();
+        this.renderWin = false;
+        this.maxScore =10;
+        this.minDomin = 0;
+        this.shrinkBorder = false;
+        this.genBonus= true;
+        this.State = Main.STATE.MENU;
+        this.frameHitbox=new FrameHitbox(this,new Vector(5,5),new Vector(796.5,597));
+        this.pause = false;
+        this.noborder =false;
+        
+   this.border ={
+       current:0,
+       direction:true,
+       cooldown:0
+   };
+   this.lastAliveCount = -1;
+   this.shrinkBorder = false;
+   this.resize();
+    }
     static onKey(ev)
     {
         //console.log(ev);
         if(ev.keyCode==32) 
         {
         this.pause= !this.pause
-        if(this.playmusic)
-        {
-        if(this.pause)
-        {
-            this.music.pause();
-        }else this.music.play();
-    }
+        if(this.renderWin){ this.reset(); return;}
         if(this.resetTrig)
         {
             this.border.cooldown=-1;
@@ -120,7 +139,10 @@ export class Main
            }));
            this.resetTrig = false;
         }
-        };
+        }else if(ev.keyCode==27)
+        {
+            this.reset();
+        }
     }
     static startGame()
     {
@@ -193,7 +215,8 @@ export class Main
     {
       if(this.State==this.STATE.GAME) this.drawGame();
       else if(this.State==this.STATE.MENU) 
-      {this.ctx.save();
+      {
+          this.ctx.save();
           Menu.draw(this.ctx);
           this.ctx.restore();
       }
@@ -250,6 +273,9 @@ export class Main
       this.ctx.fillStyle = Scoreboard.sortedScores[0].parent.color;
       this.ctx.textAlign = "center";
   this.ctx.fillText("Player with color "+Scoreboard.sortedScores[0].parent.color+" wins!!!!",400,300);
+  this.ctx.font = "20px PatrickHand";
+  this.ctx.fillStyle ="white";
+  this.ctx.fillText("Press space, to go to menu",400,330);
   }
   /*   //Info logging stuff
       let Alives = this._getAlives();

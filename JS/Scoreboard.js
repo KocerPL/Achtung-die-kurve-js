@@ -72,4 +72,11 @@ static drawBackground(ctx)
   ctx.fillStyle="#0d0d0d";
   ctx.fillRect(this.position.x,this.position.y,this.size.x,this.size.y);
 }
+static reset()
+{
+  this.scoreComponents = new Array();
+this.sortedScores = new Array();
+this.position =new Vector(802,0);
+this.size = new Vector(222,650);
+}
 }

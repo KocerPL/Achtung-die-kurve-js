@@ -39,4 +39,11 @@ export class BonusGenerator
         }
     }
     }
+    static reset()
+    {
+        this.timer =0;
+    this.interval = new Vector(70,300);
+    this.pause =false;
+    this.next =KMath.randFR(this.interval.x,this.interval.y);
+    }
 }

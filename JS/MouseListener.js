@@ -5,6 +5,7 @@ export class MouseListener
 {
     static listenerComponents= new Array();
     static ratioVec = new Vector(1,1);
+   
     static init(ratioVec)
     {
         Main.canvas.addEventListener("mousedown",this.onMouse.bind(this),false);
@@ -41,5 +42,8 @@ for(let e of this.listenerComponents)
     }
 //console.log((ev.layerX/this.ratioVec.x)," "+ev.layerY/this.ratioVec.y)
 //console.log(this.ratioVec);
-
+static reset()
+{
+    this.listenerComponents= new Array();
+}
 }

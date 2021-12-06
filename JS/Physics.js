@@ -8,6 +8,7 @@ export class Physics
     static circleComponents= new Array();
     static frameHitboxes= new Array();
     static linePointerArray = new Array();
+    
     static addAABBcomponent(aabb)
     {
         this.aabbarray.push(aabb);
@@ -242,5 +243,13 @@ export class Physics
     static calcDist(vec1,vec2)
     {
      return Math.sqrt(Math.pow(vec2.x-vec1.x,2)+Math.pow(vec2.y-vec1.y,2));
+    }
+    static reset()
+    {
+        this.aabbarray=new Array();
+        this.circleStatics= new Array();
+        this.circleComponents= new Array();
+       this.frameHitboxes= new Array();
+        this.linePointerArray = new Array();
     }
 }
