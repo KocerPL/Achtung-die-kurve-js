@@ -80,6 +80,7 @@ export class Main
         
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
+        window.addEventListener("keydown",this.onKey.bind(this),false);
     }
     static reset()
     {
@@ -110,6 +111,7 @@ export class Main
     static onKey(ev)
     {
         //console.log(ev);
+        if(this.State != this.STATE.GAME) return;
         if(ev.keyCode==32) 
         {
         this.pause= !this.pause
@@ -183,7 +185,7 @@ export class Main
       }));
    //   this.gameObjects.push(new Bonus(new Vector(100,100),Bonus.type.SPEED));
         this.lastAliveCount = this._getAlives().length;
-        window.addEventListener("keydown",this.onKey.bind(this),false);
+      
     }
     static animationLoop(time)
     {
