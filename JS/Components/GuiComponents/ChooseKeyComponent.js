@@ -19,7 +19,7 @@ export class ChooseKeyComponent extends ButtonComponent
     mouse(pos,ev)
     {
         //console.log("mos");
-       
+        if(this.hidden) return;
         if(ev=="mousemove")
         {
        

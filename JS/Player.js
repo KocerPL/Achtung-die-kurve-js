@@ -11,7 +11,7 @@ import { KMath } from "./Utils.js";
 
 export class Player extends GameObject
 {
-    static distDef = 2;
+    static distDef = 1;
     static break={
         length:20,
         interval:250,
