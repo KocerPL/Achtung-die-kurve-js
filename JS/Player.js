@@ -138,12 +138,16 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
             active:false,
             activate:function(player)
             {
+                if(player.radius-1.5>0)
+                {
                 player.awaitPoint =true;
-                player.radius-=1;
+                player.radius-=1.5;
              player.cooldown.push({
-                func:function(){ player.radius+=1;player.awaitPoint =true;},
+                func:function(){ player.radius+=1.5;player.awaitPoint =true;},
                 time:200 
+             
             })
+        }
             }
         },
         MAGNIFI:{ 
@@ -152,10 +156,11 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
             active:false,
             activate:function(player)
             {
+                
                 player.awaitPoint =true;
-                player.radius+=1;
+                player.radius+=2;
              player.cooldown.push({
-                func:function(){ player.radius-=1;player.awaitPoint =true;},
+                func:function(){if(player.radius-2>0){ player.radius-=2;player.awaitPoint =true;}},
                 time:200 
             })
             }
