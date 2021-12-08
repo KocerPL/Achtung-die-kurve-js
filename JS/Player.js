@@ -1,6 +1,5 @@
 import { GameObject } from "./GameObject.js";
 import { Vector } from "./Vector.js";
-import { AABBComponent } from "./Components/AABBComponent.js";
 import { Tail } from "./Tail.js";
 import { CircleComponent } from "./Components/LineCircleComponent.js";
 import { ScoreComponent } from "./Components/ScoreComponent.js";
@@ -23,8 +22,6 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
 {
     super(position,rotation,scale);
     this.lastRot = rotation;
-    this.hold=false;
-    this.hold2=false;
     this.radius =3;
     this.vel =1.2;
     this.alp = 0;
@@ -53,8 +50,6 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.break=Object.assign({},Player.break);
     this.invisible = false;
     this.curve90 = false;
-    //window.addEventListener("keydown",this.keyPress.bind(this),false);
-    //window.addEventListener("keyup",this.keyPress.bind(this),false);
     let temp = new CircleComponent(this);
     temp.setTag("Head");
     this.addComponent(temp);
@@ -171,54 +166,6 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     }
 }
 
-keyPress(ev)
-{
-    
-    if(this.leftKey==ev.key.toUpperCase())
-    {
-        if(this.curve90)
-        {
-            if(ev.type=="keydown" )
-         {
-             if(!this.hold)
-             {
-            this.rotation-=90;
-            this.hold=true;
-             }
-         }
-            else
-            this.hold=false;
-        return;
-        }
-        if(ev.type=="keydown")
-        {
-        this._leftKeyClick =true
-      }
-        else
-        this._leftKeyClick =false
-    }
-    else if(this.rightKey==ev.key.toUpperCase())
-    {
-        if(this.curve90)
-        {
-            if(ev.type=="keydown")
-            {
-                if(!this.hold2)
-                {
-                this.rotation+=90;
-                this.hold2=true;
-                }
-             }
-             else
-             this.hold2=false;
-            return;
-        }
-        if(ev.type=="keydown")
-        this._rightKeyClick =true
-        else
-        this._rightKeyClick =false
-    }
-}
 isAlive()
 {
     return this._alive;
@@ -344,8 +291,8 @@ if(this.alpCH==true){ this.alp+=0.05;} else {this.alp-=0.05};
 if(this.alp>1) this.alpCH= false; else if(this.alp<0.1) this.alpCH= true;
 ctx.globalAlpha = this.alp; 
 }
-ctx.arc(0,0,this.radius,0,Math.PI*2,false);
-ctx.fill();
+if(this.curve90) ctx.fillRect(-this.radius,-this.radius,this.radius*2,this.radius*2);
+else {ctx.arc(0,0,this.radius,0,Math.PI*2,false); ctx.fill();}
 ctx.globalAlpha = 1; 
 ctx.strokeStyle="red";
 if(this._drawDirection)
