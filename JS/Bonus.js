@@ -10,9 +10,10 @@ export class Bonus extends GameObject
         MAGNIFI:4,
         INVISIBLE:5,
         CURVE90:6,
-        NOBORDER:7,
-        CLEARTAILS:8,
-        SHRINKBORDER:9
+        KEYCHANGE:7,
+        NOBORDER:8,
+        CLEARTAILS:9,
+        SHRINKBORDER:10
     }); 
     static target= Object.freeze({
         ME:1,
@@ -30,7 +31,7 @@ export class Bonus extends GameObject
         this.velVec=new Vector(0,0);
         this.type = type;
         this.active=true;
-        if(type<7)
+        if(type<8)
         this.target=target
         else
         {
@@ -60,6 +61,8 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,1600,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } else  if(this.type== Bonus.type.CURVE90) {
             ctx.drawImage(Bonus.graphics,2000,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } else  if(this.type== Bonus.type.KEYCHANGE) {
+            ctx.drawImage(Bonus.graphics,2400,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } 
     }
     else if(this.target==Bonus.target.OTHERS)
@@ -76,6 +79,8 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,1800,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }  else  if(this.type== Bonus.type.CURVE90) {
             ctx.drawImage(Bonus.graphics,2200,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } else  if(this.type== Bonus.type.KEYCHANGE) {
+            ctx.drawImage(Bonus.graphics,2600,0,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         } 
     }
     else if(this.target==Bonus.target.ALL)

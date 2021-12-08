@@ -33,6 +33,7 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.crashSound.playbackRate=3;
     this.rotVel=0;
     this.color=color;
+    this.changeKeys =false;
     this.lastDistance=0;
     this.lastLeftKey = false;
     this.lastRightKey = false;
@@ -111,6 +112,23 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
             disable:function(player)
             {
                 player.curve90 = false;
+                this.active= false;
+            }
+        },
+        KEYCHANGE:{
+            assignedTo:Bonus.type.KEYCHANGE,
+            cooldown:0,
+            active:false,
+            increment:200,
+            activate:function(player)
+            {
+                player.changeKeys = true;
+                this.active= true;
+                this.cooldown = this.increment;
+            },
+            disable:function(player)
+            {
+                player.changeKeys = false;
                 this.active= false;
             }
         },
@@ -283,7 +301,7 @@ ctx.lineWidth=1;
 //ctx.font = "5px Calibri";
 //ctx.fillText(this.score,this.position.x-1.75,this.position.y-5);
 this.useTransfMat(ctx);
-ctx.fillStyle="Yellow";
+if(this.changeKeys) ctx.fillStyle = "#330066"; else ctx.fillStyle="Yellow";
 ctx.beginPath();
 if(this.invisible) 
 {
@@ -347,8 +365,15 @@ if(this.stop) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
+// Turning code 
 let isRightPress = Input.isPressed(this.rightKey);
 let isLeftPress = Input.isPressed(this.leftKey);
+if(this.changeKeys)
+{
+    let temp = isRightPress;
+    isRightPress = isLeftPress;
+    isLeftPress = temp;
+}
 if(this.curve90)
 {
     if(!this.lastLeftKey && isLeftPress)
@@ -422,6 +447,7 @@ this.invisible =false;
   this.HALT=false;
   this.break=Object.assign({},Player.break);
   this.stop = false;
+  this.changeKeys = false;
   this.bonusses = {
     STOP:{
         assignedTo:Bonus.type.STOP,
@@ -482,6 +508,23 @@ this.invisible =false;
             this.active= false;
         }
     },
+        KEYCHANGE:{
+            assignedTo:Bonus.type.KEYCHANGE,
+            cooldown:0,
+            active:false,
+            increment:200,
+            activate:function(player)
+            {
+                player.changeKeys = true;
+                this.active= true;
+                this.cooldown = this.increment;
+            },
+            disable:function(player)
+            {
+                player.changeKeys = false;
+                this.active= false;
+            }
+        },
     //Stacking bonusses
     SPEED:{ 
         assignedTo:Bonus.type.SPEED,
