@@ -89,6 +89,10 @@ export class Main
         Scoreboard.reset()
        // MouseListener.reset();
         BonusGenerator.reset();
+        for(let i=0; i< this.gameObjects.length;i++)
+        {
+            delete this.gameObjects[i];
+        }
         this.gameObjects = new Array();
         this.renderWin = false;
         this.maxScore =10;
