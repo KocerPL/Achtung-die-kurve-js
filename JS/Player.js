@@ -8,6 +8,7 @@ import { Bonus } from "./Bonus.js";
 import { Main } from "./Main.js";
 import { Particle } from "./Particle.js";
 import { KMath } from "./Utils.js";
+import { Input } from "./Input.js";
 
 export class Player extends GameObject
 {
@@ -36,8 +37,8 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.rotVel=0;
     this.color=color;
     this.lastDistance=0;
-    this._leftKeyClick =false;
-    this._rightKeyClick =false;
+    this.lastLeftKey = false;
+    this.lastRightKey = false;
     this.leftKey=leftKey.toUpperCase();
     this.rightKey=rightKey.toUpperCase();
     this.tail= new Tail(position,this);
@@ -52,8 +53,8 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.break=Object.assign({},Player.break);
     this.invisible = false;
     this.curve90 = false;
-    window.addEventListener("keydown",this.keyPress.bind(this),false);
-    window.addEventListener("keyup",this.keyPress.bind(this),false);
+    //window.addEventListener("keydown",this.keyPress.bind(this),false);
+    //window.addEventListener("keyup",this.keyPress.bind(this),false);
     let temp = new CircleComponent(this);
     temp.setTag("Head");
     this.addComponent(temp);
@@ -394,13 +395,27 @@ if(this.stop) return;
 this.velVec.x= Math.cos(this.rotation*(Math.PI/180))*this.vel;
 this.velVec.y= Math.sin(this.rotation*(Math.PI/180))*this.vel;
 super.update();
-if(this._leftKeyClick)
+let isRightPress = Input.isPressed(this.rightKey);
+let isLeftPress = Input.isPressed(this.leftKey);
+if(this.curve90)
+{
+    if(!this.lastLeftKey && isLeftPress)
+    {
+    this.rotation-=90;
+    }else if(!this.lastRightKey && isRightPress)
+    {
+        this.rotation+=90;
+    }
+}
+else if(isLeftPress)
 {
 this.rotation-=1.8*this.vel;
-}else if(this._rightKeyClick)
+}else if(isRightPress)
 {
     this.rotation+=1.8*this.vel;
 }
+this.lastRightKey = isRightPress;
+this.lastLeftKey = isLeftPress;
 if(!this.invisible) this.distance+=this.vel;
 if(this.distance-((this.radius*Player.distDef)+(this.tail.positions[this.tail.positions.length-1][this.tail.positions[this.tail.positions.length-1].length-1].width/2))>this.lastDistance && (this.rotation+0.1< this.lastRot ||this.rotation-0.1> this.lastRot || this.awaitPoint ))
 {

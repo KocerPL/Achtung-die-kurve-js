@@ -11,6 +11,7 @@ import { KMath } from "./Utils.js";
 import { Bonus } from "./Bonus.js";
 import { BonusGenerator } from "./BonusGenerator.js";
 import { ControlsGroup } from "./Components/GuiComponents/groups/ControlsGroup.js";
+import { Input } from "./Input.js";
 export class Main
 {
     // object array
@@ -77,7 +78,7 @@ export class Main
         window.addEventListener('resize',this.resize.bind(this),false);
         MouseListener.init(this.currentProportion);
         Menu.init();
-        
+        Input.init();
         document.body.appendChild(this.canvas);
         requestAnimationFrame(this.animationLoop.bind(this),false);
         window.addEventListener("keydown",this.onKey.bind(this),false);
