@@ -2,7 +2,7 @@
 import { GameObject } from "./GameObject.js";
 import { Physics } from "./Physics.js";
 import { Vector } from "./Vector.js";
-
+import {Main } from "./Main.js";
 export class Tail extends GameObject
 {
 constructor(position,parent)
@@ -20,7 +20,8 @@ draw(ctx)
 {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle=this.parent.color;
+    let color = Main.blind.is ? "white": this.parent.color;
+    ctx.strokeStyle=color;
 for(var i=0;i<this.positions.length;i++)
 {
   

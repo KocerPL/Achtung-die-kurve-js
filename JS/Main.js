@@ -21,7 +21,10 @@ export class Main
         "PatrickHand",
         "url(PatrickHand-Regular.ttf)"
       );
-    
+    static blind = {
+        cooldown:0,
+        is:false
+    }
     static cursorhov= false;
     static lastTime=0;
     static maxFps=61;
@@ -127,7 +130,8 @@ export class Main
             this.frameHitbox.pos =new Vector(5,5);
              this.frameHitbox.dpos = new Vector(796.5,596.5);
              this.shrinkBorder=false;
-
+            this.blind.cooldown =-1;
+            this.blind.is=false;
             this.noborder=false;
             this.forPlayers((p)=>{ 
                 p.reset(this.genPlayerPos(),Math.random()*360);
@@ -307,6 +311,14 @@ export class Main
                     this.noborder=false;
                     this.border.cooldown=-1;
                 }
+                if(this.blind.cooldown>0)
+                {
+                    this.blind.cooldown--;
+                } else if(this.blind.cooldown==0)
+                {
+                    this.blind.cooldown=-1;
+                    this.blind.is = false;
+                }
                 if(this.shrinkBorder)
                 {
                     this.frameHitbox.pos.x+=0.1;
@@ -413,6 +425,10 @@ export class Main
         } else if(bonus.type == Bonus.type.SHRINKBORDER)
         {
             this.shrinkBorder =true;
+        } else if(bonus.type == Bonus.type.BLIND)
+        {
+            this.blind.is =true;
+            this.blind.cooldown+=300;
         }
     }
 }

@@ -13,7 +13,7 @@ export class BonusGenerator
     {
     //    let temp =KMath.randFR(1,2);
       //  console.log(temp)
-       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,10))
+       Main.gameObjects.push(new Bonus(Main.genPlayerPos(),Math.round(KMath.randFR(1,11))
        ,Math.round(KMath.randFR(1,2))));
     }
     static delBonus()

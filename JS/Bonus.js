@@ -13,7 +13,8 @@ export class Bonus extends GameObject
         KEYCHANGE:7,
         NOBORDER:8,
         CLEARTAILS:9,
-        SHRINKBORDER:10
+        SHRINKBORDER:10,
+        BLIND:11
     }); 
     static target= Object.freeze({
         ME:1,
@@ -91,6 +92,9 @@ export class Bonus extends GameObject
             ctx.drawImage(Bonus.graphics,200,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }else if(this.type== Bonus.type.SHRINKBORDER) {
             ctx.drawImage(Bonus.graphics,400,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
+        } else if(this.type == Bonus.type.BLIND)
+        {
+            ctx.drawImage(Bonus.graphics,600,200,200,200,-this.radius,-this.radius,this.radius*2,this.radius*2);
         }
     }
       /*  ctx.beginPath();
