@@ -216,7 +216,9 @@ export class Main
     }
     static genPlayerPos()
     {
-        return new Vector(KMath.randFR(50,700),KMath.randFR(50,550));
+        let tempPos = new Vector(KMath.randFR(50,700),KMath.randFR(50,550));
+        this.forPlayers((e)=> { if(Physics.CCcoll2(e.position,tempPos,50,e.radius)) {tempPos = Main.genPlayerPos(); return tempPos;} })
+        return tempPos;
     }
     static draw(time)
     {
