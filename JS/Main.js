@@ -421,7 +421,7 @@ export class Main
             Main.border.cooldown+=300;
         } else if(bonus.type == Bonus.type.CLEARTAILS)
         {
-            this.forPlayers((e)=>{e.clearTail(); e.break.last=e.distance;e.break.is=false});
+            this.forPlayers((e)=>{e.clearTail(); e.break.last=e.distance;});
         } else if(bonus.type == Bonus.type.SHRINKBORDER)
         {
             this.shrinkBorder =true;
