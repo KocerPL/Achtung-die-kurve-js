@@ -21,10 +21,14 @@ export class Bonus extends GameObject
          OTHERS:2,
          ALL:3
     }); 
+    static graphicsLoaded = false
     static graphics =new Image();
         static initGraphics()
         {
           this.graphics.src="../IMG/bonus/bonus.svg"
+          this.graphics.onload((e)=>{
+              Bonus.graphicsLoaded = true;
+          });
         }
     constructor(pos,type,target)
     {
@@ -46,6 +50,7 @@ export class Bonus extends GameObject
     }
     draw(ctx)
     {
+        if(!Bonus.graphicsLoaded) return;
         if(!this.tested)  {this.tested=true; return;}
         this.useTransfMat(ctx);
         if(this.target==Bonus.target.ME)
