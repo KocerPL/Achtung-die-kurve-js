@@ -25,7 +25,7 @@ export class Bonus extends GameObject
     static graphics =new Image();
         static initGraphics()
         {
-          this.graphics.src="../IMG/bonus/bonus.svg"
+          this.graphics.src="./IMG/bonus/bonus.svg"
          this.graphics.onload = function () { Bonus.graphicsLoaded=true};  
                }
     constructor(pos,type,target)
