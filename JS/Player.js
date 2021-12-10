@@ -28,8 +28,8 @@ constructor(position,rotation,scale,leftKey,rightKey,color)
     this.alpCh=true;
     this.awaitPoint=false;
     this.distance=0;
-    this.crashSound = new Audio("/MSC/crashSound.wav");
-    this.bonusSound = new Audio("/MSC/bonusPicked.wav");
+    this.crashSound = new Audio("../MSC/crashSound.wav");
+    this.bonusSound = new Audio("../MSC/bonusPicked.wav");
     this.crashSound.playbackRate=3;
     this.rotVel=0;
     this.color=color;
