@@ -20,6 +20,8 @@
 #### No border: Makes border transparent, which means that players can pass through, to other side
 #### Shrink border: Shrinks border, until one player wins
 #### Blind: Changes all players colors to white for short period of time
+## Bugs
+#### If you find any bug in this remake, please open the issue, describe when bug occured, and what bug does
 ## Authors
 #### Javascript by Kocer,
 #### Some bonusses graphics by Kelvik
